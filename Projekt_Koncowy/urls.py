@@ -15,11 +15,11 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
-from evently.views import hello, CreateUserViews
+from django.urls import path, include
+
+from evently.views import EventView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('hello', hello, name='hello'),
-    path('createuser/', CreateUserViews.as_view(), name='createuser'),
+    path('event/', EventView.as_view(), name='event'),
 ]

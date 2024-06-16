@@ -1,12 +1,8 @@
-from django.contrib.auth.forms import UserCreationForm
+from django.forms import ModelForm
 
-from .models import CreateUserModel
+from .models import Event
 
-
-class CreateUserForm(UserCreationForm):
+class EventForm(ModelForm):
     class Meta:
-        model = CreateUserModel
-        fields = ['first_name', 'last_name', 'username', 'email',]
-
-
-
+        model = Event
+        fields = ['name', 'place', 'start_at', 'end_at', 'description']
