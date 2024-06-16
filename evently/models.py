@@ -11,8 +11,8 @@ class CreateUserModel(AbstractUser):
 
 class Status(models.Model):
     STATUS_CHOICES = [
-        (1, 'Active'),
-        (2, 'Inactive'),
+        ('Active', 'Active'),
+        ('Inactive', 'Inactive'),
     ]
     name = models.CharField(choices=STATUS_CHOICES, max_length=50, default=STATUS_CHOICES[1][0])
     added = models.DateTimeField(auto_now_add=True)
@@ -29,7 +29,7 @@ class Event(models.Model):
     start_at = models.DateField()
     end_at = models.DateField()
     description = models.TextField()
-    status = models.ForeignKey(Status, on_delete=models.CASCADE, default=1)
+    status = models.ForeignKey(Status, on_delete=models.CASCADE, default=2)
     added = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
 

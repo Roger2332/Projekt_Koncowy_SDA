@@ -3,7 +3,7 @@ from datetime import datetime
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
 
-from .models import Event, CreateUserModel, Category
+from .models import Event, CreateUserModel, Category, Status
 
 
 def title_validator(value):
@@ -39,6 +39,7 @@ class EventForm(forms.ModelForm):
     category = forms.ChoiceField(choices=Category.CATEGORY_CHOICES)
 
 
+
 class CreateUserForm(UserCreationForm):
     class Meta:
         model = CreateUserModel
@@ -48,11 +49,3 @@ class CreateUserForm(UserCreationForm):
         self.instance.is_active = False
         return super().save(commit)
 
-# Roger Comment
-# Roger Comment
-
-class test(forms.ModelForm):
-    pass
-# comment
-
-# Roger Comment
