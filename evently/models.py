@@ -5,8 +5,6 @@ from django.db import models
 class CreateUserModel(AbstractUser):
     email = models.EmailField(unique=True)
     username = models.CharField(unique=True, max_length=50)
-    groups = models.ManyToManyField(Group, related_name='createuser_set')
-    user_permissions = models.ManyToManyField(Permission, related_name='createuser_permissions_set')
 
 
 class Status(models.Model):
