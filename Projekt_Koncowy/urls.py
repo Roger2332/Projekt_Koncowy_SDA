@@ -17,9 +17,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
-from evently.views import EventView
+from evently.views import EventView, UserCreationView, hello
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+
+    path('hello/', hello, name='hello'),
+
     path('event/', EventView.as_view(), name='event'),
+    path('createuser/', UserCreationView.as_view(), name='user'),
 ]
