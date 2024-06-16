@@ -11,10 +11,10 @@ class CreateUserModel(AbstractUser):
 
 class Status(models.Model):
     STATUS_CHOICES = [
-        ('Active', 'Active'),
-        ('Inactive', 'Inactive'),
+        (1, 'Active'),
+        (2, 'Inactive'),
     ]
-    name = models.CharField(choices=STATUS_CHOICES, max_length=50, default='Inactive')
+    name = models.CharField(choices=STATUS_CHOICES, max_length=50, default=STATUS_CHOICES[1][0])
     added = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
 
@@ -29,7 +29,7 @@ class Event(models.Model):
     start_at = models.DateField()
     end_at = models.DateField()
     description = models.TextField()
-    status = models.ForeignKey(Status, on_delete=models.CASCADE)
+    status = models.ForeignKey(Status, on_delete=models.CASCADE, default=1)
     added = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
 
@@ -60,7 +60,17 @@ class Subscription(models.Model):
 
 
 class Category(models.Model):
-    name = models.CharField(max_length=100)
+    CATEGORY_CHOICES = [
+        ('Sport', 'Sport'),
+        ('Music', 'Music'),
+        ('Game', 'Game'),
+        ('Education', 'Education'),
+        ('Technology', 'Technology'),
+        ('Travel', 'Travel'),
+        ('Fashion', 'Fashion'),
+        ('Science', 'Science'),
+    ]
+    name = models.CharField(choices=CATEGORY_CHOICES, max_length=100)
     added = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
 
