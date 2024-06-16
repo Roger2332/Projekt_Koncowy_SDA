@@ -39,7 +39,6 @@ class EventForm(forms.ModelForm):
     category = forms.ChoiceField(choices=Category.CATEGORY_CHOICES)
 
 
-
 class CreateUserForm(UserCreationForm):
     class Meta:
         model = CreateUserModel
@@ -48,4 +47,3 @@ class CreateUserForm(UserCreationForm):
     def save(self, commit=True):
         self.instance.is_active = False
         return super().save(commit)
-
