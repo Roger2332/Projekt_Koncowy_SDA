@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path, include
 import django.contrib.auth.views as auth_views
 
-from evently.views import create_event, UserCreationView, hello
+from evently.views import create_event, UserCreationView, hello, CreateCategoryView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -26,6 +26,8 @@ urlpatterns = [
     path('hello/', hello, name='index'),
 
     path('event/', create_event, name='event'),
+
+    path("CreateCategory", CreateCategoryView.as_view(), name="create_category"),
 
     # Zarzadzanie uzytkownikiem
     path('createuser/', UserCreationView.as_view(), name='user'),
