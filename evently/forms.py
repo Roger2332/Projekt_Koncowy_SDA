@@ -48,4 +48,8 @@ class CreateUserForm(UserCreationForm):
         self.instance.is_active = False
         return super().save(commit)
 
+# Roger Comment
+
 # comment
+
+# Roger Comment
