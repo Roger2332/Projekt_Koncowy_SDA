@@ -50,6 +50,9 @@ class CreateUserForm(UserCreationForm):
 
 # Roger Comment
 # Roger Comment
+
+class test(forms.ModelForm):
+    pass
 # comment
 
 # Roger Comment
