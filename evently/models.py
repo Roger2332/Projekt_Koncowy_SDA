@@ -1,87 +1,76 @@
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, Group, Permission
 from django.db import models
 
 
 class CreateUserModel(AbstractUser):
     email = models.EmailField(unique=True)
     username = models.CharField(unique=True, max_length=50)
+    groups = models.ManyToManyField(Group, related_name='createuser_set')
+    user_permissions = models.ManyToManyField(Permission, related_name='createuser_permissions_set')
 
 
 class Status(models.Model):
-    STATUS_CHOICE = [
+    STATUS_CHOICES = [
         ('Active', 'Active'),
         ('Inactive', 'Inactive'),
     ]
-    name = models.CharField(choices=STATUS_CHOICE, max_length=50, default=STATUS_CHOICE[1][0])
+    name = models.CharField(choices=STATUS_CHOICES, max_length=50, default='Inactive')
     added = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f'''
-        Status: {self.name}
-        '''
+        return f'Status: {self.name}'
 
 
 class Event(models.Model):
-    autor_id = models.OneToOneRel(CreateUserModel, on_delete=models.CASCADE)  # User table
+    author = models.ForeignKey(CreateUserModel, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     place = models.CharField(max_length=100)
     start_at = models.DateField()
     end_at = models.DateField()
     description = models.TextField()
-    status_id = models.OneToOneRel(Status, on_delete=models.CASCADE)  # Status table
+    status = models.ForeignKey(Status, on_delete=models.CASCADE)
     added = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f'''
-        Event: {self.name}, start at: {self.start_at}, end at: {self.end_at}
-        '''
+        return f'Event: {self.name}, start at: {self.start_at}, end at: {self.end_at}'
 
 
 class Comment(models.Model):
-    author_id = models.OneToOneField(CreateUserModel, on_delete=models.CASCADE)
-    event_id = models.OneToOneField(Event, on_delete=models.CASCADE)
-    contnent = models.TextField()
+    author = models.ForeignKey(CreateUserModel, on_delete=models.CASCADE)
+    event = models.ForeignKey(Event, on_delete=models.CASCADE)
+    content = models.TextField()
     event_date = models.DateTimeField(auto_now_add=True)
     added = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f'''
-        Author: {self.author_id}, Event: {self.event_id}
-        '''
+        return f'Author: {self.author}, Event: {self.event}'
 
 
-class Subscriptoion(models.Model):
-    user_id = models.ForeignKey(CreateUserModel, on_delete=models.CASCADE)
-    event_id = models.ForeignKey(Event, on_delete=models.CASCADE)
+class Subscription(models.Model):
+    user = models.ForeignKey(CreateUserModel, on_delete=models.CASCADE)
+    event = models.ForeignKey(Event, on_delete=models.CASCADE)
     added = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f'''
-        User_id: {self.user_id}, Event: {self.event_id}
-        '''
+        return f'User: {self.user}, Event: {self.event}'
 
 
 class Category(models.Model):
-    event_id = models.ForeignKey(Event, on_delete=models.CASCADE)
-    category_name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100)
     added = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f'''
-        Category: {self.category_name}
-        '''
+        return f'Category: {self.name}'
 
 
-class Event_category(models.Model):
-    event_id = models.ForeignKey(Event, on_delete=models.CASCADE)
-    category_id = models.ForeignKey(Category, on_delete=models.CASCADE)
+class EventCategory(models.Model):
+    event = models.ForeignKey(Event, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'''
-        Event_id: {self.event_id}, category_id: {self.category_id}
-        '''
+        return f'Event: {self.event}, Category: {self.category}'
