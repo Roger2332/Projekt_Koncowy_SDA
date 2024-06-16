@@ -47,3 +47,5 @@ class CreateUserForm(UserCreationForm):
     def save(self, commit=True):
         self.instance.is_active = False
         return super().save(commit)
+
+# comment
