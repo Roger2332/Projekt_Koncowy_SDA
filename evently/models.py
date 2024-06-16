@@ -60,17 +60,7 @@ class Subscription(models.Model):
 
 
 class Category(models.Model):
-    CATEGORY_CHOICES = [
-        ('Sport', 'Sport'),
-        ('Music', 'Music'),
-        ('Game', 'Game'),
-        ('Education', 'Education'),
-        ('Technology', 'Technology'),
-        ('Travel', 'Travel'),
-        ('Fashion', 'Fashion'),
-        ('Science', 'Science'),
-    ]
-    name = models.CharField(choices=CATEGORY_CHOICES, max_length=100)
+    name = models.CharField(max_length=100)
     added = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
 

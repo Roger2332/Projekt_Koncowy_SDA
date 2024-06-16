@@ -36,7 +36,13 @@ class EventForm(forms.ModelForm):
     start_at = forms.DateField(widget=forms.SelectDateWidget, validators=[data_start_validator])
     end_at = forms.DateField(widget=forms.SelectDateWidget)
     description = forms.CharField(widget=forms.Textarea, validators=[dec_valid])
-    category = forms.ChoiceField(choices=Category.CATEGORY_CHOICES)
+    category = forms.ModelChoiceField(queryset=Category.objects.all(),
+                                      widget=forms.Select(attrs={'class': 'form-control'}),
+                                      empty_label="Wybierz kategorię"
+                                      )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
 
 class CreateUserForm(UserCreationForm):
@@ -47,3 +53,9 @@ class CreateUserForm(UserCreationForm):
     def save(self, commit=True):
         self.instance.is_active = False
         return super().save(commit)
+
+
+class CategoryForm(forms.ModelForm):
+    class Meta:
+        model = Category
+        fields = ['name']

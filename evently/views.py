@@ -4,9 +4,9 @@ from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
 
-from .forms import EventForm, CreateUserForm
+from .forms import EventForm, CreateUserForm, CategoryForm
 
-from .models import Status
+from .models import Status, Category
 
 
 # Create your views here.
@@ -33,4 +33,11 @@ def create_event(request):
 class UserCreationView(CreateView):
     template_name = 'form.html'
     form_class = CreateUserForm
-    success_url = reverse_lazy('hello')
+    success_url = reverse_lazy('index')
+
+
+class CreateCategoryView(CreateView):
+    template_name = 'form.html'
+    model = Category
+    form_class = CategoryForm
+    success_url = reverse_lazy('index')
