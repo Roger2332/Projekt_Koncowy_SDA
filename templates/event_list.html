@@ -1,0 +1,26 @@
+<!-- templates/event_list.html -->
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Event list</h1>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Title</th>
+            <th>Date start</th>
+            <th>Date end</th>
+            <th>Description</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for event in events %}
+            <tr>
+                <td>{{ event.name }}</td>
+                <td>{{ event.start_at }}</td>
+                <td>{{ event.end_at }}</td>
+                <td>{{ event.description|slice:":50" }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

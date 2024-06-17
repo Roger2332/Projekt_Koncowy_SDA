@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from django.contrib.auth.forms import UserCreationForm
+from django.core.exceptions import ValidationError
 from django import forms
 
 from .models import Event, CreateUserModel, Category, Status
@@ -14,11 +15,14 @@ def title_validator(value):
 def data_start_validator(value):
     if value < datetime.now().date():
         raise forms.ValidationError('The data cannot be in the future')
-
-
-# def data_end_validator(date_start, date_end):
-#     if date_start > date_end:
-#         raise forms.ValidationError('The end date cannot be greater than the start date')
+#ZMIANA -nowy validator
+# sprawdzanie czy date_start > date_end
+def data_end_validator(date_end):
+    def validate(date_start):
+        if date_start and date_end:
+            if date_start > date_end:
+                 raise forms.ValidationError('The end date cannot be earlier than the start date')
+    return validate
 
 
 def dec_valid(value):
@@ -34,7 +38,7 @@ class EventForm(forms.ModelForm):
     name = forms.CharField(max_length=100, validators=[title_validator])
     place = forms.CharField(max_length=100, validators=[title_validator])
     start_at = forms.DateField(widget=forms.SelectDateWidget, validators=[data_start_validator])
-    end_at = forms.DateField(widget=forms.SelectDateWidget)
+    end_at = forms.DateField(widget=forms.SelectDateWidget, validators=[data_end_validator]) # ZMIANA zapis nowego validatora!
     description = forms.CharField(widget=forms.Textarea, validators=[dec_valid])
     category = forms.ModelChoiceField(queryset=Category.objects.all(),
                                       widget=forms.Select(attrs={'class': 'form-control'}),
