@@ -3,6 +3,7 @@ from datetime import datetime
 from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
 from django import forms
+from django.db import IntegrityError
 
 from .models import Event, CreateUserModel, Category, Status, Subscription
 
@@ -81,9 +82,17 @@ class SubscriptionForm(forms.ModelForm):
         fields = ['user', 'event']
 
     # sprawdzanie, czy user nie podpisuje się na własny event
-    def clean(self):
-        if self.user == self.event.author:
-            raise ValidationError("You cannot sign up for your own event.")
-        # sprawdzanie, czy user nie jest już podpisany na event
-        if Subscription.objects.filter(user=self.user, event=self.event).exists():
-            raise ValidationError("You are already subscribed to this event.")
+    def save(self, commit=True):
+        user = self.cleaned_data.get('user')
+        event = self.cleaned_data.get('event')
+        if Subscription.objects.filter(user=user, event=event).exists():
+            raise forms.ValidationError("You are already subscribed to this event.")
+        if user == event.author:
+            raise forms.ValidationError("You cannot sign up for your own event.")
+        try:
+            super().save(commit)
+        except IntegrityError as e:
+            if str(e) == "UNIQUE constraint failed: evently_subscription.user_id, evently_subscription.event_id":
+                raise forms.ValidationError("You are already subscribed to this event.")
+            else:
+                raise e
