@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path, include
 import django.contrib.auth.views as auth_views
 
-from evently.views import create_event, UserCreationView, hello, CreateCategoryView
+from evently.views import create_event, UserCreationView, hello, CreateCategoryView, list_events
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -47,5 +47,6 @@ urlpatterns = [
          name='password_reset_confirm'),
     path('accounts/reset/done/', auth_views.PasswordResetCompleteView.as_view(),
          name='password_reset_complete'),
+    path('list_events/', list_events, name='list_events'),
 
 ]

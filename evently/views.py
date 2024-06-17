@@ -6,7 +6,7 @@ from django.views.generic import CreateView
 
 from .forms import EventForm, CreateUserForm, CategoryForm
 
-from .models import Status, Category
+from .models import Status, Category, Event
 
 
 # Create your views here.
@@ -41,3 +41,7 @@ class CreateCategoryView(CreateView):
     model = Category
     form_class = CategoryForm
     success_url = reverse_lazy('index')
+
+def list_events(request):
+    events = Event.objects.all().order_by('start_at')
+    return render(request, 'event_list.html', {'events': events})
