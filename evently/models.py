@@ -17,8 +17,16 @@ class Status(models.Model):
     modified = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f'Status: {self.name}'
+        return f'{self.name}'
 
+
+class Category(models.Model):
+    name = models.CharField(max_length=100)
+    added = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f'{self.name}'
 
 class Event(models.Model):
     author = models.ForeignKey(CreateUserModel, on_delete=models.CASCADE)
@@ -28,6 +36,7 @@ class Event(models.Model):
     end_at = models.DateField()
     description = models.TextField()
     status = models.ForeignKey(Status, on_delete=models.CASCADE, default=2)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True, blank=True)
     added = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
 
@@ -48,22 +57,13 @@ class Comment(models.Model):
 
 
 class Subscription(models.Model):
-    user = models.ForeignKey(CreateUserModel, on_delete=models.CASCADE)
+    user = models.OneToOneField(CreateUserModel, on_delete=models.CASCADE)
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
     added = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f'User: {self.user}, Event: {self.event}'
-
-
-class Category(models.Model):
-    name = models.CharField(max_length=100)
-    added = models.DateTimeField(auto_now_add=True)
-    modified = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        return f'Category: {self.name}'
 
 
 class EventCategory(models.Model):

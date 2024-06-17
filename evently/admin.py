@@ -19,7 +19,7 @@ class StatusAdmin(admin.ModelAdmin):
 
 
 class EventAdmin(admin.ModelAdmin):
-    list_display = ('name', 'author', 'place', 'start_at', 'end_at', 'status', 'description', 'added', 'modified')
+    list_display = ('name', 'author', 'place', 'start_at', 'end_at', 'status', 'category', 'description', 'added', 'modified')
     search_fields = ('name', 'author', 'place', 'start_at', 'end_at', 'status', 'description')
     list_filter = ('status', 'place', 'start_at', 'end_at')
     ordering = ('-start_at',)
