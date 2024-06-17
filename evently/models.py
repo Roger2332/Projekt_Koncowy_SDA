@@ -29,6 +29,7 @@ class Category(models.Model):
     def __str__(self):
         return f'{self.name}'
 
+
 class Event(models.Model):
     author = models.ForeignKey(CreateUserModel, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
@@ -70,10 +71,9 @@ class Subscription(models.Model):
     def clean(self):
         if self.user == self.event.author:
             raise ValidationError("You cannot sign up for your own event.")
-    # sprawdzanie, czy user nie jest już podpisany na event
+        # sprawdzanie, czy user nie jest już podpisany na event
         if Subscription.objects.filter(user=self.user, event=self.event).exists():
             raise ValidationError("You are already subscribed to this event.")
-
 
     # sprawdzanie na unikatowość
     class Meta:

@@ -20,12 +20,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config('SECRET_KEY')
+SECRET_KEY = config('SECRET_KEY')  # Zabezpieczenie dostepu do aplikacji
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config('DEBUG', default=False, cast=bool)
+DEBUG = config('DEBUG', default=False, cast=bool)  # Zabezpieczenie dostepu do aplikacji
 
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='').split(',')
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='').split(',')  # Zabezpieczenie dostepu do aplikacji
 
 # Application definition
 
@@ -119,7 +119,7 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-AUTH_USER_MODEL = 'evently.CreateUserModel'
+AUTH_USER_MODEL = 'evently.CreateUserModel'  # Zmiana modelu defoltowego Uzytkownika
 
-LOGIN_REDIRECT_URL = 'index'
-LOGOUT_REDIRECT_URL = 'index'
+LOGIN_REDIRECT_URL = 'index'  # Ustawienia pozwalajace na zalogowanie sie
+LOGOUT_REDIRECT_URL = 'index'  # Ustawienia pozwalajace na wylogowanie sie
