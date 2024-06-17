@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractUser, Group, Permission
 from django.db import models
+from django.core.exceptions import ValidationError
 
 
 class CreateUserModel(AbstractUser):
@@ -57,13 +58,26 @@ class Comment(models.Model):
 
 
 class Subscription(models.Model):
-    user = models.OneToOneField(CreateUserModel, on_delete=models.CASCADE)
+    user = models.ForeignKey(CreateUserModel, on_delete=models.CASCADE)
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
     added = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f'User: {self.user}, Event: {self.event}'
+
+    # sprawdzanie, czy user nie podpisuje się na własny event
+    def clean(self):
+        if self.user == self.event.author:
+            raise ValidationError("You cannot sign up for your own event.")
+    # sprawdzanie, czy user nie jest już podpisany na event
+        if Subscription.objects.filter(user=self.user, event=self.event).exists():
+            raise ValidationError("You are already subscribed to this event.")
+
+
+    # sprawdzanie na unikatowość
+    class Meta:
+        unique_together = ('user', 'event')
 
 
 class EventCategory(models.Model):
