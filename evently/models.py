@@ -67,17 +67,6 @@ class Subscription(models.Model):
     def __str__(self):
         return f'User: {self.user}, Event: {self.event}'
 
-    # sprawdzanie, czy user nie podpisuje się na własny event
-    def clean(self):
-        if self.user == self.event.author:
-            raise ValidationError("You cannot sign up for your own event.")
-        # sprawdzanie, czy user nie jest już podpisany na event
-        if Subscription.objects.filter(user=self.user, event=self.event).exists():
-            raise ValidationError("You are already subscribed to this event.")
-
-    # sprawdzanie na unikatowość
-    class Meta:
-        unique_together = ('user', 'event')
 
 
 class EventCategory(models.Model):
