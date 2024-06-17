@@ -4,7 +4,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
 from django import forms
 
-from .models import Event, CreateUserModel, Category, Status
+from .models import Event, CreateUserModel, Category, Subscription, Status
 
 
 def title_validator(value):
@@ -63,3 +63,19 @@ class CategoryForm(forms.ModelForm):
     class Meta:
         model = Category
         fields = ['name']
+
+class SubscriptionForm(forms.ModelForm):
+    class Meta:
+        model = Subscription
+        unique_together = ('user', 'event')    # sprawdzanie na unikatowość
+        fields = ['user', 'event']
+
+    # sprawdzanie, czy user nie podpisuje się na własny event
+    def clean(self):
+        if self.user == self.event.author:
+            raise ValidationError("You cannot sign up for your own event.")
+        # sprawdzanie, czy user nie jest już podpisany na event
+        if Subscription.objects.filter(user=self.user, event=self.event).exists():
+            raise ValidationError("You are already subscribed to this event.")
+
+
