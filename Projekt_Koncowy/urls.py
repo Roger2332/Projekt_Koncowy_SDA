@@ -18,16 +18,16 @@ from django.contrib import admin
 from django.urls import path, include
 import django.contrib.auth.views as auth_views
 
-from evently.views import create_event, UserCreationView, hello, CreateCategoryView, list_events
+from evently.views import create_event, UserCreationView, CreateCategoryView, list_events
 
 urlpatterns = [
     path('admin/', admin.site.urls),
 
-    path('hello/', hello, name='index'),
-
     path('event/', create_event, name='event'),
 
     path("CreateCategory", CreateCategoryView.as_view(), name="create_category"),
+
+    path('list_events/', list_events, name='list_events'),
 
     # Zarzadzanie uzytkownikiem
     path('createuser/', UserCreationView.as_view(), name='user'),
@@ -47,6 +47,5 @@ urlpatterns = [
          name='password_reset_confirm'),
     path('accounts/reset/done/', auth_views.PasswordResetCompleteView.as_view(),
          name='password_reset_complete'),
-    path('list_events/', list_events, name='list_events'),
 
 ]
