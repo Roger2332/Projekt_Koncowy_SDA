@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractUser, Group, Permission
 from django.db import models
+from django.core.exceptions import ValidationError
 
 
 class CreateUserModel(AbstractUser):
@@ -17,8 +18,16 @@ class Status(models.Model):
     modified = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f'Status: {self.name}'
+        return f'{self.name}'
 
+
+class Category(models.Model):
+    name = models.CharField(max_length=100)
+    added = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f'{self.name}'
 
 class Event(models.Model):
     author = models.ForeignKey(CreateUserModel, on_delete=models.CASCADE)
@@ -28,6 +37,7 @@ class Event(models.Model):
     end_at = models.DateField()
     description = models.TextField()
     status = models.ForeignKey(Status, on_delete=models.CASCADE, default=2)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True, blank=True)
     added = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
 
@@ -56,14 +66,18 @@ class Subscription(models.Model):
     def __str__(self):
         return f'User: {self.user}, Event: {self.event}'
 
+    # sprawdzanie, czy user nie podpisuje się na własny event
+    def clean(self):
+        if self.user == self.event.author:
+            raise ValidationError("You cannot sign up for your own event.")
+    # sprawdzanie, czy user nie jest już podpisany na event
+        if Subscription.objects.filter(user=self.user, event=self.event).exists():
+            raise ValidationError("You are already subscribed to this event.")
 
-class Category(models.Model):
-    name = models.CharField(max_length=100)
-    added = models.DateTimeField(auto_now_add=True)
-    modified = models.DateTimeField(auto_now=True)
 
-    def __str__(self):
-        return f'Category: {self.name}'
+    # sprawdzanie na unikatowość
+    class Meta:
+        unique_together = ('user', 'event')
 
 
 class EventCategory(models.Model):
