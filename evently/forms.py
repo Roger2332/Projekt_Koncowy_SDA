@@ -19,17 +19,6 @@ def data_start_validator(value):
         raise forms.ValidationError('The data cannot be in the future')
 
 
-# ZMIANA -nowy validator
-# sprawdzanie czy date_start > date_end
-def data_end_validator(date_end):
-    def validate(date_start):
-        if date_start and date_end:
-            if date_start > date_end:
-                raise forms.ValidationError('The end date cannot be earlier than the start date')
-
-    return validate
-
-
 # Sprawdzanie czy tresc zawiera conajmniej 20 znakow
 def dec_valid(value):
     if len(value) < 20:
