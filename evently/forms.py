@@ -44,13 +44,23 @@ class EventForm(forms.ModelForm):
     name = forms.CharField(max_length=100, validators=[title_validator])
     place = forms.CharField(max_length=100, validators=[title_validator])
     start_at = forms.DateField(widget=forms.SelectDateWidget, validators=[data_start_validator])
-    end_at = forms.DateField(widget=forms.SelectDateWidget,
-                             validators=[data_end_validator])  # ZMIANA zapis nowego validatora!
+    end_at = forms.DateField(widget=forms.SelectDateWidget)  # ZMIANA zapis nowego validatora!
     description = forms.CharField(widget=forms.Textarea, validators=[dec_valid])
     category = forms.ModelChoiceField(queryset=Category.objects.all(),
                                       widget=forms.Select(attrs={'class': 'form-control'}),
                                       empty_label="Wybierz kategorię"
                                       )
+
+    def clean(self):
+        cleaned_data = super().clean()
+        start_at = cleaned_data.get("start_at")
+        end_at = cleaned_data.get("end_at")
+
+        if start_at and end_at:
+            if end_at <= start_at:
+                raise ValidationError('Data zakończenia musi być późniejsza niż data rozpoczęcia')
+
+        return cleaned_data
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -71,7 +81,6 @@ class CategoryForm(forms.ModelForm):
     class Meta:
         model = Category
         fields = ['name']
-
 
 
 class SubscriptionForm(forms.ModelForm):
