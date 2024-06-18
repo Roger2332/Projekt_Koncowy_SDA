@@ -1,0 +1,9 @@
+<form method="GET" action="{% url 'search_event' %}">
+    <input type="text" name="query" placeholder="Wpisz frazę" value="{{ form.query.value|default_if_none:'' }}">
+    <select name="search_type">
+        <option value="all" {% if form.search_type.value == "all" %}selected{% endif %}>Wszystkie</option>
+        <option value="future" {% if form.search_type.value == "future" %}selected{% endif %}>Przyszłe</option>
+        <option value="ongoing_future" {% if form.search_type.value == "ongoing_future" %}selected{% endif %}>Trwające i przyszłe</option>
+    </select>
+    <button type="submit">Szukaj</button>
+</form>

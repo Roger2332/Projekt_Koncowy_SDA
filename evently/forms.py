@@ -74,25 +74,45 @@ class CategoryForm(forms.ModelForm):
         fields = ['name']
 
 
-
+# do poprawy
 class SubscriptionForm(forms.ModelForm):
     class Meta:
         model = Subscription
-        unique_together = ('user', 'event')  # sprawdzanie na unikatowość
         fields = ['user', 'event']
 
-    # sprawdzanie, czy user nie podpisuje się na własny event
-    def save(self, commit=True):
-        user = self.cleaned_data.get('user')
-        event = self.cleaned_data.get('event')
+
+    def clean(self):
+        cleaned_data = super().clean()
+        user = cleaned_data.get('user')
+        event = cleaned_data.get('event')
+
+        print(f"User: {user}, Event: {event}, Author: {event.author}")
+
+        # sprawdzanie, czy user nie jest podpisany na event
         if Subscription.objects.filter(user=user, event=event).exists():
+            print("User is already subscribed.")
             raise forms.ValidationError("You are already subscribed to this event.")
+
+        # sprawdzanie, czy user nie podpisuje się na własny event
         if user == event.author:
-            raise forms.ValidationError("You cannot sign up for your own event.")
+            print("User is the author of the event.")
+            raise ValidationError("You cannot sign up for your own event.")
+
+        return cleaned_data
+
+    def save(self, commit=True):
         try:
-            super().save(commit)
-        except IntegrityError as e:
-            if str(e) == "UNIQUE constraint failed: evently_subscription.user_id, evently_subscription.event_id":
-                raise forms.ValidationError("You are already subscribed to this event.")
-            else:
-                raise e
+            return super().save(commit)
+        except IntegrityError:
+            raise forms.ValidationError("You are already subscribed to this event.")
+
+#NEW
+class EventSearchForm(forms.Form):
+    SEARCH_CHOICES = [
+        ('future', 'Przyszłe'),
+        ('ongoing_future', 'Trwające i przyszłe'),
+        ('all', 'Wszystkie')
+    ]
+
+    query = forms.CharField(label='Nazwa wydarzenia', max_length=100, required=False)
+    search_type = forms.ChoiceField(label='Typ wyszukiwania', choices=SEARCH_CHOICES, required=False)
