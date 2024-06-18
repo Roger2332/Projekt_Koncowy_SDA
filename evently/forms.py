@@ -5,7 +5,7 @@ from django.core.exceptions import ValidationError
 from django import forms
 from django.db import IntegrityError
 
-from .models import Event, CreateUserModel, Category, Status, Subscription
+from .models import Event, CreateUserModel, Category, Subscription
 
 
 # sprawdzanie czy tytul nie zawiera samych bialych znakow
@@ -105,13 +105,21 @@ class SubscriptionForm(forms.ModelForm):
             raise forms.ValidationError("You are already subscribed to this event.")
 
 
-# NEW
+#wyszukiwarka
 class EventSearchForm(forms.Form):
     SEARCH_CHOICES = [
         ('future', 'Przyszłe'),
+        ('past', 'Przeszłe'),
         ('ongoing_future', 'Trwające i przyszłe'),
         ('all', 'Wszystkie')
     ]
 
     query = forms.CharField(label='Nazwa wydarzenia', max_length=100, required=False)
     search_type = forms.ChoiceField(label='Typ wyszukiwania', choices=SEARCH_CHOICES, required=False)
+
+    place = forms.CharField(label='Nazwa miejsca', max_length=100, required=False)
+    category = forms.ModelChoiceField(queryset=Category.objects.all(), label='Kategoria', required=False)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['place'].queryset = Event.objects.values_list('place', flat=True).distinct()
