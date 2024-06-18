@@ -83,17 +83,18 @@ class SubscriptionForm(forms.ModelForm):
         user = cleaned_data.get('user')
         event = cleaned_data.get('event')
 
-        print(f"User: {user}, Event: {event}, Author: {event.author}")
+        if event:  # Upewnij się, że event jest obecny
+            print(f"User: {user}, Event: {event}, Author: {event.author}")
 
-        # sprawdzanie, czy user nie jest podpisany na event
-        if Subscription.objects.filter(user=user, event=event).exists():
-            print("User is already subscribed.")
-            raise forms.ValidationError("You are already subscribed to this event.")
+            # Sprawdzanie, czy user nie jest podpisany na event
+            if Subscription.objects.filter(user=user, event=event).exists():
+                print("User is already subscribed.")
+                raise forms.ValidationError("You are already subscribed to this event.")
 
-        # sprawdzanie, czy user nie podpisuje się na własny event
-        if user == event.author:
-            print("User is the author of the event.")
-            raise ValidationError("You cannot sign up for your own event.")
+            # Sprawdzanie, czy user nie podpisuje się na własny event
+            if user == event.author:
+                print("User is the author of the event.")
+                raise ValidationError("You cannot sign up for your own event.")
 
         return cleaned_data
 
