@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path, include
 import django.contrib.auth.views as auth_views
 
-from evently.views import create_event, UserCreationView, CreateCategoryView, list_events, subscribe_event, search_event
+from evently.views import create_event, UserCreationView, CreateCategoryView, list_events, subscribe_event, search_event, subscribe_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -28,6 +28,11 @@ urlpatterns = [
     path("CreateCategory", CreateCategoryView.as_view(), name="create_category"),  # Tworzenie kategori
 
     path('list_events/', list_events, name='list_events'),  # Lista eventow
+
+    path('search', search_event, name='search_event'),
+
+    path('subscribe/<int:event_id>/', subscribe_event, name='subscribe_event'),  # dodano event_id
+
 
     # Zarzadzanie uzytkownikiem
     path('createuser/', UserCreationView.as_view(), name='user'),
@@ -47,8 +52,7 @@ urlpatterns = [
          name='password_reset_confirm'),
     path('accounts/reset/done/', auth_views.PasswordResetCompleteView.as_view(),
          name='password_reset_complete'),
-    path('subscribe/<int:event_id>/', subscribe_event, name='subscribe_event'),
     #new
-    path('search', search_event, name='search_event'),
+
 
 ]

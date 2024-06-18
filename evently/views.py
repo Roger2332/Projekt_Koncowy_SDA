@@ -82,3 +82,15 @@ def search_event(request):
             events = events.filter(Q(start_at__lte=now, end_at__gte=now) | Q(start_at__gt=now))
 
     return render(request, 'search_results_list.html', {'form': form, 'events': events})
+
+
+
+def subscribe_view(request):
+    if request.method == 'POST':
+        form = SubscriptionForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('index')
+    else:
+        form = SubscriptionForm()
+    return render(request, 'subscribe.html', {'form': form})
