@@ -65,11 +65,10 @@ class Subscription(models.Model):
     modified = models.DateTimeField(auto_now=True)
 
     class Meta:
-        unique_together = ('user', 'event') # sprawdzanie na unikatowość
+        unique_together = ('user', 'event')  # sprawdzanie na unikatowość
 
     def __str__(self):
         return f'User: {self.user}, Event: {self.event}'
-
 
 
 class EventCategory(models.Model):

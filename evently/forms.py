@@ -72,11 +72,11 @@ class CategoryForm(forms.ModelForm):
         model = Category
         fields = ['name']
 
+
 class SubscriptionForm(forms.ModelForm):
     class Meta:
         model = Subscription
         fields = ['user', 'event']
-
 
     def clean(self):
         cleaned_data = super().clean()
@@ -104,7 +104,8 @@ class SubscriptionForm(forms.ModelForm):
         except IntegrityError:
             raise forms.ValidationError("You are already subscribed to this event.")
 
-#NEW
+
+# NEW
 class EventSearchForm(forms.Form):
     SEARCH_CHOICES = [
         ('future', 'Przyszłe'),
