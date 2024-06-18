@@ -69,12 +69,17 @@ def search_event(request):
 
 
 @login_required
-def subscribe_view(request):
+def subscribe_view(request, event_id):
+    event = get_object_or_404(Event, id=event_id)
+
     if request.method == 'POST':
         form = SubscriptionForm(request.POST)
         if form.is_valid():
+            form.instance.user = request.user
+            form.instance.event = event
             form.save()
-            return redirect('index')
+            return redirect('list_events')
     else:
-        form = SubscriptionForm()
-    return render(request, 'subscribe.html', {'form': form})
+        form = SubscriptionForm(initial={'event': event})
+
+    return render(request, 'subscribe.html', {'form': form, 'event': event})
