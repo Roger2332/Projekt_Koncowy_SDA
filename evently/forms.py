@@ -3,6 +3,7 @@ from datetime import datetime
 from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
 from django import forms
+from django.db import IntegrityError
 
 from .models import Event, CreateUserModel, Category, Status, Subscription
 
@@ -71,17 +72,44 @@ class CategoryForm(forms.ModelForm):
         model = Category
         fields = ['name']
 
-
 class SubscriptionForm(forms.ModelForm):
     class Meta:
         model = Subscription
-        unique_together = ('user', 'event')  # sprawdzanie na unikatowość
         fields = ['user', 'event']
 
-    # sprawdzanie, czy user nie podpisuje się na własny event
+
     def clean(self):
-        if self.user == self.event.author:
+        cleaned_data = super().clean()
+        user = cleaned_data.get('user')
+        event = cleaned_data.get('event')
+
+        print(f"User: {user}, Event: {event}, Author: {event.author}")
+
+        # sprawdzanie, czy user nie jest podpisany na event
+        if Subscription.objects.filter(user=user, event=event).exists():
+            print("User is already subscribed.")
+            raise forms.ValidationError("You are already subscribed to this event.")
+
+        # sprawdzanie, czy user nie podpisuje się na własny event
+        if user == event.author:
+            print("User is the author of the event.")
             raise ValidationError("You cannot sign up for your own event.")
-        # sprawdzanie, czy user nie jest już podpisany na event
-        if Subscription.objects.filter(user=self.user, event=self.event).exists():
-            raise ValidationError("You are already subscribed to this event.")
+
+        return cleaned_data
+
+    def save(self, commit=True):
+        try:
+            return super().save(commit)
+        except IntegrityError:
+            raise forms.ValidationError("You are already subscribed to this event.")
+
+#NEW
+class EventSearchForm(forms.Form):
+    SEARCH_CHOICES = [
+        ('future', 'Przyszłe'),
+        ('ongoing_future', 'Trwające i przyszłe'),
+        ('all', 'Wszystkie')
+    ]
+
+    query = forms.CharField(label='Nazwa wydarzenia', max_length=100, required=False)
+    search_type = forms.ChoiceField(label='Typ wyszukiwania', choices=SEARCH_CHOICES, required=False)
