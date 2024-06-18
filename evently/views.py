@@ -8,7 +8,7 @@ from django.db.models import Q
 
 from .forms import EventForm, CreateUserForm, CategoryForm, SubscriptionForm, EventSearchForm
 
-from .models import Status, Category, Event
+from .models import Status, Category, Event, Subscription
 
 
 @login_required  # Dekorator Sprawedza czy uzytkownik jest zalogowany, jesli nie jest zostanie przekierowany na strone do logowania
@@ -47,6 +47,7 @@ def list_events(request):
     return render(request, 'event_list.html', {'events': events})
 
 
+@login_required
 def search_event(request):
     form = EventSearchForm(request.GET)
     events = Event.objects.all()
@@ -65,21 +66,14 @@ def search_event(request):
         elif search_type == 'ongoing_future':
             events = events.filter(Q(start_at__lte=now, end_at__gte=now) | Q(start_at__gt=now))
 
-    return render(request, 'search_results_list.html', {'form': form, 'events': events})
-
+    return render(request, 'event_list.html', {'form': form, 'events': events})
 
 @login_required
-def subscribe_view(request, event_id):
+def subscribe_event(request, event_id):
     event = get_object_or_404(Event, id=event_id)
+    user = request.user
 
-    if request.method == 'POST':
-        form = SubscriptionForm(request.POST)
-        if form.is_valid():
-            form.instance.user = request.user
-            form.instance.event = event
-            form.save()
-            return redirect('list_events')
-    else:
-        form = SubscriptionForm(initial={'event': event})
+    if not Subscription.objects.filter(user=user, event=event).exists():
+        Subscription.objects.create(user=user, event=event)
 
-    return render(request, 'subscribe.html', {'form': form, 'event': event})
+    return redirect('search_event')
