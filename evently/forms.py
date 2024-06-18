@@ -72,28 +72,29 @@ class CategoryForm(forms.ModelForm):
         model = Category
         fields = ['name']
 
+
 class SubscriptionForm(forms.ModelForm):
     class Meta:
         model = Subscription
         fields = ['user', 'event']
-
 
     def clean(self):
         cleaned_data = super().clean()
         user = cleaned_data.get('user')
         event = cleaned_data.get('event')
 
-        print(f"User: {user}, Event: {event}, Author: {event.author}")
+        if event:  # Upewnij się, że event jest obecny
+            print(f"User: {user}, Event: {event}, Author: {event.author}")
 
-        # sprawdzanie, czy user nie jest podpisany na event
-        if Subscription.objects.filter(user=user, event=event).exists():
-            print("User is already subscribed.")
-            raise forms.ValidationError("You are already subscribed to this event.")
+            # Sprawdzanie, czy user nie jest podpisany na event
+            if Subscription.objects.filter(user=user, event=event).exists():
+                print("User is already subscribed.")
+                raise forms.ValidationError("You are already subscribed to this event.")
 
-        # sprawdzanie, czy user nie podpisuje się na własny event
-        if user == event.author:
-            print("User is the author of the event.")
-            raise ValidationError("You cannot sign up for your own event.")
+            # Sprawdzanie, czy user nie podpisuje się na własny event
+            if user == event.author:
+                print("User is the author of the event.")
+                raise ValidationError("You cannot sign up for your own event.")
 
         return cleaned_data
 
@@ -102,6 +103,7 @@ class SubscriptionForm(forms.ModelForm):
             return super().save(commit)
         except IntegrityError:
             raise forms.ValidationError("You are already subscribed to this event.")
+
 
 #wyszukiwarka
 class EventSearchForm(forms.Form):
@@ -114,6 +116,7 @@ class EventSearchForm(forms.Form):
 
     query = forms.CharField(label='Nazwa wydarzenia', max_length=100, required=False)
     search_type = forms.ChoiceField(label='Typ wyszukiwania', choices=SEARCH_CHOICES, required=False)
+
     place = forms.CharField(label='Nazwa miejsca', max_length=100, required=False)
     category = forms.ModelChoiceField(queryset=Category.objects.all(), label='Kategoria', required=False)
 

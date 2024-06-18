@@ -5,10 +5,10 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
 from django.db.models import Q
-
+from django.http import HttpResponse
 from .forms import EventForm, CreateUserForm, CategoryForm, SubscriptionForm, EventSearchForm
 
-from .models import Status, Category, Event
+from .models import Status, Category, Event, Subscription
 
 
 @login_required  # Dekorator Sprawedza czy uzytkownik jest zalogowany, jesli nie jest zostanie przekierowany na strone do logowania
@@ -47,21 +47,6 @@ def list_events(request):
     return render(request, 'event_list.html', {'events': events})
 
 @login_required
-def subscribe_event(request, event_id):
-    event = get_object_or_404(Event, id=event_id)
-    if request.method == 'POST':
-        form = SubscriptionForm(request.POST)
-        if form.is_valid():
-            try:
-                form.save()
-                return redirect('event_detail', event_id=event_id)
-            except forms.ValidationError as e:
-                form.add_error(None, e)
-    else:
-        form = SubscriptionForm(initial={'user': request.user, 'event': event})
-    return render(request, 'subscribe_event.html', {'form': form, 'event': event})
-
-#wyszukiwarka
 def search_event(request):
     form = EventSearchForm(request.GET)
     events = Event.objects.all()
@@ -92,4 +77,16 @@ def search_event(request):
             events = events.filter(category=category)
 
 
-    return render(request, 'search_results_list.html', {'form': form, 'events': events})
+    return render(request, 'event_list.html', {'form': form, 'events': events})
+
+@login_required
+def subscribe_event(request, event_id):
+    event = get_object_or_404(Event, id=event_id)
+    user = request.user
+
+    if request.method == 'POST':
+        # Sprawdzenie czy użytkownik nie jest już subskrybowany
+        if not Subscription.objects.filter(user=user, event=event).exists():
+            Subscription.objects.create(user=user, event=event)
+            return HttpResponse("Subscribed successfully.")# Przekierowanie po subskrypcji
+    return HttpResponse("Invalid request method.")  # Przekierowanie w razie błędu
