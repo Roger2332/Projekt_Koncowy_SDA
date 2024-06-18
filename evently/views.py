@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
 from django.db.models import Q
-
+from django.http import HttpResponse
 from .forms import EventForm, CreateUserForm, CategoryForm, SubscriptionForm, EventSearchForm
 
 from .models import Status, Category, Event, Subscription
@@ -73,7 +73,9 @@ def subscribe_event(request, event_id):
     event = get_object_or_404(Event, id=event_id)
     user = request.user
 
-    if not Subscription.objects.filter(user=user, event=event).exists():
-        Subscription.objects.create(user=user, event=event)
-
-    return redirect('search_event')
+    if request.method == 'POST':
+        # Sprawdzenie czy użytkownik nie jest już subskrybowany
+        if not Subscription.objects.filter(user=user, event=event).exists():
+            Subscription.objects.create(user=user, event=event)
+            return HttpResponse("Subscribed successfully.")# Przekierowanie po subskrypcji
+    return HttpResponse("Invalid request method.")  # Przekierowanie w razie błędu
