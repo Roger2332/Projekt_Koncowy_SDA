@@ -61,8 +61,7 @@ def subscribe_event(request, event_id):
         form = SubscriptionForm(initial={'user': request.user, 'event': event})
     return render(request, 'subscribe_event.html', {'form': form, 'event': event})
 
-#new
-
+#wyszukiwarka
 def search_event(request):
     form = EventSearchForm(request.GET)
     events = Event.objects.all()
@@ -70,15 +69,27 @@ def search_event(request):
     if form.is_valid():
         query = form.cleaned_data.get('query')
         search_type = form.cleaned_data.get('search_type')
+        place = form.cleaned_data.get('place')
+        category = form.cleaned_data.get('category')
 
         if query:
             events = events.filter(name__icontains=query)
 
         now = datetime.now().date()
 
-        if search_type == 'future':
-            events = events.filter(start_at__gt=now)
-        elif search_type == 'ongoing_future':
-            events = events.filter(Q(start_at__lte=now, end_at__gte=now) | Q(start_at__gt=now))
+        if search_type:
+            if search_type == 'future':
+                events = events.filter(start_at__gt=datetime.now())
+            elif search_type == 'past':
+                events = events.filter(end_at__lt=datetime.now())
+            elif search_type == 'ongoing_future':
+                events = events.filter(end_at__gt=datetime.now())
+
+        if place:
+            events = events.filter(place__icontains=place)
+
+        if category:
+            events = events.filter(category=category)
+
 
     return render(request, 'search_results_list.html', {'form': form, 'events': events})
