@@ -5,44 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}My Django App{% endblock %}</title>
     {% load static %}
-    <link href="{% static 'css/bootstrap.css' %}" rel="stylesheet">
-    <link href="{% static 'css/fonts.css' %}" rel="stylesheet">
-    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@1.4.0/css/pico.min.css">
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="{% url 'list_events' %}">EVENTLY</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ml-auto">
-            {% if user.is_authenticated %}
-                <li class="nav-item">
-                    <form method="post" action="{% url 'logout' %}">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-link nav-link">Wyloguj się</button>
-                    </form>
-                </li>
-            {% else %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'login' %}">Zaloguj się</a>
-                </li>
-            {% endif %}
-        </ul>
-    </div>
+<nav class="container-fluid">
+    <a href="{% url 'list_events' %}" class="contrast">EventApp</a>
+    <ul>
+        {% if user.is_authenticated %}
+            <li>
+                <form method="post" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="contrast">Wyloguj się</button>
+                </form>
+            </li>
+        {% else %}
+            <li><a href="{% url 'login' %}" class="contrast">Zaloguj się</a></li>
+        {% endif %}
+    </ul>
 </nav>
 
-<div class="container mt-4">
+<main class="container mt-4">
     {% block content %}
     {% endblock %}
-</div>
+</main>
 
-<script src="{% static 'js/core.min.js' %}"></script>
-<script src="{% static 'js/html5shiv.min.js' %}"></script>
-<script src="{% static 'js/pointer-events.min.js' %}"></script>
-<script src="{% static 'js/script.js' %}"></script>
 </body>
 </html>
