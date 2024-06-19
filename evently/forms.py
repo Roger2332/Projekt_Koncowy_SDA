@@ -8,13 +8,13 @@ from django.db import IntegrityError
 from .models import Event, CreateUserModel, Category, Subscription
 
 
-# sprawdzanie czy tytul nie zawiera samych bialych znakow
+# Sprawdzanie czy tytul nie zawiera samych bialych znakow
 def title_validator(value):
     if value == '' * len(value):
         raise forms.ValidationError('The title cannot contain only trademarks')
 
 
-# sprawdzanie czy data nie jest wpisana przeszla
+# Sprawdzanie czy data nie jest wpisana przeszla
 def data_start_validator(value):
     if value < datetime.now().date():
         raise forms.ValidationError('The data cannot be in the future')
@@ -26,6 +26,7 @@ def dec_valid(value):
         raise forms.ValidationError('Description must contain at least 20 characters')
 
 
+# Lista eventów
 class EventForm(forms.ModelForm):
     class Meta:
         model = Event
@@ -40,7 +41,7 @@ class EventForm(forms.ModelForm):
                                       widget=forms.Select(attrs={'class': 'form-control'}),
                                       empty_label="Wybierz kategorię"
                                       )
-
+# ???
     def clean(self):
         cleaned_data = super().clean()
         start_at = cleaned_data.get("start_at")
@@ -56,23 +57,24 @@ class EventForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
 
 
+# Forma do tworzenia usera
 class CreateUserForm(UserCreationForm):
     class Meta:
         model = CreateUserModel
         fields = ['first_name', 'last_name', 'username', 'email', ]
-
+    # Dodanie statusu nieaktywnego odrazu jak uzytkownik stworzy konto, admin musi mu aktywowac konto
     def save(self,
-             commit=True):  # Dodanie statusu nieaktywnego odrazu jak uzytkownik stworzy konto, admin musi mu aktywowac konto
+             commit=True):
         self.instance.is_active = False
         return super().save(commit)
 
-
+# Forma do tworzenia kategorii
 class CategoryForm(forms.ModelForm):
     class Meta:
         model = Category
         fields = ['name']
 
-
+# Forma do zapisywania się na eventy
 class SubscriptionForm(forms.ModelForm):
     class Meta:
         model = Subscription
@@ -83,7 +85,8 @@ class SubscriptionForm(forms.ModelForm):
         user = cleaned_data.get('user')
         event = cleaned_data.get('event')
 
-        if event:  # Upewnij się, że event jest obecny
+        # Upewnij się, że event jest obecny
+        if event:
             print(f"User: {user}, Event: {event}, Author: {event.author}")
 
             # Sprawdzanie, czy user nie jest podpisany na event
@@ -105,7 +108,7 @@ class SubscriptionForm(forms.ModelForm):
             raise forms.ValidationError("You are already subscribed to this event.")
 
 
-#wyszukiwarka
+# Wyszukiwarka
 class EventSearchForm(forms.Form):
     SEARCH_CHOICES = [
         ('future', 'Przyszłe'),
@@ -116,9 +119,11 @@ class EventSearchForm(forms.Form):
 
     query = forms.CharField(label='Nazwa wydarzenia', max_length=100, required=False)
     search_type = forms.ChoiceField(label='Typ wyszukiwania', choices=SEARCH_CHOICES, required=False)
-
     place = forms.CharField(label='Nazwa miejsca', max_length=100, required=False)
     category = forms.ModelChoiceField(queryset=Category.objects.all(), label='Kategoria', required=False)
+    #new
+    start_date = forms.DateField(label='Data rozpoczęcia', required=False, widget=forms.TextInput(attrs={'type': 'date'}))
+    end_date = forms.DateField(label='Data zakończenia', required=False, widget=forms.TextInput(attrs={'type': 'date'}))
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

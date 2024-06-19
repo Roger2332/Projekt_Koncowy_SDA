@@ -1,5 +1,6 @@
 <form method="GET" action="{% url 'search_event' %}">
     <input type="text" name="query" placeholder="Wpisz nazwę eventu" value="{{ form.query.value|default_if_none:'' }}">
+
     <select name="search_type">
         <option value="all" {% if form.search_type.value == "all" %}selected{% endif %}>Wszystkie</option>
         <option value="future" {% if form.search_type.value == "future" %}selected{% endif %}>Przyszłe</option>
@@ -20,6 +21,12 @@
             <option value="{{ category.id }}" {% if form.category.value == category.id %}selected{% endif %}>{{ category.name }}</option>
         {% endfor %}
     </select>
+
+    <label for="start_date">Data rozpoczęcia</label>
+    <input type="date" name="start_date" value="{{ form.start_date.value|default_if_none:'' }}">
+
+    <label for="end_date">Data zakończenia</label>
+    <input type="date" name="end_date" value="{{ form.end_date.value|default_if_none:'' }}">
 
     <button type="submit">Szukaj</button>
 </form>
