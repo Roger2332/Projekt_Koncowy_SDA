@@ -121,5 +121,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'evently.CreateUserModel'  # Zmiana modelu defoltowego Uzytkownika
 
-LOGIN_REDIRECT_URL = 'index'  # Ustawienia pozwalajace na zalogowanie sie
-LOGOUT_REDIRECT_URL = 'index'  # Ustawienia pozwalajace na wylogowanie sie
+LOGIN_REDIRECT_URL = 'list_events'  # Ustawienia pozwalajace na zalogowanie sie
+LOGOUT_REDIRECT_URL = 'login'  # Ustawienia pozwalajace na wylogowanie sie

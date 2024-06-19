@@ -1,46 +1,79 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Event list</h1>
+    <div class="container mt-4">
+        <h1 class="mb-4">Lista wydarzeń</h1>
 
-    <!-- Formularz wyszukiwania -->
-    <form method="GET" action="{% url 'search_event' %}">
-        <input type="text" name="query" placeholder="Wpisz frazę" value="{{ request.GET.query }}">
-        <select name="search_type">
-            <option value="all" {% if request.GET.search_type == "all" %}selected{% endif %}>Wszystkie</option>
-            <option value="future" {% if request.GET.search_type == "future" %}selected{% endif %}>Przyszłe</option>
-            <option value="ongoing_future" {% if request.GET.search_type == "ongoing_future" %}selected{% endif %}>Trwające i przyszłe</option>
-        </select>
-        <button type="submit">Szukaj</button>
-    </form>
+        <!-- Formularz wyszukiwania -->
+        <form method="GET" action="{% url 'search_event' %}">
+            <input type="text" name="query" placeholder="Wpisz nazwę eventu"
+                   value="{{ form.query.value|default_if_none:'' }}">
+            <select name="search_type">
+                <option value="all" {% if form.search_type.value == "all" %}selected{% endif %}>Wszystkie</option>
+                <option value="future" {% if form.search_type.value == "future" %}selected{% endif %}>Przyszłe</option>
+                <option value="ongoing_future" {% if form.search_type.value == "ongoing_future" %}selected{% endif %}>
+                    Trwające i przyszłe
+                </option>
+                <option value="past" {% if form.search_type.value == "past" %}selected{% endif %}>Przeszłe</option>
+            </select>
 
-    <table class="table">
-        <tbody>
-        {% for event in events %}
-            <tr>
-                <td><h2>{{ event.name }}</h2></td>
-            </tr>
-            <tr>
-                <td>{{ event.start_at }} - {{ event.end_at }}</td>
-            </tr>
-            <tr>
-                <td>Description: {{ event.description }}</td>
-            </tr>
-            <tr>
-                <td>
-                    <form id="subscribeForm{{ event.id }}" action="{% url 'subscribe_event' event.id %}" method="post" style="display: none;">
-                        {% csrf_token %}
-                    </form>
-                    <button type="button" class="btn btn-primary subscribe-btn" data-event-id="{{ event.id }}">Subscribe</button>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+            <select name="place">
+                <option value="" {% if not form.place.value %}selected{% endif %}>Wybierz miejsce</option>
+                {% for place in form.place.field.queryset %}
+                    <option value="{{ place }}"
+                            {% if form.place.value == place %}selected{% endif %}>{{ place }}</option>
+                {% endfor %}
+            </select>
+
+            <select name="category">
+                <option value="" {% if not form.category.value %}selected{% endif %}>Wybierz kategorię</option>
+                {% for category in form.category.field.queryset %}
+                    <option value="{{ category.id }}"
+                            {% if form.category.value == category.id %}selected{% endif %}>{{ category.name }}</option>
+                {% endfor %}
+            </select>
+
+            <button type="submit">Szukaj</button>
+        </form>
+
+        <!-- Tabela z wynikami wyszukiwania -->
+        <div class="table-responsive">
+            <table class="table table-striped mt-4">
+                <thead>
+                <tr>
+                    <th>Nazwa</th>
+                    <th>Data rozpoczęcia</th>
+                    <th>Data zakończenia</th>
+                    <th>Opis</th>
+                    <th>Subskrybuj</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for event in events %}
+                    <tr>
+                        <td>{{ event.name }}</td>
+                        <td>{{ event.start_at }}</td>
+                        <td>{{ event.end_at }}</td>
+                        <td>{{ event.description|truncatewords:50 }}</td>
+                        <td>
+                            <form id="subscribeForm{{ event.id }}" action="{% url 'subscribe_event' event.id %}"
+                                  method="post" style="display: none;">
+                                {% csrf_token %}
+                            </form>
+                            <button type="button" class="btn btn-primary subscribe-btn" data-event-id="{{ event.id }}">
+                                Subskrybuj
+                            </button>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 
     <script>
         document.querySelectorAll('.subscribe-btn').forEach(button => {
-            button.addEventListener('click', function() {
+            button.addEventListener('click', function () {
                 const eventId = this.getAttribute('data-event-id');
                 const formId = `#subscribeForm${eventId}`;
                 document.querySelector(formId).submit();
