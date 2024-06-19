@@ -68,6 +68,7 @@ def search_event(request):
 
     return render(request, 'event_list.html', {'form': form, 'events': events})
 
+
 @login_required
 def subscribe_event(request, event_id):
     event = get_object_or_404(Event, id=event_id)
@@ -77,5 +78,5 @@ def subscribe_event(request, event_id):
         # Sprawdzenie czy użytkownik nie jest już subskrybowany
         if not Subscription.objects.filter(user=user, event=event).exists():
             Subscription.objects.create(user=user, event=event)
-            return HttpResponse("Subscribed successfully.")# Przekierowanie po subskrypcji
+            return HttpResponse("Subscribed successfully.")  # Przekierowanie po subskrypcji
     return HttpResponse("Invalid request method.")  # Przekierowanie w razie błędu
