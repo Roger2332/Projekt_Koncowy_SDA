@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path, include
 import django.contrib.auth.views as auth_views
 
-from evently.views import create_event, UserCreationView, CreateCategoryView, list_events, subscribe_view, \
+from evently.views import create_event, UserCreationView, CreateCategoryView, list_events, subscribe_event, \
     search_event
 
 urlpatterns = [
@@ -32,7 +32,7 @@ urlpatterns = [
 
     path('search', search_event, name='search_event'),
 
-    path('subscribe/<int:event_id>/', subscribe_view, name='subscribe_event'),  # dodano event_id
+    path('subscribe/<int:event_id>/', subscribe_event, name='subscribe_event'),  # dodano event_id
 
     # Zarzadzanie uzytkownikiem
     path('createuser/', UserCreationView.as_view(), name='user'),
