@@ -1,10 +1,12 @@
-<form method="GET" action="{% url 'search_event' %}">
+<form method="GET" action="{% url 'list_events' %}">
     <input type="text" name="query" placeholder="Wpisz nazwę eventu" value="{{ form.query.value|default_if_none:'' }}">
 
     <select name="search_type">
         <option value="all" {% if form.search_type.value == "all" %}selected{% endif %}>Wszystkie</option>
         <option value="future" {% if form.search_type.value == "future" %}selected{% endif %}>Przyszłe</option>
-        <option value="ongoing_future" {% if form.search_type.value == "ongoing_future" %}selected{% endif %}>Trwające i przyszłe</option>
+        <option value="ongoing_future" {% if form.search_type.value == "ongoing_future" %}selected{% endif %}>Trwające i
+            przyszłe
+        </option>
         <option value="past" {% if form.search_type.value == "past" %}selected{% endif %}>Przeszłe</option>
     </select>
 
@@ -18,7 +20,8 @@
     <select name="category">
         <option value="" {% if not form.category.value %}selected{% endif %}>Wybierz kategorię</option>
         {% for category in form.category.field.queryset %}
-            <option value="{{ category.id }}" {% if form.category.value == category.id %}selected{% endif %}>{{ category.name }}</option>
+            <option value="{{ category.id }}"
+                    {% if form.category.value == category.id %}selected{% endif %}>{{ category.name }}</option>
         {% endfor %}
     </select>
 
