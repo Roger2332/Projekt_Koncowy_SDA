@@ -24,15 +24,14 @@ from evently.views import create_event, UserCreationView, CreateCategoryView, li
 urlpatterns = [
     path('admin/', admin.site.urls),
 
-    path('event/', create_event, name='event'),  # Tworzenie eventu
+    path('Create_Event/', create_event, name='event'),  # Tworzenie eventu
 
-    path("CreateCategory", CreateCategoryView.as_view(), name="create_category"),  # Tworzenie kategori
+    path("Create_Category", CreateCategoryView.as_view(), name="create_category"),  # Tworzenie kategori
 
     path('list_events/', list_events, name='list_events'),  # Lista eventow
 
-    path('search', search_event, name='search_event'),
 
-    path('subscribe/<int:event_id>/', subscribe_event, name='subscribe_event'),  # dodano event_id
+    path('subscribe/<int:event_id>/', subscribe_event, name='subscribe_event'),  # Opcja mozliwosci zasubskrybowania eventu
 
     # Zarzadzanie uzytkownikiem
     path('createuser/', UserCreationView.as_view(), name='user'),
