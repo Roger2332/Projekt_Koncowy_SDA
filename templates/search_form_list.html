@@ -25,6 +25,13 @@
         {% endfor %}
     </select>
 
+    <select name="organizer">
+        <option value="" {% if not form.organizer.value %}selected{% endif %}>Wybierz organizatora</option>
+        {% for organizer in form.organizer.field.queryset %}
+            <option value="{{ organizer.id }}" {% if form.organizer.value == organizer.id %}selected{% endif %}>{{ organizer.username }}</option>
+        {% endfor %}
+    </select>
+
     <label for="start_date">Data rozpoczęcia</label>
     <input type="date" id="start_date" name="start_date" value="{{ form.start_date.value|default_if_none:'' }}">
 
