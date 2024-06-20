@@ -57,6 +57,7 @@ def search_event(request):
         search_type = form.cleaned_data.get('search_type')
         place = form.cleaned_data.get('place')
         category = form.cleaned_data.get('category')
+        organizer = form.cleaned_data.get('organizer') # new
         start_date = form.cleaned_data.get('start_date')
         end_date = form.cleaned_data.get('end_date')
 
@@ -84,6 +85,9 @@ def search_event(request):
 
         if end_date:
             events = events.filter(end_at__lte=end_date)
+
+        if organizer: #new
+            events = events.filter(author=organizer)
 
     return render(request, 'event_list.html', {'form': form, 'events': events})
 

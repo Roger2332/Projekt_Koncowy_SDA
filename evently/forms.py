@@ -121,7 +121,7 @@ class EventSearchForm(forms.Form):
     search_type = forms.ChoiceField(label='Typ wyszukiwania', choices=SEARCH_CHOICES, required=False)
     place = forms.CharField(label='Nazwa miejsca', max_length=100, required=False)
     category = forms.ModelChoiceField(queryset=Category.objects.all(), label='Kategoria', required=False)
-    #new
+    organizer = forms.ModelChoiceField(queryset=CreateUserModel.objects.all(), label='Organizator', required=False) #new
     start_date = forms.DateField(label='Data rozpoczęcia', required=False, widget=forms.TextInput(attrs={'type': 'date'}))
     end_date = forms.DateField(label='Data zakończenia', required=False, widget=forms.TextInput(attrs={'type': 'date'}))
 

@@ -11,13 +11,40 @@
         {% include 'search_results_list.html' %}
 
         <script>
-            document.querySelectorAll('.subscribe-btn').forEach(button => {
-                button.addEventListener('click', function () {
-                    const eventId = this.getAttribute('data-event-id');
-                    const formId = `#subscribeForm${eventId}`;
-                    document.querySelector(formId).submit();
-                });
+            document.addEventListener('DOMContentLoaded', function() {
+                populateFilters();
             });
+
+            function populateFilters() {
+                // Assuming you need to fetch filter data dynamically via an API
+                fetch('/api/getFilters')
+                    .then(response => response.json())
+                    .then(data => {
+                        populateDropdown('placeDropdown', data.places);
+                        populateDropdown('categoryDropdown', data.categories);
+                        populateDropdown('organizerDropdown', data.organizers);
+                    })
+                    .catch(error => console.error('Error fetching filters:', error));
+            }
+
+            function populateDropdown(dropdownId, options) {
+                const dropdown = document.getElementById(dropdownId);
+                dropdown.innerHTML = ''; // Clear existing options
+                options.forEach(option => {
+                    const optionElement = document.createElement('option');
+                    optionElement.value = option.value;
+                    optionElement.textContent = option.label;
+                    dropdown.appendChild(optionElement);
+                });
+            }
+
+            document.getElementById('searchButton').addEventListener('click', function() {
+                performSearch();
+            });
+
+            function performSearch() {
+                // Your existing search functionality
+            }
         </script>
     </div>
 {% endblock %}
