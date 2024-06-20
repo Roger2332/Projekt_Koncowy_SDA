@@ -10,6 +10,7 @@ from .forms import EventForm, CreateUserForm, CategoryForm, SubscriptionForm, Ev
 
 from .models import Status, Category, Event, Subscription
 
+
 # Dekorator Sprawdza czy uzytkownik jest zalogowany, jesli nie jest zostanie przekierowany na strone do logowania
 @login_required
 def create_event(request):
@@ -46,8 +47,8 @@ def list_events(request):
     events = Event.objects.all().order_by('start_at')
     return render(request, 'event_list.html', {'events': events})
 
+
 # Wyszukiwarka eventów
-@login_required
 def search_event(request):
     form = EventSearchForm(request.GET)
     events = Event.objects.all()

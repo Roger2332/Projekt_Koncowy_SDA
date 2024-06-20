@@ -9,15 +9,10 @@
 
         <!-- Tabela z wynikami wyszukiwania -->
         {% include 'search_results_list.html' %}
-
+        
+        <!--Przycisk subskrybuj-->
         <script>
-            document.querySelectorAll('.subscribe-btn').forEach(button => {
-                button.addEventListener('click', function () {
-                    const eventId = this.getAttribute('data-event-id');
-                    const formId = `#subscribeForm${eventId}`;
-                    document.querySelector(formId).submit();
-                });
-            });
+            {% include 'subscribe.js' %}
         </script>
     </div>
 {% endblock %}
