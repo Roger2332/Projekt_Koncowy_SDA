@@ -6,30 +6,40 @@
         <th>Kategoria</th>
         <th>Data rozpoczęcia</th>
         <th>Data zakończenia</th>
-        <th>Opis</th>
         <th>Organizator</th>
-        <th>Subskrybuj</th>
+
     </tr>
     </thead>
     <tbody>
     {% for event in events %}
         <tr>
-            <td>{{ event.name }}</td>
+            <td><h5>{{ event.name }}</h5></td>
             <td>{{ event.place }}</td>
             <td>{{ event.category.name }}</td>
             <td>{{ event.start_at }}</td>
             <td>{{ event.end_at }}</td>
-            <td>{{ event.description|truncatewords:50 }}</td>
             <td>{{ event.author.username }}</td>
             <td>
                 <form id="subscribeForm{{ event.id }}" action="{% url 'subscribe_event' event.id %}" method="post"
                       style="display: none;">
                     {% csrf_token %}
                 </form>
-                <button type="button" class="contrast" data-event-id="{{ event.id }}">Subskrybuj</button>
+                <button type="button" class="contrast subscribe-btn" data-event-id="{{ event.id }}">Subskrybuj</button>
             </td>
+        </tr>
+        <tr>
+            <td colspan="7">{{ event.description|truncatewords:50 }}</td>
         </tr>
     {% endfor %}
     </tbody>
 </table>
-</div>
+
+<script>
+    document.querySelectorAll('.subscribe-btn').forEach(button => {
+        button.addEventListener('click', function () {
+            const eventId = this.getAttribute('data-event-id');
+            const formId = `#subscribeForm${eventId}`;
+            document.querySelector(formId).submit();
+        });
+    });
+</script>
