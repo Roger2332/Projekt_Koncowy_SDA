@@ -1,26 +1,35 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Wyniki wyszukiwania wydarzeń</title>
-</head>
-<body>
-<h1>Wyniki wyszukiwania</h1>
-{% include 'search_form_list.html' %}
-<table>
+<table role="grid">
+    <thead>
+    <tr>
+        <th>Nazwa</th>
+        <th>Miejsce</th>
+        <th>Kategoria</th>
+        <th>Data rozpoczęcia</th>
+        <th>Data zakończenia</th>
+        <th>Opis</th>
+        <th>Organizator</th>
+        <th>Subskrybuj</th>
+    </tr>
+    </thead>
+    <tbody>
     {% for event in events %}
         <tr>
-            <td><h2>{{ event.name }}</h2></td>
-            <td>Miesce: {{ event.place }}</td>
-            <td>Kategoria: {{ event.category.name }}</td>
-            <td>Data otwarcia: {{ event.start_at }}</td>
-            <td>Data zamknięcia: {{ event.end_at }}</td>
-            <td>{{ event.description }}</td>
-            <td>Organizator: {{ event.author.username }}</td>
+            <td>{{ event.name }}</td>
+            <td>{{ event.place }}</td>
+            <td>{{ event.category.name }}</td>
+            <td>{{ event.start_at }}</td>
+            <td>{{ event.end_at }}</td>
+            <td>{{ event.description|truncatewords:50 }}</td>
+            <td>{{ event.author.username }}</td>
+            <td>
+                <form id="subscribeForm{{ event.id }}" action="{% url 'subscribe_event' event.id %}" method="post"
+                      style="display: none;">
+                    {% csrf_token %}
+                </form>
+                <button type="button" class="contrast" data-event-id="{{ event.id }}">Subskrybuj</button>
+            </td>
         </tr>
     {% endfor %}
+    </tbody>
 </table>
-<a href="{% url 'list_events' %}">Powrót do strony głównej</a>
-</body>
-</html>
-
+</div>
