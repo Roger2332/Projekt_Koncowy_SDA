@@ -4,7 +4,9 @@
     <select name="search_type">
         <option value="all" {% if form.search_type.value == "all" %}selected{% endif %}>Wszystkie</option>
         <option value="future" {% if form.search_type.value == "future" %}selected{% endif %}>Przyszłe</option>
-        <option value="ongoing_future" {% if form.search_type.value == "ongoing_future" %}selected{% endif %}>Trwające i przyszłe</option>
+        <option value="ongoing_future" {% if form.search_type.value == "ongoing_future" %}selected{% endif %}>Trwające i
+            przyszłe
+        </option>
         <option value="past" {% if form.search_type.value == "past" %}selected{% endif %}>Przeszłe</option>
     </select>
 
@@ -18,7 +20,8 @@
     <select name="category">
         <option value="" {% if not form.category.value %}selected{% endif %}>Wybierz kategorię</option>
         {% for category in form.category.field.queryset %}
-            <option value="{{ category.id }}" {% if form.category.value == category.id %}selected{% endif %}>{{ category.name }}</option>
+            <option value="{{ category.id }}"
+                    {% if form.category.value == category.id %}selected{% endif %}>{{ category.name }}</option>
         {% endfor %}
     </select>
 
@@ -30,10 +33,10 @@
     </select>
 
     <label for="start_date">Data rozpoczęcia</label>
-    <input type="date" name="start_date" value="{{ form.start_date.value|default_if_none:'' }}">
+    <input type="date" id="start_date" name="start_date" value="{{ form.start_date.value|default_if_none:'' }}">
 
     <label for="end_date">Data zakończenia</label>
-    <input type="date" name="end_date" value="{{ form.end_date.value|default_if_none:'' }}">
+    <input type="date" id="end_date" name="end_date" value="{{ form.end_date.value|default_if_none:'' }}">
 
     <button type="submit">Szukaj</button>
 </form>

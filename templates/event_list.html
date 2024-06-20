@@ -5,10 +5,19 @@
         <h1 class="mb-4">Lista wydarzeń</h1>
 
         <!-- Formularz wyszukiwania -->
-        {% include 'search_form_list.html' %}
+        <!-- Button to toggle filters -->
+        <button type="button" class="btn btn-primary" id="toggleFilters">Filtry</button>
+
+        <!-- Filter form section (initially hidden) -->
+        <div id="filterSection" style="display: none;">
+            {% include 'search_form_list.html' %}
+        </div>
 
         <!-- Tabela z wynikami wyszukiwania -->
         {% include 'search_results_list.html' %}
+
+        <!--Przycisk subskrybuj-->
+
 
         <script>
             document.addEventListener('DOMContentLoaded', function() {
@@ -45,6 +54,12 @@
             function performSearch() {
                 // Your existing search functionality
             }
+=======
+
+            {% include 'filter.js' %}       {#  Przycisk z filtracja #}
+
+            <!--Przycisk zasubskrybuj-->
+            {% include 'subscribe.js' %}
         </script>
     </div>
 {% endblock %}

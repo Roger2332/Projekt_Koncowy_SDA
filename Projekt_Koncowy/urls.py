@@ -24,9 +24,9 @@ from evently.views import create_event, UserCreationView, CreateCategoryView, li
 urlpatterns = [
     path('admin/', admin.site.urls),
 
-    path('event/', create_event, name='event'),  # Tworzenie eventu
+    path('Create_event/', create_event, name='event'),  # Tworzenie eventu
 
-    path("CreateCategory", CreateCategoryView.as_view(), name="create_category"),  # Tworzenie kategori
+    path("Create_Category", CreateCategoryView.as_view(), name="create_category"),  # Tworzenie kategori
 
     path('list_events/', list_events, name='list_events'),  # Lista eventow
 

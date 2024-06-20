@@ -9,7 +9,10 @@
 </head>
 <body>
 <nav class="container-fluid">
-    <a href="{% url 'list_events' %}" class="contrast">EventApp</a>
+    <a href="{% url 'list_events' %}" class="contrast">
+<img src="{% static 'logo_test.png' %}" alt="Evently" style="max-width: 100px; height: auto;">
+
+    </a>
     <ul>
         {% if user.is_authenticated %}
             <li>
