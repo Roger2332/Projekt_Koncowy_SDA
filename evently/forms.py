@@ -65,7 +65,6 @@ class CreateUserForm(UserCreationForm):
     # Dodanie statusu nieaktywnego odrazu jak uzytkownik stworzy konto, admin musi mu aktywowac konto
     def save(self,
              commit=True):
-        self.instance.is_active = False
         return super().save(commit)
 
 # Forma do tworzenia kategorii
