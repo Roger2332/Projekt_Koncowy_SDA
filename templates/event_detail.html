@@ -8,13 +8,20 @@
 
         <p><strong>Data rozpoczęcia</strong> {{ event.start_at }}</p>
         <p><strong>Data zakończenia</strong> {{ event.end_at }}</p>
-    
+
         <p><strong>Pełny opis:</strong> {{ event.description }}</p>
         <p><strong>Organizator:</strong> {{ event.author.username }}</p>
 
         {% if is_organizer %}
-            <a href="{% url 'movie_update' event.id %}" class="btn btn-secondary">EDIT_EVENT</a>
-            <a href="{% url 'delete_event' event.id %}" class="btn btn-danger">DELETE_EVENT</a>
+            <form action="{% url 'event_edit' event.id %}" class="btn btn-secondary">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-success">Edit Event</button>
+            </form>
+            <form action="{% url 'delete_event' event.id %}" class="btn btn-secondary">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-success">Delate Event</button>
+            </form>
+            
         {% elif is_registered %}
             <form action="{% url 'unsubscribe_event' event.id %}" method="post">
                 {% csrf_token %}
