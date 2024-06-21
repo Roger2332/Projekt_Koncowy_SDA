@@ -1,44 +1,30 @@
 <table role="grid">
-    <thead>
-    <tr>
-        <th>Nazwa</th>
-        <th>Miejsce</th>
-        <th>Kategoria</th>
-        <th>Data rozpoczęcia</th>
-        <th>Data zakończenia</th>
-        <th>Organizator</th>
-    </tr>
-    </thead>
+
     <tbody>
     {% for event in events %}
         <tr>
-            <td><h5>{{ event.name }}</h5></td>
-            <td>{{ event.place }}</td>
-            <td>{{ event.category.name }}</td>
-            <td>{{ event.start_at }}</td>
-            <td>{{ event.end_at }}</td>
-            <td>{{ event.author.username }}</td>
-            <td>
-                <form id="subscribeForm{{ event.id }}" action="{% url 'subscribe_event' event.id %}" method="post"
+            <td colspan="6"><h4>{{ event.name }}</h4></td>
+        <tr>
+            <td><h6>Miejsce:</h6> {{ event.place }}</td>
+            <td><h6>Data rozpoczęcia:</h6> {{ event.start_at }}</td>
+            <td><h6>Data zakończenia:</h6> {{ event.end_at }}</td>
+            <td><h6>Organizator:</h6> {{ event.author.username }}</td>
+        </tr>
+        <tr>
+            <td colspan="6">{{ event.description|truncatewords:50 }}</td>
+        </tr>
+        <tr>
+            <td colspan="6">
+                <form id="subscribeForm{{ event.id }}" action="{% url 'event_detail' event.id %}" method="post"
                       style="display: none;">
                     {% csrf_token %}
                 </form>
-                <button type="button" class="contrast subscribe-btn" data-event-id="{{ event.id }}">Subskrybuj</button>
+                <button type="button" class="contrast subscribe-btn" data-event-id="{{ event.id }}">See
+                    event {{ event.name }}</button>
             </td>
         </tr>
-        <tr>
-            <td colspan="7">{{ event.description|truncatewords:50 }}</td>
-        </tr>
+
     {% endfor %}
     </tbody>
 </table>
 
-<script>
-    document.querySelectorAll('.subscribe-btn').forEach(button => {
-        button.addEventListener('click', function () {
-            const eventId = this.getAttribute('data-event-id');
-            const formId = `#subscribeForm${eventId}`;
-            document.querySelector(formId).submit();
-        });
-    });
-</script>

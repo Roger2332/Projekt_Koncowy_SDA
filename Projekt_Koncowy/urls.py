@@ -19,7 +19,7 @@ from django.urls import path, include
 import django.contrib.auth.views as auth_views
 
 from evently.views import create_event, UserCreationView, CreateCategoryView, list_events, subscribe_event, \
-    search_event, UpdateEventView, delete_event, event_detail
+    search_event, edit_event, delete_event, event_detail, unsubscribe_event
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -29,11 +29,12 @@ urlpatterns = [
     path('list_events/', list_events, name='list_events'),
     # Zarządzanie eventem
     path('Create_event/', create_event, name='event'),
-    path('update_event/<pk>', UpdateEventView.as_view(), name='movie_update'),
+    path('update_event/<pk>', edit_event, name='movie_update'),
     path('delete_event/<int:pk>', delete_event, name='delete_event'),
     path('event/<int:pk>/', event_detail, name='event_detail'),
 
     path('subscribe_event/<int:event_id>/', subscribe_event, name='subscribe_event'),
+    path('event/<int:pk>/unregister/', unsubscribe_event, name='unsubscribe_event'),
     path("create_category", CreateCategoryView.as_view(), name="create_category"),  # Tworzenie kategori
     # user
     path('createuser/', UserCreationView.as_view(), name='user'), # Zarzadzanie uzytkownikiem
