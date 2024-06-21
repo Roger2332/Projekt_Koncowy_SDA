@@ -118,8 +118,24 @@ class UpdateEventView(UpdateView):
         LOGGER.warning('User provided invalid data while updating a movie.')
         return super().form_invalid(form)
 
-# Widok usuwania
-class DeleteEventView(DeleteView):
-    template_name = 'delete_event.html'
-    model = Event
-    success_url = reverse_lazy('index')
+# Widok usuwania wydarzenia
+@login_required
+def delete_event(request, pk):
+    event = get_object_or_404(Event, id=pk)
+    if request.user == event.author or request.user.is_staff:
+        if request.method == 'POST':
+            event.delete()
+            return redirect('list_events')
+        return render(request, 'delete_event.html', {'event': event})
+    return HttpResponse('Nie jesteś organizatorem', status=403)
+
+# Widok profilu użytkownika
+def event_detail(request, pk):
+    event = get_object_or_404(Event, pk=pk)
+    is_organizer = request.user == event.author
+    is_registered = event.participants.filter(id=request.user.id).exists()
+    return render(request, 'event_detail.html', {
+        'event': event,
+        'is_organizer': is_organizer,
+        'is_registered': is_registered,
+    })
