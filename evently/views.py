@@ -1,9 +1,10 @@
+from concurrent.futures._base import LOGGER
 from datetime import datetime
 from django import forms
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
-from django.views.generic import CreateView
+from django.views.generic import CreateView, UpdateView, DeleteView
 from django.db.models import Q
 from django.http import HttpResponse
 from .forms import EventForm, CreateUserForm, CategoryForm, SubscriptionForm, EventSearchForm
@@ -58,7 +59,7 @@ def search_event(request):
         search_type = form.cleaned_data.get('search_type')
         place = form.cleaned_data.get('place')
         category = form.cleaned_data.get('category')
-        organizer = form.cleaned_data.get('organizer') # new
+        organizer = form.cleaned_data.get('organizer')
         start_date = form.cleaned_data.get('start_date')
         end_date = form.cleaned_data.get('end_date')
 
@@ -87,7 +88,7 @@ def search_event(request):
         if end_date:
             events = events.filter(end_at__lte=end_date)
 
-        if organizer: #new
+        if organizer:
             events = events.filter(author=organizer)
 
     return render(request, 'event_list.html', {'form': form, 'events': events})
@@ -105,3 +106,20 @@ def subscribe_event(request, event_id):
             Subscription.objects.create(user=user, event=event)
             return HttpResponse("Subscribed successfully.")  # Przekierowanie po subskrypcji
     return HttpResponse("Invalid request method.")  # Przekierowanie w razie błędu
+
+# Widok edycji
+class UpdateEventView(UpdateView):
+    template_name = 'form.html'
+    model = Event
+    form_class = EventForm
+    success_url = reverse_lazy('index')
+
+    def form_invalid(self, form):
+        LOGGER.warning('User provided invalid data while updating a movie.')
+        return super().form_invalid(form)
+
+# Widok usuwania
+class DeleteEventView(DeleteView):
+    template_name = 'delete_event.html'
+    model = Event
+    success_url = reverse_lazy('index')
