@@ -5,6 +5,10 @@
         <h1>{{ event.name }}</h1>
         <p><strong>Miejsce:</strong> {{ event.place }}</p>
         <p><strong>Kategoria:</strong> {{ event.category.name }}</p>
+
+        <p><strong>Data rozpoczęcia</strong> {{ event.start_at }}</p>
+        <p><strong>Data zakończenia</strong> {{ event.end_at }}</p>
+    
         <p><strong>Pełny opis:</strong> {{ event.description }}</p>
         <p><strong>Organizator:</strong> {{ event.author.username }}</p>
 
@@ -12,7 +16,7 @@
             <a href="{% url 'movie_update' event.id %}" class="btn btn-secondary">EDIT_EVENT</a>
             <a href="{% url 'delete_event' event.id %}" class="btn btn-danger">DELETE_EVENT</a>
         {% elif is_registered %}
-            <form action="{% url 'create_category' event.id %}" method="post">
+            <form action="{% url 'unsubscribe_event' event.id %}" method="post">
                 {% csrf_token %}
                 <button type="submit" class="btn btn-warning">Rezygnuj</button>
             </form>

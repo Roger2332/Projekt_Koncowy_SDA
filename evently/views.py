@@ -98,36 +98,71 @@ def search_event(request):
 @login_required
 def subscribe_event(request, event_id):
     event = get_object_or_404(Event, id=event_id)
-    user = request.user
 
-    if request.method == 'POST':
-        # Sprawdzanie czy użytkownik nie jest już subskrybowany
-        if not Subscription.objects.filter(user=user, event=event).exists():
-            Subscription.objects.create(user=user, event=event)
-            return HttpResponse("Subscribed successfully.")  # Przekierowanie po subskrypcji
-    return HttpResponse("Invalid request method.")  # Przekierowanie w razie błędu
+    # Sprawdzenie, czy użytkownik jest już uczestnikiem wydarzenia
+    if event.participants.filter(id=request.user.id).exists():
+        return HttpResponse('Jesteś już zarejestrowany na to wydarzenie.', status=400)
+
+    # Dodanie użytkownika do uczestników wydarzenia
+    event.participants.add(request.user)
+
+    # Przekierowanie do szczegółów wydarzenia po zapisaniu się
+    return redirect('event_detail', pk=event.id)
+
+
+# Wyrejestrowanie sie do eventu
+def unsubscribe_event(request, pk):
+    event = get_object_or_404(Event, id=pk)
+
+    # Sprawdzenie, czy użytkownik jest uczestnikiem wydarzenia
+    if not event.participants.filter(id=request.user.id).exists():
+        return HttpResponse('Nie jesteś zarejestrowany na to wydarzenie.', status=400)
+
+    # Usunięcie użytkownika z uczestników wydarzenia
+    event.participants.remove(request.user)
+
+    # Przekierowanie do szczegółów wydarzenia po rezygnacji
+    return redirect('event_detail', pk=event.id)
+
 
 # Widok edycji
-class UpdateEventView(UpdateView):
-    template_name = 'form.html'
-    model = Event
-    form_class = EventForm
-    success_url = reverse_lazy('index')
+@login_required
+def edit_event(request, pk):
+    # Pobranie wydarzenia na podstawie klucza podstawowego
+    event = get_object_or_404(Event, id=pk)
 
-    def form_invalid(self, form):
-        LOGGER.warning('User provided invalid data while updating a movie.')
-        return super().form_invalid(form)
+    # Sprawdzenie, czy użytkownik jest autorem wydarzenia lub administratorem
+    if request.user == event.author or request.user.is_staff:
+        # Tworzenie formularza z danymi POST i istniejącą instancją wydarzenia
+        if request.method == 'POST':
+            form = EventForm(request.POST, instance=event)
+            if form.is_valid():
+                form.save()
+                return redirect('event_detail', pk=event.id)  # Po edycji przekierowanie do szczegółów wydarzenia
+        # Tworzenie formularza z istniejącą instancją wydarzeniaUmożliwia to wypełnienie formularza danymi istniejącego wydarzenia, aby użytkownik mógł je edytować
+        else:
+            form = EventForm(instance=event)
+        # Renderowanie formularza, zarówno w przypadku GET jak i błędów walidacji
+        return render(request, 'form.html', {'form': form, 'event': event})
+    # Zwrócenie odpowiedzi HTTP 403, jeśli użytkownik nie jest uprawniony do edycji wydarzenia
+    return HttpResponse('Nie jesteś organizatorem', status=403)
+
 
 # Widok usuwania wydarzenia
 @login_required
 def delete_event(request, pk):
+    # Pobranie wydarzenia na podstawie klucza podstawowego
     event = get_object_or_404(Event, id=pk)
+    # Sprawdzenie, czy użytkownik jest autorem wydarzenia lub administratorem
     if request.user == event.author or request.user.is_staff:
         if request.method == 'POST':
             event.delete()
-            return redirect('list_events')
+            return redirect('list_events')  # Po usunieciu przekierowanie do szczegółów wydarzenia
+        # Renderowanie formularza, zarówno w przypadku GET jak i błędów walidacji
         return render(request, 'delete_event.html', {'event': event})
+    # Zwrócenie odpowiedzi HTTP 403, jeśli użytkownik nie jest uprawniony do edycji wydarzenia
     return HttpResponse('Nie jesteś organizatorem', status=403)
+
 
 # Widok profilu użytkownika
 def event_detail(request, pk):
