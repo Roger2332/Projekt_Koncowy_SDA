@@ -29,7 +29,7 @@ urlpatterns = [
     path('list_events/', list_events, name='list_events'),
     # Zarządzanie eventem
     path('Create_event/', create_event, name='event'),
-    path('update_event/<pk>', edit_event, name='movie_update'),
+    path('update_event/<pk>', edit_event, name='event_edit'),
     path('delete_event/<int:pk>', delete_event, name='delete_event'),
     path('event/<int:pk>/', event_detail, name='event_detail'),
 

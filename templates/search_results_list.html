@@ -3,7 +3,9 @@
     <tbody>
     {% for event in events %}
         <tr>
-            <td colspan="6"><h4>{{ event.name }}</h4></td>
+            <td colspan="6" ><h2><a href="{% url 'event_detail' event.id %}"
+                                                       class="btn btn-secondary">{{ event.name }}</a></h2>
+    
         <tr>
             <td><h6>Miejsce:</h6> {{ event.place }}</td>
             <td><h6>Data rozpoczęcia:</h6> {{ event.start_at }}</td>
@@ -11,19 +13,19 @@
             <td><h6>Organizator:</h6> {{ event.author.username }}</td>
         </tr>
         <tr>
-            <td colspan="6">{{ event.description|truncatewords:50 }}</td>
+            <td colspan="6"> {{ event.description|truncatewords:50 }}</td>
         </tr>
+        <td colspan="6">
+            <form id="subscribeForm{{ event.id }}" action="{% url 'event_detail' event.id %}" method="post"
+                  style="display: none;">
+                {% csrf_token %}
+            </form>
+            <button type="button" class="contrast subscribe-btn" data-event-id="{{ event.id }}">See
+                event {{ event.name }}</button>
+        </td>
         <tr>
-            <td colspan="6">
-                <form id="subscribeForm{{ event.id }}" action="{% url 'event_detail' event.id %}" method="post"
-                      style="display: none;">
-                    {% csrf_token %}
-                </form>
-                <button type="button" class="contrast subscribe-btn" data-event-id="{{ event.id }}">See
-                    event {{ event.name }}</button>
-            </td>
+            <td colspan="6" style="height: 200px;" bgcolor="#11191f"></td> <!-- Pierwszy duży odstęp -->
         </tr>
-
     {% endfor %}
     </tbody>
 </table>
