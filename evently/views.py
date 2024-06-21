@@ -1,9 +1,10 @@
+from concurrent.futures._base import LOGGER
 from datetime import datetime
 from django import forms
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
-from django.views.generic import CreateView
+from django.views.generic import CreateView, UpdateView, DeleteView
 from django.db.models import Q
 from django.http import HttpResponse
 from .forms import EventForm, CreateUserForm, CategoryForm, SubscriptionForm, EventSearchForm
@@ -58,7 +59,7 @@ def search_event(request):
         search_type = form.cleaned_data.get('search_type')
         place = form.cleaned_data.get('place')
         category = form.cleaned_data.get('category')
-        organizer = form.cleaned_data.get('organizer') # new
+        organizer = form.cleaned_data.get('organizer')
         start_date = form.cleaned_data.get('start_date')
         end_date = form.cleaned_data.get('end_date')
 
@@ -87,7 +88,7 @@ def search_event(request):
         if end_date:
             events = events.filter(end_at__lte=end_date)
 
-        if organizer: #new
+        if organizer:
             events = events.filter(author=organizer)
 
     return render(request, 'event_list.html', {'form': form, 'events': events})
@@ -105,3 +106,36 @@ def subscribe_event(request, event_id):
             Subscription.objects.create(user=user, event=event)
             return HttpResponse("Subscribed successfully.")  # Przekierowanie po subskrypcji
     return HttpResponse("Invalid request method.")  # Przekierowanie w razie błędu
+
+# Widok edycji
+class UpdateEventView(UpdateView):
+    template_name = 'form.html'
+    model = Event
+    form_class = EventForm
+    success_url = reverse_lazy('index')
+
+    def form_invalid(self, form):
+        LOGGER.warning('User provided invalid data while updating a movie.')
+        return super().form_invalid(form)
+
+# Widok usuwania wydarzenia
+@login_required
+def delete_event(request, pk):
+    event = get_object_or_404(Event, id=pk)
+    if request.user == event.author or request.user.is_staff:
+        if request.method == 'POST':
+            event.delete()
+            return redirect('list_events')
+        return render(request, 'delete_event.html', {'event': event})
+    return HttpResponse('Nie jesteś organizatorem', status=403)
+
+# Widok profilu użytkownika
+def event_detail(request, pk):
+    event = get_object_or_404(Event, pk=pk)
+    is_organizer = request.user == event.author
+    is_registered = event.participants.filter(id=request.user.id).exists()
+    return render(request, 'event_detail.html', {
+        'event': event,
+        'is_organizer': is_organizer,
+        'is_registered': is_registered,
+    })

@@ -19,37 +19,32 @@ from django.urls import path, include
 import django.contrib.auth.views as auth_views
 
 from evently.views import create_event, UserCreationView, CreateCategoryView, list_events, subscribe_event, \
-    search_event
+    search_event, UpdateEventView, delete_event, event_detail
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    # Wyszukiwarka
+    path('search/', search_event, name='search_event'),
+    # Lista eventow
+    path('list_events/', list_events, name='list_events'),
+    # Zarządzanie eventem
+    path('Create_event/', create_event, name='event'),
+    path('update_event/<pk>', UpdateEventView.as_view(), name='movie_update'),
+    path('delete_event/<int:pk>', delete_event, name='delete_event'),
+    path('event/<int:pk>/', event_detail, name='event_detail'),
 
-    path('Create_event/', create_event, name='event'),  # Tworzenie eventu
-
-    path("Create_Category", CreateCategoryView.as_view(), name="create_category"),  # Tworzenie kategori
-
-    path('list_events/', list_events, name='list_events'),  # Lista eventow
-
-    path('search', search_event, name='search_event'),
-
-    path('subscribe/<int:event_id>/', subscribe_event, name='subscribe_event'),  # dodano event_id
-
-    # Zarzadzanie uzytkownikiem
-    path('createuser/', UserCreationView.as_view(), name='user'),
+    path('subscribe_event/<int:event_id>/', subscribe_event, name='subscribe_event'),
+    path("create_category", CreateCategoryView.as_view(), name="create_category"),  # Tworzenie kategori
+    # user
+    path('createuser/', UserCreationView.as_view(), name='user'), # Zarzadzanie uzytkownikiem
     path('accounts/login/', auth_views.LoginView.as_view(), name='login'),
     path('accounts/logout/', auth_views.LogoutView.as_view(), name='logout'),
-    path('accounts/password_change/', auth_views.PasswordChangeView.as_view(),
-         name='password_change'),
-    path('accounts/password_change/done/', auth_views.PasswordChangeDoneView.as_view(),
-         name='password_change_done'),
-    path('accounts/password_reset/', auth_views.PasswordResetView.as_view(),
-         name='password_reset'),
-    path('accounts/password_reset/done/', auth_views.PasswordResetDoneView.as_view(),
-         name='password_reset_done'),
-    path('accounts/reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(),
-         name='password_reset_confirm'),
-    path('accounts/reset/done/', auth_views.PasswordResetCompleteView.as_view(),
-         name='password_reset_complete'),
-    # new
+    # zarządzanie hasłem
+    path('accounts/password_change/', auth_views.PasswordChangeView.as_view(), name='password_change'),
+    path('accounts/password_change/done/', auth_views.PasswordChangeDoneView.as_view(), name='password_change_done'),
+    path('accounts/password_reset/', auth_views.PasswordResetView.as_view(), name='password_reset'),
+    path('accounts/password_reset/done/', auth_views.PasswordResetDoneView.as_view(), name='password_reset_done'),
+    path('accounts/reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
+    path('accounts/reset/done/', auth_views.PasswordResetCompleteView.as_view(), name='password_reset_complete'),
 
 ]

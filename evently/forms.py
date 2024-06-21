@@ -37,7 +37,7 @@ class EventForm(forms.ModelForm):
     start_at = forms.DateField(widget=forms.SelectDateWidget, validators=[data_start_validator])
     end_at = forms.DateField(widget=forms.SelectDateWidget)  # ZMIANA zapis nowego validatora!
     description = forms.CharField(widget=forms.Textarea, validators=[dec_valid])
-    category = forms.ModelChoiceField(queryset=Category.objects.all(),
+    category = forms.ModelChoiceField(queryset=Category.objects.all(), # do poprawy
                                       widget=forms.Select(attrs={'class': 'form-control'}),
                                       empty_label="Wybierz kategorię"
                                       )

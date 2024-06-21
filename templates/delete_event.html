@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="container mt-4">
+        <h1>Usuń wydarzenie</h1>
+        <p>Czy na pewno chcesz usunąć wydarzenie "{{ event.name }}"?</p>
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Usuń</button>
+            <a href="{% url 'event_detail' event.id %}" class="btn btn-secondary">Anuluj</a>
+        </form>
+    </div>
+{% endblock %}

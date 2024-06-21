@@ -39,6 +39,7 @@ class Event(models.Model):
     description = models.TextField()
     status = models.ForeignKey(Status, on_delete=models.CASCADE, default=2)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True, blank=True)
+    participants = models.ManyToManyField(CreateUserModel, related_name='events_participated', blank=True)
     added = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
 
@@ -63,9 +64,6 @@ class Subscription(models.Model):
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
     added = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        unique_together = ('user', 'event')  # sprawdzanie na unikatowość
 
     def __str__(self):
         return f'User: {self.user}, Event: {self.event}'
