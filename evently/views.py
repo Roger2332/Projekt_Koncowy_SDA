@@ -49,6 +49,10 @@ def list_events(request):
     return render(request, 'event_list.html', {'events': events})
 
 
+def home_views(request):
+    return render(request, 'home.html', {'home_views': home_views})
+
+
 # Wyszukiwarka eventów
 def search_event(request):
     form = EventSearchForm(request.GET)
@@ -176,4 +180,10 @@ def event_detail(request, pk):
     })
 
 
-#test
+def Linkedlin_Roger(request):
+    response =redirect('https://www.linkedin.com/in/rogerszwaja')
+    return response
+def Linkedlin_Artema(request):
+    response =redirect('https://www.linkedin.com/in/artem-monkiewicz')
+    return response
+
