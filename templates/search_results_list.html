@@ -1,5 +1,12 @@
-<table role="grid">
 
+{% load static %}
+
+<head>
+    <title>Event List</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styles_list_events.css' %}">
+</head>
+
+<table role="grid">
     <tbody>
     {% for event in events %}
         <tr>
