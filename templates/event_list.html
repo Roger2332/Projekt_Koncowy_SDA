@@ -1,11 +1,14 @@
+
 {% extends "base.html" %}
+
+{% load static %}
 
 {% block content %}
     <div class="container mt-4">
         <h1 class="mb-4">Lista wydarzeń</h1>
 
         <!-- Formularz wyszukiwania -->
-        <!-- Button to toggle filters -->
+
 
         <button type="button" class="btn btn-primary" id="toggleFilters">Filtry</button>
 
@@ -17,14 +20,7 @@
         <!-- Tabela z wynikami wyszukiwania -->
         {% include 'search_results_list.html' %}
 
-        <!--Przycisk subskrybuj-->
-
-
-        <script>
-            {% include 'js/filter.js' %}       {#  Przycisk z filtracja #}
-
-            <!--Przycisk zasubskrybuj-->
-            {% include 'js/subscribe.js' %}
-        </script>
+        <script src="{% static 'js/filter.js' %}"></script> <!-- Przycisk_z_filtracja -->
+        <script src="{% static 'js/subscribe.js' %}"></script> <!--Przycisk zasubskrybuj-->
     </div>
 {% endblock %}
