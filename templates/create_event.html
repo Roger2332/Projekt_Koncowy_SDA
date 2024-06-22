@@ -1,10 +1,9 @@
-<!DOCTYPE html>
-<html lang="pl">
-<head>
 
-</head>
-<body>
-    <button type="button" class="btn btn-primary" id="add_event">Dodaj wydarzenie</button>
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block content %}
     <div id="add_event_new" class="hidden">
         <form method="post" action="{% url 'event' %}" id="event_form">
             {% csrf_token %}
@@ -13,15 +12,5 @@
         </form>
     </div>
 
-    <script>
-        document.getElementById('add_event').addEventListener('click', function() {
-            var addEventDiv = document.getElementById('add_event_new');
-            if (addEventDiv.classList.contains('hidden')) {
-                addEventDiv.classList.remove('hidden');
-            } else {
-                addEventDiv.classList.add('hidden');
-            }
-        });
-    </script>
-</body>
-</html>
+<script src="{% static 'js/add_event.js' %}"></script> <!--Przycisk dodawania eventu-->
+{% endblock %}
