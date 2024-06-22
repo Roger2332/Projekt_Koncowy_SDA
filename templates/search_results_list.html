@@ -1,5 +1,12 @@
-<table role="grid">
 
+{% load static %}
+
+<head>
+    <title>Event List</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styles_list_events.css' %}">
+</head>
+
+<table role="grid">
     <tbody>
     {% for event in events %}
         <tr>
@@ -24,7 +31,9 @@
                 event {{ event.name }}</button>
         </td>
         <tr>
-            <td colspan="6" style="height: 200px;" bgcolor="#11191f"></td> <!-- duży odstęp -->
+
+            <td colspan="6" style="height: 200px;"></td> <!-- Pierwszy duży odstęp -->
+
         </tr>
     {% endfor %}
     </tbody>

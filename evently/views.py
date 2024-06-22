@@ -174,3 +174,6 @@ def event_detail(request, pk):
         'is_organizer': is_organizer,
         'is_registered': is_registered,
     })
+
+
+#test

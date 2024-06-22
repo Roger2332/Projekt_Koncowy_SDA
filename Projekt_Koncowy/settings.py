@@ -114,6 +114,14 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+# Path where static files will be collected
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+# Additional locations the staticfiles app will traverse
+STATICFILES_DIRS = [
+    BASE_DIR / 'evently' / 'static',  # ścieżka do plików statystycznych projektu evently
+]
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
