@@ -17,10 +17,23 @@
             {% include 'search_form_list.html' %}
         </div>
 
+        <div id="add_event_new" class="hidden">
+            <form method="post" action="{% url 'event' %}" id="event_form">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-success">Dodaj wydarzenie</button>
+            </form>
+        </div>
+
+
         <!-- Tabela z wynikami wyszukiwania -->
         {% include 'search_results_list.html' %}
 
+
+        <!--Przycisk subskrybuj-->
+
         <script src="{% static 'js/filter.js' %}"></script> <!-- Przycisk_z_filtracja -->
         <script src="{% static 'js/subscribe.js' %}"></script> <!--Przycisk zasubskrybuj-->
+
     </div>
 {% endblock %}

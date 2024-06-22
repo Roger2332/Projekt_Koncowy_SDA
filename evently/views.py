@@ -19,13 +19,13 @@ def create_event(request):
         form = EventForm(request.POST)
         if form.is_valid():
             # Przypisanie aktualnie zalogowanego użytkownika jako właściciela wydarzenia
+            event = form.save(commit=False)
             form.instance.author = request.user
-
             form.save()
-            return redirect('list_events')
+            return redirect('event_detail', pk=event.pk)
     else:
         form = EventForm()
-    return render(request, 'form.html', {'form': form})
+    return render(request, 'create_event.html', {'form': form})
 
 
 # Widok umozliwiajacy tworzenie uzytkownikow
