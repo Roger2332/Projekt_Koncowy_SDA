@@ -45,8 +45,9 @@ class CreateCategoryView(CreateView):
 
 # Widok tworzacy liste eventów
 def list_events(request):
+    form = EventSearchForm(request.GET)
     events = Event.objects.all().order_by('start_at')
-    return render(request, 'event_list.html', {'events': events})
+    return render(request, 'event_list.html', {'events': events, 'form': form})
 
 
 def home_views(request):
@@ -94,6 +95,11 @@ def search_event(request):
 
         if organizer:
             events = events.filter(author=organizer)
+
+    # Dodanie debugowania
+    print(f"Filtered events: {events}")
+    for event in events:
+        print(f"Event: {event.name}, Start: {event.start_at}, End: {event.end_at}")
 
     return render(request, 'event_list.html', {'form': form, 'events': events})
 
@@ -181,9 +187,10 @@ def event_detail(request, pk):
 
 
 def Linkedlin_Roger(request):
-    response =redirect('https://www.linkedin.com/in/rogerszwaja')
-    return response
-def Linkedlin_Artema(request):
-    response =redirect('https://www.linkedin.com/in/artem-monkiewicz')
+    response = redirect('https://www.linkedin.com/in/rogerszwaja')
     return response
 
+
+def Linkedlin_Artema(request):
+    response = redirect('https://www.linkedin.com/in/artem-monkiewicz')
+    return response
