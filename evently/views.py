@@ -48,6 +48,7 @@ def list_events(request):
     events = Event.objects.all().order_by('start_at')  # Sortowanie wydarzen po dacie
     return render(request, 'event_list.html', {'events': events, 'form': form})
 
+
 # Widok strony głównej
 def home_views(request):
     return render(request, 'home.html', {'home_views': home_views})
@@ -211,6 +212,11 @@ def user_events(request, pk):
         return redirect('/search/?query=&search_type=all&place=&category=&organizer=&start_date=&end_date=')
 
 
+@login_required
+def user_subscriptions(request):
+    user = request.user
+    subscribed_events = Event.objects.filter(participants=user)
+    return render(request, 'user_subscriptions.html', {'subscribed_events': subscribed_events})
 
 
 def Linkedlin_Roger(request):
