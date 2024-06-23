@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}User Profile{% endblock %}
+
+{% block content %}
+    <div style="text-align: center;">
+        <h1>User Profile</h1>
+        <h2>{{ user.username }}</h2>
+    </div>
+    <div>
+        <p><strong>First Name:</strong> {{ user.first_name }}</p>
+        <p><strong>Last Name:</strong> {{ user.last_name }}</p>
+        <p><strong>Email:</strong> {{ user.email }}</p>
+    </div>
+
+<!-- new -->
+<!-- Dodanie sprawdzania i przycusku do profilu -->
+    <button onclick="window.location.href='{% url 'user_events' user.id %}'">Twoje wydarzenia</button>
+
+
+{% endblock %}
