@@ -11,7 +11,7 @@
         {% for event in events %}
             <tr>
                 <td colspan="6">
-                    <h2><a href="{% url 'event_detail' event.id %}" class="btn btn-secondary">{{ event.name }}</a></h2>
+                    <h2><a href="{% url 'detail_event' event.id %}" class="btn btn-secondary">{{ event.name }}</a></h2>
                 </td>
             </tr>
             <tr>
@@ -25,7 +25,7 @@
             </tr>
             <tr>
                 <td colspan="6">
-                    <form id="subscribeForm{{ event.id }}" action="{% url 'event_detail' event.id %}" method="post" style="display: none;">
+                    <form id="subscribeForm{{ event.id }}" action="{% url 'detail_event' event.id %}" method="post" style="display: none;">
                         {% csrf_token %}
                     </form>
                     <button type="button" class="contrast subscribe-btn" data-event-id="{{ event.id }}">Zobacz wydarzenie {{ event.name }}</button>

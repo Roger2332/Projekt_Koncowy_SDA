@@ -20,37 +20,35 @@ import django.contrib.auth.views as auth_views
 
 
 from evently.views import create_event, UserCreateView, CreateCategoryView, list_events, subscribe_event, \
-    search_event, edit_event, delete_event, event_detail, unsubscribe_event, home_views, Linkedlin_Roger, \
+    search_event, edit_event, delete_event, detail_event, unsubscribe_event, home_views, Linkedlin_Roger, \
     Linkedlin_Artema, user_profile, user_events, user_subscriptions
 
 
 urlpatterns = [
+    # admin
     path('admin/', admin.site.urls),
-    # Wyszukiwarka
-    path('search/', search_event, name='search_event'),
-    # Lista eventow
-    path('list_events/', list_events, name='list_events'),
-
+    path("create_category", CreateCategoryView.as_view(), name="create_category"), # uprawienia admina
+    # główna strona
     path('home_li/', home_views, name='home_li'),
-    # Zarządzanie eventem
+    # lista eventow
+    path('list_events/', list_events, name='list_events'),
+    # wyszukiwarka
+    path('search/', search_event, name='search_event'),
+    # zarządzanie eventem
     path('create_event/', create_event, name='create_event'),
-    path('update_event/<pk>', edit_event, name='event_edit'),
-    path('delete_event/<int:pk>', delete_event, name='delete_event'),
-    path('event/<int:pk>/', event_detail, name='event_detail'),
-
+    path('update_event/<int:pk>/', edit_event, name='event_edit'),
+    path('delete_event/<int:pk>/', delete_event, name='delete_event'),
+    path('detail_event/<int:pk>/', detail_event, name='detail_event'),
     path('subscribe_event/<int:event_id>/', subscribe_event, name='subscribe_event'),
     path('event/<int:pk>/unregister/', unsubscribe_event, name='unsubscribe_event'),
-    path("create_category", CreateCategoryView.as_view(), name="create_category"),  # Tworzenie kategori
-
-    path('Artem', Linkedlin_Artema, name="Artem"),
-    path('Roger', Linkedlin_Roger, name="Roger"),
     # user
-    path('createuser/', UserCreateView.as_view(), name='user'), # Zarzadzanie uzytkownikiem
+    path('createuser/', UserCreateView.as_view(), name='user'),
     path('accounts/login/', auth_views.LoginView.as_view(), name='login'),
     path('accounts/logout/', auth_views.LogoutView.as_view(), name='logout'),
-    path('profile/subscriptions/<pk>', user_subscriptions, name='user_subscriptions'),
+    # profile usera
     path('profile/', user_profile, name='user_profile'),
-    path('user/events/<int:pk>', user_events, name='user_events'),
+    path('user/events/<int:pk>/', user_events, name='user_events'),
+    path('profile/subscriptions/<pk>/', user_subscriptions, name='user_subscriptions'), # forma "twoje subskrypcje"
     # zarządzanie hasłem
     path('accounts/password_change/', auth_views.PasswordChangeView.as_view(), name='password_change'),
     path('accounts/password_change/done/', auth_views.PasswordChangeDoneView.as_view(), name='password_change_done'),
@@ -58,5 +56,7 @@ urlpatterns = [
     path('accounts/password_reset/done/', auth_views.PasswordResetDoneView.as_view(), name='password_reset_done'),
     path('accounts/reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
     path('accounts/reset/done/', auth_views.PasswordResetCompleteView.as_view(), name='password_reset_complete'),
-
+    # autorzy Evently
+    path('Artem', Linkedlin_Artema, name="Artem"),
+    path('Roger', Linkedlin_Roger, name="Roger"),
 ]

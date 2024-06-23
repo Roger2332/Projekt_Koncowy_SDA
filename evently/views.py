@@ -19,7 +19,7 @@ def create_event(request):
             event = form.save(commit=False)
             form.instance.author = request.user  # Przypisanie bieżącego użytkownika jako autora wydarzenia
             form.save()  # Zapisanie formularza do bazy danych
-            return redirect('event_detail', pk=event.pk)  # Przekierowanie na stronę szczegółów utworzonego wydarzenia
+            return redirect('detail_event', pk=event.pk)  # Przekierowanie na stronę szczegółów utworzonego wydarzenia
     else:
         form = CreateEventForm()  # Utworzenie pustego formularza CreateEventForm w przypadku, gdy żądanie nie jest metodą POST
     return render(request, 'create_event.html', {
@@ -123,7 +123,7 @@ def subscribe_event(request, event_id):
     event.participants.add(request.user)
 
     # Przekierowanie do szczegółów wydarzenia po zapisaniu się
-    return redirect('event_detail', pk=event.id)
+    return redirect('detail_event', pk=event.id)
 
 
 # Wyrejestrowanie sie do eventu
@@ -138,7 +138,7 @@ def unsubscribe_event(request, pk):
     event.participants.remove(request.user)
 
     # Przekierowanie do szczegółów wydarzenia po rezygnacji
-    return redirect('event_detail', pk=event.id)
+    return redirect('detail_event', pk=event.id)
 
 
 # Widok edycji
@@ -154,7 +154,7 @@ def edit_event(request, pk):
             form = CreateEventForm(request.POST, instance=event)
             if form.is_valid():  # Pobieranie danych z formularza po poprawnej walidacji
                 form.save()
-                return redirect('event_detail', pk=event.id)  # Po edycji przekierowanie do szczegółów wydarzenia
+                return redirect('detail_event', pk=event.id)  # Po edycji przekierowanie do szczegółów wydarzenia
 
         # Tworzenie formularza z istniejącą instancją wydarzenia Umożliwia to wypełnienie formularza danymi istniejącego wydarzenia, aby użytkownik mógł je edytować
         else:
@@ -182,12 +182,12 @@ def delete_event(request, pk):
 
 
 # Widok calego wydarzenia
-def event_detail(request, pk):
+def detail_event(request, pk):
     event = get_object_or_404(Event, pk=pk)
     is_organizer = request.user == event.author  # Sprawdzanie czy zalogowany uzytkownik to autor wydarzenia
     # Sprawdzenie, czy użytkownik jest zarejestrowany na wydarzenie
     is_registered = event.participants.filter(id=request.user.id).exists()
-    return render(request, 'event_detail.html', {
+    return render(request, 'detail_event.html', {
         'event': event,  # Przekazanie obiektu wydarzenia do szablonu
         # Informacja czy zalogowany użytkownik jest organizatorem wydarzenia Boolen True lub False
         'is_organizer': is_organizer,
@@ -213,7 +213,7 @@ def user_events(request, pk):
 
 
 @login_required
-def user_subscriptions(request):
+def user_subscriptions(request, pk):
     user = request.user
     subscribed_events = Event.objects.filter(participants=user)
     return render(request, 'user_subscriptions.html', {'subscribed_events': subscribed_events})
