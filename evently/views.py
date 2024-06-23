@@ -7,21 +7,21 @@ from django.urls import reverse_lazy
 from django.views.generic import CreateView
 from django.http import HttpResponse
 
-from .forms import EventForm, CreateUserForm, CategoryForm, EventSearchForm
+from .forms import CreateEventForm, CreateUserForm, CategoryForm, EventSearchForm
 from .models import Category, Event, CreateUserModel
 
 
 @login_required  # Dekorator Sprawdza czy uzytkownik jest zalogowany, jesli nie jest zostanie przekierowany na strone do logowania
 def create_event(request):
     if request.method == 'POST':
-        form = EventForm(request.POST)  # Inicjalizacja formularza EventForm z danymi przekazanymi z żądania POST
+        form = CreateEventForm(request.POST)  # Inicjalizacja formularza CreateEventForm z danymi przekazanymi z żądania POST
         if form.is_valid():  # Sprawdzenie poprawności danych formularza
             event = form.save(commit=False)
             form.instance.author = request.user  # Przypisanie bieżącego użytkownika jako autora wydarzenia
             form.save()  # Zapisanie formularza do bazy danych
             return redirect('event_detail', pk=event.pk)  # Przekierowanie na stronę szczegółów utworzonego wydarzenia
     else:
-        form = EventForm()  # Utworzenie pustego formularza EventForm w przypadku, gdy żądanie nie jest metodą POST
+        form = CreateEventForm()  # Utworzenie pustego formularza CreateEventForm w przypadku, gdy żądanie nie jest metodą POST
     return render(request, 'create_event.html', {
         'form': form})  # Renderowanie szablonu create_event.html z przekazaniem formularza do kontekstu szablonu
 
@@ -151,14 +151,14 @@ def edit_event(request, pk):
     if request.user == event.author:
         # Tworzenie formularza z danymi POST i istniejącą wartosciami
         if request.method == 'POST':
-            form = EventForm(request.POST, instance=event)
+            form = CreateEventForm(request.POST, instance=event)
             if form.is_valid():  # Pobieranie danych z formularza po poprawnej walidacji
                 form.save()
                 return redirect('event_detail', pk=event.id)  # Po edycji przekierowanie do szczegółów wydarzenia
 
         # Tworzenie formularza z istniejącą instancją wydarzenia Umożliwia to wypełnienie formularza danymi istniejącego wydarzenia, aby użytkownik mógł je edytować
         else:
-            form = EventForm(instance=event)
+            form = CreateEventForm(instance=event)
         # Renderowanie formularza, zarówno w przypadku GET jak i błędów walidacji
         return render(request, 'form.html', {'form': form, 'event': event})
 
