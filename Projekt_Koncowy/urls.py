@@ -18,9 +18,11 @@ from django.contrib import admin
 from django.urls import path, include
 import django.contrib.auth.views as auth_views
 
-from evently.views import create_event, UserCreationView, CreateCategoryView, list_events, subscribe_event, \
+
+from evently.views import create_event, UserCreateView, CreateCategoryView, list_events, subscribe_event, \
     search_event, edit_event, delete_event, event_detail, unsubscribe_event, home_views, Linkedlin_Roger, \
     Linkedlin_Artema, user_profile, user_events, user_subscriptions
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -43,7 +45,7 @@ urlpatterns = [
     path('Artem', Linkedlin_Artema, name="Artem"),
     path('Roger', Linkedlin_Roger, name="Roger"),
     # user
-    path('createuser/', UserCreationView.as_view(), name='user'), # Zarzadzanie uzytkownikiem
+    path('createuser/', UserCreateView.as_view(), name='user'), # Zarzadzanie uzytkownikiem
     path('accounts/login/', auth_views.LoginView.as_view(), name='login'),
     path('accounts/logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('profile/subscriptions/<pk>', user_subscriptions, name='user_subscriptions'),

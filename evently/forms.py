@@ -3,9 +3,9 @@ from datetime import datetime
 from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
 from django import forms
-from django.db import IntegrityError
 
-from .models import Event, CreateUserModel, Category, Subscription
+
+from .models import Event, CreateUserModel, Category
 
 
 # Sprawdzanie czy tytul nie zawiera samych bialych znakow
@@ -37,11 +37,12 @@ class EventForm(forms.ModelForm):
     start_at = forms.DateField(widget=forms.SelectDateWidget, validators=[data_start_validator])
     end_at = forms.DateField(widget=forms.SelectDateWidget)  # ZMIANA zapis nowego validatora!
     description = forms.CharField(widget=forms.Textarea, validators=[dec_valid])
-    category = forms.ModelChoiceField(queryset=Category.objects.all(), # do poprawy
+    category = forms.ModelChoiceField(queryset=Category.objects.all(),  # do poprawy
                                       widget=forms.Select(attrs={'class': 'form-control'}),
                                       empty_label="Wybierz kategorię"
                                       )
-# ???
+
+    # ???
     def clean(self):
         cleaned_data = super().clean()
         start_at = cleaned_data.get("start_at")
@@ -62,49 +63,18 @@ class CreateUserForm(UserCreationForm):
     class Meta:
         model = CreateUserModel
         fields = ['first_name', 'last_name', 'username', 'email', ]
+
     # Dodanie statusu nieaktywnego odrazu jak uzytkownik stworzy konto, admin musi mu aktywowac konto
     def save(self,
              commit=True):
         return super().save(commit)
+
 
 # Forma do tworzenia kategorii
 class CategoryForm(forms.ModelForm):
     class Meta:
         model = Category
         fields = ['name']
-
-# Forma do zapisywania się na eventy
-class SubscriptionForm(forms.ModelForm):
-    class Meta:
-        model = Subscription
-        fields = ['user', 'event']
-
-    def clean(self):
-        cleaned_data = super().clean()
-        user = cleaned_data.get('user')
-        event = cleaned_data.get('event')
-
-        # Upewnij się, że event jest obecny
-        if event:
-            print(f"User: {user}, Event: {event}, Author: {event.author}")
-
-            # Sprawdzanie, czy user nie jest podpisany na event
-            if Subscription.objects.filter(user=user, event=event).exists():
-                print("User is already subscribed.")
-                raise forms.ValidationError("You are already subscribed to this event.")
-
-            # Sprawdzanie, czy user nie podpisuje się na własny event
-            if user == event.author:
-                print("User is the author of the event.")
-                raise ValidationError("You cannot sign up for your own event.")
-
-        return cleaned_data
-
-    def save(self, commit=True):
-        try:
-            return super().save(commit)
-        except IntegrityError:
-            raise forms.ValidationError("You are already subscribed to this event.")
 
 
 # Wyszukiwarka
@@ -120,8 +90,10 @@ class EventSearchForm(forms.Form):
     search_type = forms.ChoiceField(label='Typ wyszukiwania', choices=SEARCH_CHOICES, required=False)
     place = forms.CharField(label='Nazwa miejsca', max_length=100, required=False)
     category = forms.ModelChoiceField(queryset=Category.objects.all(), label='Kategoria', required=False)
-    organizer = forms.ModelChoiceField(queryset=CreateUserModel.objects.all(), label='Organizator', required=False) #new
-    start_date = forms.DateField(label='Data rozpoczęcia', required=False, widget=forms.TextInput(attrs={'type': 'date'}))
+    organizer = forms.ModelChoiceField(queryset=CreateUserModel.objects.all(), label='Organizator',
+                                       required=False)  # new
+    start_date = forms.DateField(label='Data rozpoczęcia', required=False,
+                                 widget=forms.TextInput(attrs={'type': 'date'}))
     end_date = forms.DateField(label='Data zakończenia', required=False, widget=forms.TextInput(attrs={'type': 'date'}))
 
     def __init__(self, *args, **kwargs):
