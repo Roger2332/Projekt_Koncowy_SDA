@@ -6,56 +6,27 @@
     <title>{% block title %}My Django App{% endblock %}</title>
     {% load static %}
     <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@1.4.0/css/pico.min.css">
-    <style>
-        html, body {
-            height: 100%;
-            margin: 0;
-            padding: 0;
-        }
-        body {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            background: url("{% static 'img/back_homepage.jpg' %}") no-repeat center center fixed;
-            background-size: cover;
-        }
-        .content-wrapper {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-        }
-        nav {
-            width: 200%;
-            margin-top: 50%; /* Dostosuj wartość aby przesunąć logo w górę lub w dół */
-        }
-        nav a {
-            display: block;
-            margin: 0 auto;
-        }
-        main, footer {
-            width: 100%;
-            flex: 100%;
-        }
-    </style>
+    <link rel="stylesheet" href="{% static 'css/logout.css' %}">
+
 </head>
 <body>
-<div>
+<div class="logout-wrapper">
     <nav>
+
         <ul>
             {% if user.is_authenticated %}
                 <li>
                     <form method="post" action="{% url 'logout' %}">
                         {% csrf_token %}
-                        <button style="color: black" type="submit" class="contrast">Wyloguj się</button>
+                        <button type="submit" class="logout-button btn btn-primary">Wyloguj się</button>
                     </form>
                 </li>
             {% else %}
-                <li ><a style="font-size: 30px; color: red"  href="{% url 'login' %}" class="contrast">Zaloguj się</a></li>
+                <li><a href="{% url 'login' %}" class="logout-button btn btn-primary">Zaloguj się</a></li>
             {% endif %}
         </ul>
+
+
     </nav>
 </div>
 <div class="content-wrapper">
@@ -66,21 +37,21 @@
     </nav>
 </div>
 
-
 <main>
     {% block content %}
     {% endblock %}
 </main>
 <footer>
     <!-- Stopka -->
-
 </footer>
-<h3>
-    𝔸𝕦𝕥𝕠𝕣𝕤:
-        <a href="{% url 'Roger' %}" class="contrast"> ℝ𝕠𝕘𝕖𝕣 𝕊𝕫𝕨𝕒𝕛𝕒</a>
-    𝕒𝕟𝕕
-        <a href="{% url 'Artem' %}" class="contrast"> 𝔸𝕣𝕥𝕖𝕞 𝕄𝕠𝕟𝕜𝕚𝕖𝕨𝕚𝕔𝕫</a>
-</h3>
+
+
 
 </body>
+<h3>
+    𝔸𝕦𝕥𝕠𝕣𝕤:
+    <a href="{% url 'Roger' %}" class="contrast"> ℝ𝕠𝕘𝕖𝕣 𝕊𝕫𝕨𝕒𝕛𝕒</a>
+    𝕒𝕟𝕕
+    <a href="{% url 'Artem' %}" class="contrast"> 𝔸𝕣𝕥𝕖𝕞 𝕄𝕠𝕟𝕜𝕚𝕖𝕨𝕚𝕔𝕫</a>
+</h3>
 </html>
