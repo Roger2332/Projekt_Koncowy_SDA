@@ -45,7 +45,7 @@ class CreateCategoryView(PermissionRequiredMixin, CreateView):
 # Widok tworzacy liste eventów
 def list_events(request):
     form = EventSearchForm(request.GET)
-    events = Event.objects.all().filter(status=2).order_by('start_at')  # Sortowanie wydarzen po dacie oraz sprawdzanie czy status ma aktywny
+    events = Event.objects.all().filter(status=1).order_by('start_at')  # Sortowanie wydarzen po dacie oraz sprawdzanie czy status ma aktywny
     return render(request, 'event_list.html', {'events': events, 'form': form})
 
 
