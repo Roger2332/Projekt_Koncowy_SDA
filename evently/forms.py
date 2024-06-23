@@ -19,6 +19,7 @@ def data_start_validator(value):
         raise forms.ValidationError('The date cannot be past')
 
 
+
 # Sprawdzanie czy tresc zawiera conajmniej 20 znakow
 def dec_valid(value):
     if len(value) < 20:
@@ -108,3 +109,5 @@ class EventSearchForm(forms.Form):
 
         # Dynamiczne ustawienie queryset dla pola place na podstawie unikalnych miejsc z obiektów Event
         self.fields['place'].queryset = Event.objects.values_list('place', flat=True).distinct()
+
+# bsfjgslkfjdgvk;,
