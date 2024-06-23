@@ -16,6 +16,7 @@
     </a>
     <ul>
         {% if user.is_authenticated %}
+            <li>Jesteś zalogowany jako <a href="{% url 'user_profile' %}"> {{ user.username }}</a></li>
             <li>
                 <form method="post" action="{% url 'logout' %}">
                     {% csrf_token %}
