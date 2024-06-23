@@ -9,7 +9,7 @@ from django.db.models import Q
 from django.http import HttpResponse
 from .forms import EventForm, CreateUserForm, CategoryForm, SubscriptionForm, EventSearchForm
 
-from .models import Status, Category, Event, Subscription
+from .models import Status, Category, Event, Subscription, CreateUserModel
 
 
 # Dekorator Sprawdza czy uzytkownik jest zalogowany, jesli nie jest zostanie przekierowany na strone do logowania
@@ -175,5 +175,16 @@ def event_detail(request, pk):
         'is_registered': is_registered,
     })
 
+# Widok profilu Usera
+def user_profile(request):
+    user = request.user
+    return render(request, 'profile.html', {'user': user})
 
-#test
+# Widok wydażeń usera(jak jest organizatorem)
+def user_events(request, pk):
+    user = get_object_or_404(CreateUserModel, pk=pk)
+    if request.user == user:
+        events = Event.objects.filter(author=user)
+        return render(request, 'search_results_list.html', {'events': events})
+    else:
+        return render(request, 'search_results_list.html', {'events': []})
