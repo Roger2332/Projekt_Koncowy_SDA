@@ -1,0 +1,135 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-image: url('../img/back_homepage.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: local; /* Tło pozostaje na miejscu podczas przewijania */
+    background-position: center center; /* Tło na środku */
+    height: 110vh; /* Wysokość przewijania */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center; /* Treść zaczyna się od góry */
+}
+
+.center-content {
+    text-align: center;
+    position: relative;
+    width: 100%;
+    height: 130%; /* wysokość kontenera*/
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex: 1; /* Pozwala centrować treść */
+}
+
+.background-circle {
+    position: absolute;
+    top: 30%;  /* Przesunięcie górne */
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 300px;  /* szerokość */
+    height: 300px; /* wysokość */
+    background-color: rgba(255, 255, 255, 0.7); /* tło */
+    border-radius: 50%; /* zaokręglenie */
+    animation: fadeInBackground 2s ease-in-out forwards;
+    opacity: 0; /* stan początkowy niewidoczny */
+    z-index: 0;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    top: -20%; /* Przesunięte logo i przyciski */
+}
+
+.center-logo {
+    width: 350px; /* rozmiar logo */
+    height: auto;
+    cursor: pointer;
+    position: relative;
+    z-index: 1; /* warstwa logo(powirzch backgr) */
+    animation: appearAndTransform 3s ease-in-out forwards;
+    margin-right: 20px; /* odstęp pomiędzy logo a Log In */
+}
+
+.events-button, .login-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: rgba(255, 255, 255, 0.7); /* półprzezroczyste białe tło */
+    color: #000;
+    text-decoration: none;
+    border-radius: 25px;
+    font-size: 42px;
+    font-weight: bold;
+    position: relative;
+    z-index: 1;
+    opacity: 0; /* stan początkowy niewidoczny */
+}
+.login-button{
+    margin-left: 80px; /* odstęp między Log In a logo */
+    animation: fadeInButton 10s ease-in-out forwards;
+}
+
+.events-button {
+    margin-right: 80px; /* odstęp między Events a logo */
+    animation: fadeInButton 6s ease-in-out forwards;
+}
+
+.authors {
+    text-align: center;
+    width: 100%;
+    font-size: 24px;
+    color: #fff;
+    margin-top: auto; /* Pozwala trzymać treść na dole strony */
+    padding: 20px 0; /* Odstęp od dołu */
+}
+
+.author-button {
+    display: inline-block;
+    margin: 0 10px;
+    padding: 5px 10px;
+    background-color: rgba(255, 255, 255, 0.7); /* półprzezroczyste białe tło */
+    color: #000;
+    text-decoration: none;
+    border-radius: 15px;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+@keyframes appearAndTransform {
+    0% {
+        opacity: 0;
+        transform: scale(0.5) rotate(0deg);
+    }
+    50% {
+        opacity: 0.5;
+        transform: scale(1.2) rotate(180deg);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1) rotate(360deg);
+    }
+}
+
+@keyframes fadeInBackground {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 0.7;
+    }
+}
+
+@keyframes fadeInButton {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
