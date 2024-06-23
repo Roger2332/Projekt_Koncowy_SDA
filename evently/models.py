@@ -8,6 +8,16 @@ class CreateUserModel(AbstractUser):
     username = models.CharField(unique=True, max_length=50)
 
 
+
+
+class Category(models.Model):
+    name = models.CharField(max_length=100)
+    added = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f'{self.name}'
+
 class Status(models.Model):
     STATUS_CHOICES = [
         ('Active', 'Active'),
@@ -20,16 +30,6 @@ class Status(models.Model):
     def __str__(self):
         return f'{self.name}'
 
-
-class Category(models.Model):
-    name = models.CharField(max_length=100)
-    added = models.DateTimeField(auto_now_add=True)
-    modified = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        return f'{self.name}'
-
-
 class Event(models.Model):
     author = models.ForeignKey(CreateUserModel, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
@@ -37,7 +37,7 @@ class Event(models.Model):
     start_at = models.DateField()
     end_at = models.DateField()
     description = models.TextField()
-    status = models.ForeignKey(Status, on_delete=models.CASCADE, default=2)
+    status = models.ForeignKey(Status, on_delete=models.CASCADE)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True, blank=True)
     participants = models.ManyToManyField(CreateUserModel, related_name='events_participated', blank=True)
     added = models.DateTimeField(auto_now_add=True)
