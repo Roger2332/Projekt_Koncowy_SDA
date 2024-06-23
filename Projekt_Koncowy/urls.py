@@ -15,13 +15,15 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path
 import django.contrib.auth.views as auth_views
 
 
 from evently.views import create_event, UserCreateView, CreateCategoryView, list_events, subscribe_event, \
-    search_event, edit_event, delete_event, detail_event, unsubscribe_event, home_views, Linkedlin_Roger, \
-    Linkedlin_Artema, user_profile, user_events, user_subscriptions
+    search_event, edit_event, delete_event, detail_event, unsubscribe_event, Linkedlin_Roger, \
+    Linkedlin_Artema, user_profile, user_events, user_subscriptions, homepage
+
+#hone_views
 
 
 urlpatterns = [
@@ -29,7 +31,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path("create_category", CreateCategoryView.as_view(), name="create_category"), # uprawienia admina
     # główna strona
-    path('home_li/', home_views, name='home_li'),
+    # path('home_li/', home_views, name='home_li'),
+    path('homapage/', homepage, name='homepage'),
     # lista eventow
     path('list_events/', list_events, name='list_events'),
     # wyszukiwarka

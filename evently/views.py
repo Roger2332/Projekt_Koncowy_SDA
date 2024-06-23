@@ -50,8 +50,12 @@ def list_events(request):
 
 
 # Widok strony głównej
-def home_views(request):
-    return render(request, 'home.html', {'home_views': home_views})
+# def home_views(request):
+#     return render(request, 'home.html', {'home_views': home_views})
+
+# Widok str gł Artem
+def homepage(request):
+    return render(request, 'homepage.html')
 
 
 # Wyszukiwarka eventów
