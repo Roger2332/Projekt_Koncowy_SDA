@@ -19,7 +19,7 @@
 
     <!-- Formularz dodawania wydarzenia (początkowo ukryty) -->
     <div id="add_event_new" class="hidden">
-        <form method="post" action="{% url 'event' %}" id="event_form">
+        <form method="post" action="{% url 'create_event' %}" id="event_form">
             {% csrf_token %}
             <button type="submit" class="btn btn-success">Dodaj wydarzenie</button>
         </form>
@@ -34,4 +34,3 @@
     <script src="{% static 'js/subscribe.js' %}"></script>
 </div>
 {% endblock %}
-#

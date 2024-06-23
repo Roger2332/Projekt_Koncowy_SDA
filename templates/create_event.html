@@ -5,7 +5,7 @@
 
 {% block content %}
     <div id="add_event_new" class="hidden">
-        <form method="post" action="{% url 'event' %}" id="event_form">
+        <form method="post" action="{% url 'create_event' %}" id="event_form">
             {% csrf_token %}
             {{ form.as_p }}
             <button type="submit" class="btn btn-success">Zapisz</button>

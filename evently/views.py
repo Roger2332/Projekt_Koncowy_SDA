@@ -49,7 +49,7 @@ def list_events(request):
     events = Event.objects.all().order_by('start_at')
     return render(request, 'event_list.html', {'events': events, 'form': form})
 
-
+# Widok strony głównej
 def home_views(request):
     return render(request, 'home.html', {'home_views': home_views})
 
@@ -196,9 +196,16 @@ def user_events(request, pk):
     user = get_object_or_404(CreateUserModel, pk=pk)
     if request.user == user:
         events = Event.objects.filter(author=user)
-        return render(request, 'search_results_list.html', {'events': events})
+        return redirect(f'/search/?query=&search_type=all&place=&category=&organizer={user.id}&start_date=&end_date=')
     else:
-        return render(request, 'search_results_list.html', {'events': []})
+        return redirect('/search/?query=&search_type=all&place=&category=&organizer=&start_date=&end_date=')
+
+# Widok wydażeń usera
+@login_required
+def user_subscriptions(request):
+    user = request.user
+    subscribed_events = Event.objects.filter(participants=user)
+    return render(request, 'user_subscriptions.html', {'subscribed_events': subscribed_events})
 
 
 def Linkedlin_Roger(request):

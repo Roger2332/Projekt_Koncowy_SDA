@@ -19,8 +19,8 @@ from django.urls import path, include
 import django.contrib.auth.views as auth_views
 
 from evently.views import create_event, UserCreationView, CreateCategoryView, list_events, subscribe_event, \
-
-    search_event, edit_event, delete_event, event_detail, unsubscribe_event, home_views, Linkedlin_Roger, Linkedlin_Artema, user_profile, user_events
+    search_event, edit_event, delete_event, event_detail, unsubscribe_event, home_views, Linkedlin_Roger, \
+    Linkedlin_Artema, user_profile, user_events, user_subscriptions
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -29,10 +29,9 @@ urlpatterns = [
     # Lista eventow
     path('list_events/', list_events, name='list_events'),
 
-
     path('home_li/', home_views, name='home_li'),
     # Zarządzanie eventem
-    path('Create_event/', create_event, name='event'),
+    path('create_event/', create_event, name='create_event'),
     path('update_event/<pk>', edit_event, name='event_edit'),
     path('delete_event/<int:pk>', delete_event, name='delete_event'),
     path('event/<int:pk>/', event_detail, name='event_detail'),
@@ -47,6 +46,7 @@ urlpatterns = [
     path('createuser/', UserCreationView.as_view(), name='user'), # Zarzadzanie uzytkownikiem
     path('accounts/login/', auth_views.LoginView.as_view(), name='login'),
     path('accounts/logout/', auth_views.LogoutView.as_view(), name='logout'),
+    path('profile/subscriptions/<pk>', user_subscriptions, name='user_subscriptions'),
     path('profile/', user_profile, name='user_profile'),
     path('user/events/<int:pk>', user_events, name='user_events'),
     # zarządzanie hasłem
