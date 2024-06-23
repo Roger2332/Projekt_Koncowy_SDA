@@ -19,7 +19,8 @@ from django.urls import path, include
 import django.contrib.auth.views as auth_views
 
 from evently.views import create_event, UserCreationView, CreateCategoryView, list_events, subscribe_event, \
-    search_event, edit_event, delete_event, event_detail, unsubscribe_event, user_profile, user_events
+
+    search_event, edit_event, delete_event, event_detail, unsubscribe_event, home_views, Linkedlin_Roger, Linkedlin_Artema, user_profile, user_events
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -27,6 +28,9 @@ urlpatterns = [
     path('search/', search_event, name='search_event'),
     # Lista eventow
     path('list_events/', list_events, name='list_events'),
+
+
+    path('home_li/', home_views, name='home_li'),
     # Zarządzanie eventem
     path('Create_event/', create_event, name='event'),
     path('update_event/<pk>', edit_event, name='event_edit'),
@@ -36,6 +40,9 @@ urlpatterns = [
     path('subscribe_event/<int:event_id>/', subscribe_event, name='subscribe_event'),
     path('event/<int:pk>/unregister/', unsubscribe_event, name='unsubscribe_event'),
     path("create_category", CreateCategoryView.as_view(), name="create_category"),  # Tworzenie kategori
+
+    path('Artem', Linkedlin_Artema, name="Artem"),
+    path('Roger', Linkedlin_Roger, name="Roger"),
     # user
     path('createuser/', UserCreationView.as_view(), name='user'), # Zarzadzanie uzytkownikiem
     path('accounts/login/', auth_views.LoginView.as_view(), name='login'),

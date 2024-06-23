@@ -1,4 +1,3 @@
-
 {% extends "base.html" %}
 
 {% load static %}
@@ -7,21 +6,14 @@
     <div class="container mt-4">
         <h1 class="mb-4">Lista wydarzeń</h1>
 
-        <!-- Formularz wyszukiwania -->
-
-
+        <!-- Przycisk do przełączania sekcji filtrów -->
         <button type="button" class="btn btn-primary" id="toggleFilters">Filtry</button>
 
-        <!-- Filter form section (initially hidden) -->
+        <!-- Sekcja formularza filtrów (początkowo ukryta) -->
         <div id="filterSection" style="display: none;">
-            {% include 'search_form_list.html' %}
-        </div>
-
-        <div id="add_event_new" class="hidden">
-            <form method="post" action="{% url 'event' %}" id="event_form">
-                {% csrf_token %}
+            <form method="get" action="{% url 'search_event' %}" id="filter_form">
                 {{ form.as_p }}
-                <button type="submit" class="btn btn-success">Dodaj wydarzenie</button>
+                <button type="submit" class="btn btn-success">Szukaj</button>
             </form>
         </div>
 
@@ -29,11 +21,11 @@
         <!-- Tabela z wynikami wyszukiwania -->
         {% include 'search_results_list.html' %}
 
+        <button type="button" class="btn btn-primary" id="toggleAddEvent">Dodaj Wydarzenie</button>
 
-        <!--Przycisk subskrybuj-->
 
-        <script src="{% static 'js/filter.js' %}"></script> <!-- Przycisk_z_filtracja -->
-        <script src="{% static 'js/subscribe.js' %}"></script> <!--Przycisk zasubskrybuj-->
-
+        <!-- Skrypty JavaScript -->
+        <script src="{% static 'js/filter.js' %}"></script>
+        <script src="{% static 'js/subscribe.js' %}"></script>
     </div>
 {% endblock %}
