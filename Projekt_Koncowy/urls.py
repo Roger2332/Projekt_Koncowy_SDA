@@ -19,7 +19,8 @@ from django.urls import path, include
 import django.contrib.auth.views as auth_views
 
 from evently.views import create_event, UserCreationView, CreateCategoryView, list_events, subscribe_event, \
-    search_event, edit_event, delete_event, event_detail, unsubscribe_event, home_views, Linkedlin_Roger, Linkedlin_Artema
+
+    search_event, edit_event, delete_event, event_detail, unsubscribe_event, home_views, Linkedlin_Roger, Linkedlin_Artema, user_profile, user_events
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -46,6 +47,8 @@ urlpatterns = [
     path('createuser/', UserCreationView.as_view(), name='user'), # Zarzadzanie uzytkownikiem
     path('accounts/login/', auth_views.LoginView.as_view(), name='login'),
     path('accounts/logout/', auth_views.LogoutView.as_view(), name='logout'),
+    path('profile/', user_profile, name='user_profile'),
+    path('user/events/<int:pk>', user_events, name='user_events'),
     # zarządzanie hasłem
     path('accounts/password_change/', auth_views.PasswordChangeView.as_view(), name='password_change'),
     path('accounts/password_change/done/', auth_views.PasswordChangeDoneView.as_view(), name='password_change_done'),
