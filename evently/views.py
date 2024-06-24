@@ -8,8 +8,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import CreateView
 from django.http import HttpResponse, JsonResponse
 
-from .forms import CreateEventForm, CreateUserForm, CategoryForm, EventSearchForm
-from .models import Category, Event, CreateUserModel, Status
+from .forms import CreateEventForm, CreateUserForm, CategoryForm, EventSearchForm, CommentForm
+from .models import Category, Event, CreateUserModel, Status, Comment
 
 
 @login_required  # Dekorator Sprawdza czy uzytkownik jest zalogowany, jesli nie jest zostanie przekierowany na strone do logowania
@@ -195,15 +195,35 @@ def delete_event(request, pk):
 # Widok calego wydarzenia
 def detail_event(request, pk):
     event = get_object_or_404(Event, pk=pk)
+    comments = Comment.objects.filter(event=event).order_by('added') #new
     is_organizer = request.user == event.author  # Sprawdzanie czy zalogowany uzytkownik to autor wydarzenia
     # Sprawdzenie, czy użytkownik jest zarejestrowany na wydarzenie
     is_registered = event.participants.filter(id=request.user.id).exists()
+
+    #new
+    if request.method == 'POST':
+        if request.user.is_authenticated:
+            form = CommentForm(request.POST)
+            if form.is_valid():
+                comment = form.save(commit=False)
+                comment.author = request.user
+                comment.event = event
+                comment.save()
+                return redirect('detail_event', pk=event.pk)
+        else:
+            return redirect('login')
+    else:
+        form = CommentForm()
+
     return render(request, 'detail_event.html', {
-        'event': event,  # Przekazanie obiektu wydarzenia do szablonu
+        # Przekazanie obiektu wydarzenia do szablonu
+        'event': event,
+        'comments': comments, #new
         # Informacja czy zalogowany użytkownik jest organizatorem wydarzenia Boolen True lub False
         'is_organizer': is_organizer,
         # Informacja czy zalogowany użytkownik jest zarejestrowany na wydarzenie
         'is_registered': is_registered,
+        'form': form, #new
     })
 
 

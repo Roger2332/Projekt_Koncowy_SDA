@@ -4,7 +4,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
 from django import forms
 
-from .models import Event, CreateUserModel, Category
+from .models import Event, CreateUserModel, Category, Comment
 
 
 # Sprawdzanie czy tytul nie zawiera samych bialych znakow
@@ -110,4 +110,12 @@ class EventSearchForm(forms.Form):
         # Dynamiczne ustawienie queryset dla pola place na podstawie unikalnych miejsc z obiektów Event
         self.fields['place'].queryset = Event.objects.values_list('place', flat=True).distinct()
 
-# bsfjgslkfjdgvk;,
+#new
+# Forma dla komentów
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['content']
+        widgets = {
+            'content': forms.Textarea(attrs={'rows': 3, 'placeholder': 'Add a comment...'})
+        }
