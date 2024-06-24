@@ -13,7 +13,23 @@
         <p><strong>Organizer:</strong> {{ event.author.username }}</p>
 
         {% if is_organizer %}
-            <p><strong>Status:</strong> {{ event.status }}</p>
+
+            
+            
+{#            Testowew rowiazanie, nie dziala !!!!!!!!!!!!!!#}
+            {% if event.status == 'Active' %}
+                <p style="color: green;"><strong>Status:</strong> {{ event.status }}</p>
+            {% elif event.status == 'Inactive' %}
+                <p style="color: yellow;"><strong>Status:</strong> {{ event.status }}</p>
+            {% elif event.status == 'Rejected' %}
+                <p style="color: red;"><strong>Status:</strong> {{ event.status }}</p>
+            {% else %}
+                <p style="color: black;"><strong>Status:</strong> {{ event.status }}</p>
+            {% endif %}
+            
+            
+            
+            
             <form action="{% url 'event_edit' event.id %}" method="post" class="btn btn-secondary">
                 {% csrf_token %}
                 <button type="submit" class="btn btn-success">Edit Event</button>
@@ -49,7 +65,7 @@
                 <p>You need to <a href="{% url 'login' %}">log in</a> to add a comment.</p>
             {% endif %}
 
-            <!-- List event -->
+            <!-- Lista komentarzy -->
             <div class="comments-list">
                 {% for comment in comments %}
                     <div class="comment">
