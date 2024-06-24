@@ -25,6 +25,11 @@
         </form>
     </div>
 
+    <!-- Zarządzanie statusami z poziomu admina -->
+    {% if is_admin %}
+        <button type="button" class="btn btn-warning" onclick="location.href='{% url 'accept_status' %}'">Manage event statuses</button>
+    {% endif %}
+
     <!-- Tabela z wynikami wyszukiwania -->
     {% include 'search_results_list.html' %}
 
