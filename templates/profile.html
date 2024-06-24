@@ -1,3 +1,5 @@
+
+
 {% extends 'base.html' %}
 
 {% load static %}
@@ -16,9 +18,9 @@
     </div>
 
 <!-- Dodanie sprawdzania i przycusku do profilu -->
-    <button onclick="window.location.href='/search/?query=&search_type=all&place=&category=&organizer={{ user.id }}&start_date=&end_date='">Twoje wydarzenia</button>
-    <button onclick="window.location.href='{% url 'create_event' %}'">Dodaj nowe wydarzenie</button>
-    <a href="{% url 'user_subscriptions' user.id %}" class="btn btn-info">Zobacz swoje subskrypcje</a>
+    <button onclick="window.location.href='/search/?query=&search_type=all&place=&category=&organizer={{ user.id }}&start_date=&end_date='">Your events</button>
+    <button onclick="window.location.href='{% url 'create_event' %}'">Create a new event</button>
+    <button onclick="window.location.href='{% url 'user_subscriptions' user.id %}'">Your subscriptions</button>
 
 
 {% endblock %}

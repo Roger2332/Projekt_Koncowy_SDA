@@ -18,11 +18,11 @@
                 <li>
                     <form method="post" action="{% url 'logout' %}">
                         {% csrf_token %}
-                        <button type="submit" class="logout-button btn btn-primary">Wyloguj się</button>
+                        <button type="submit" class="logout-button btn btn-primary">Log Out</button>
                     </form>
                 </li>
             {% else %}
-                <li><a href="{% url 'login' %}" class="logout-button btn btn-primary">Zaloguj się</a></li>
+                <li><a href="{% url 'login' %}" class="logout-button btn btn-primary">Log In</a></li>
             {% endif %}
         </ul>
 

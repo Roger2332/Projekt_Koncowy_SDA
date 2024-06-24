@@ -3,14 +3,14 @@
 {% block content %}
     <div class="container mt-4">
         <h1>{{ event.name }}</h1>
-        <p><strong>Miejsce:</strong> {{ event.place }}</p>
-        <p><strong>Kategoria:</strong> {{ event.category.name }}</p>
+        <p><strong>Place:</strong> {{ event.place }}</p>
+        <p><strong>Category:</strong> {{ event.category.name }}</p>
 
-        <p><strong>Data rozpoczęcia</strong> {{ event.start_at }}</p>
-        <p><strong>Data zakończenia</strong> {{ event.end_at }}</p>
+        <p><strong>Start date:</strong> {{ event.start_at }}</p>
+        <p><strong>End date:</strong> {{ event.end_at }}</p>
 
-        <p><strong>Pełny opis:</strong> {{ event.description }}</p>
-        <p><strong>Organizator:</strong> {{ event.author.username }}</p>
+        <p><strong>Full description:</strong> {{ event.description }}</p>
+        <p><strong>Organizer:</strong> {{ event.author.username }}</p>
 
         {% if is_organizer %}
             <form action="{% url 'event_edit' event.id %}" class="btn btn-secondary">
@@ -19,18 +19,18 @@
             </form>
             <form action="{% url 'delete_event' event.id %}" class="btn btn-secondary">
                 {% csrf_token %}
-                <button type="submit" class="btn btn-success">Delate Event</button>
+                <button type="submit" class="btn btn-success">Delete Event</button>
             </form>
             
         {% elif is_registered %}
             <form action="{% url 'unsubscribe_event' event.id %}" method="post">
                 {% csrf_token %}
-                <button type="submit" class="btn btn-warning">Rezygnuj</button>
+                <button type="submit" class="btn btn-warning">Cancel the event</button>
             </form>
         {% else %}
             <form action="{% url 'subscribe_event' event.id %}" method="post">
                 {% csrf_token %}
-                <button type="submit" class="btn btn-success">Zapisz się</button>
+                <button type="submit" class="btn btn-success">Sign up for this event</button>
             </form>
         {% endif %}
     </div>

@@ -3,7 +3,7 @@
 
 {% block content %}
     <div class="container mt-4">
-        <h1 class="mb-4">Moje subskrypcje</h1>
+        <h1 class="mb-4">List of my subscriptions</h1>
 
         {% if subscribed_events %}
             <ul class="list-group">
@@ -11,14 +11,14 @@
                     <li class="list-group-item">
                         <p style="height: 200px;"></p> <!-- Pierwszy duży odstęp -->
                         <h3><a href="{% url 'detail_event' event.id %}" class="btn btn-primary">{{ event.name }}</a></h3>
-                        <p><strong>Miejsce:</strong> {{ event.place }}</p>
-                        <p><strong>Początek:</strong> {{ event.start_at }}</p>
-                        <p><strong>Koniec:</strong> {{ event.end_at }}</p>
+                        <p><strong>Place:</strong> {{ event.place }}</p>
+                        <p><strong>Start at:</strong> {{ event.start_at }}</p>
+                        <p><strong>End at:</strong> {{ event.end_at }}</p>
                     </li>
         {% endfor %}
             </ul>
         {% else %}
-            <p>Nie jesteś jeszcze podpisany na żądne wydarzenia</p>
+            <p>You are not signed to any events yet</p>
         {% endif %}
     </div>
 {% endblock %}

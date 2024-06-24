@@ -15,10 +15,10 @@
                 </td>
             </tr>
             <tr>
-                <td><h6>Miejsce:</h6> {{ event.place }}</td>
-                <td><h6>Data rozpoczęcia:</h6> {{ event.start_at }}</td>
-                <td><h6>Data zakończenia:</h6> {{ event.end_at }}</td>
-                <td><h6>Organizator:</h6> {{ event.author.username }}</td>
+                <td><h6>Place:</h6> {{ event.place }}</td>
+                <td><h6>Start at:</h6> {{ event.start_at }}</td>
+                <td><h6>End at:</h6> {{ event.end_at }}</td>
+                <td><h6>Organizer:</h6> {{ event.author.username }}</td>
             </tr>
             <tr>
                 <td colspan="6">{{ event.description|truncatewords:50 }}</td>
@@ -28,7 +28,7 @@
                     <form id="subscribeForm{{ event.id }}" action="{% url 'detail_event' event.id %}" method="post" style="display: none;">
                         {% csrf_token %}
                     </form>
-                    <button type="button" class="contrast subscribe-btn" data-event-id="{{ event.id }}">Zobacz wydarzenie {{ event.name }}</button>
+                    <button type="button" class="contrast subscribe-btn" data-event-id="{{ event.id }}">View the event {{ event.name }}</button>
                 </td>
             </tr>
             <tr>
@@ -36,7 +36,7 @@
             </tr>
         {% empty %}
             <tr>
-                <td colspan="6">Brak wyników spełniających kryteria wyszukiwania.</td>
+                <td colspan="6">No results match your search criteria</td> <!-- Brak wyników spełniających kryteria wyszukiwania -->
             </tr>
         {% endfor %}
         </tbody>

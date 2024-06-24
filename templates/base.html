@@ -16,15 +16,15 @@
     </a>
     <ul>
         {% if user.is_authenticated %}
-            <li>Jesteś zalogowany jako <a href="{% url 'user_profile' %}"> {{ user.username }}</a></li>
+            <li>You are logged in as<a href="{% url 'user_profile' %}"> {{ user.username }}</a></li>
             <li>
                 <form method="post" action="{% url 'logout' %}">
                     {% csrf_token %}
-                    <button type="submit" class="contrast">Wyloguj się</button>
+                    <button type="submit" class="contrast">Log out</button>
                 </form>
             </li>
         {% else %}
-            <li><a href="{% url 'login' %}" class="contrast">Zaloguj się</a></li>
+            <li><a href="{% url 'login' %}" class="contrast">Log in</a></li>
         {% endif %}
     </ul>
 </nav>
