@@ -30,7 +30,7 @@ urlpatterns = [
     # admin
     path('admin/', admin.site.urls),
     path("create_category", CreateCategoryView.as_view(), name="create_category"), # uprawienia admina
-    path("accept_status", admin_status_view, name="akcept_status"),
+    path("accept_status", admin_status_view, name="accept_status"),
     path('update_event_status/', update_event_status, name='update_event_status'),
     # główna strona
     path('homapage/', homepage, name='homepage'),
