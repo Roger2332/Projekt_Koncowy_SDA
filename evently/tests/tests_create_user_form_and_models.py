@@ -2,6 +2,7 @@ import pytest
 from evently.forms import CreateUserForm
 from evently.models import CreateUserModel
 
+
 @pytest.fixture
 def form_data():
     return {
@@ -13,6 +14,7 @@ def form_data():
         'password2': 'testpassword',
     }
 
+
 @pytest.mark.django_db
 def test_create_user_form_valid(form_data):
     form = CreateUserForm(data=form_data)
@@ -23,6 +25,7 @@ def test_create_user_form_valid(form_data):
     assert user.last_name == form_data['last_name']
     assert user.username == form_data['username']
     assert user.email == form_data['email']
+
 
 @pytest.mark.django_db
 def test_create_user_form_invalid_duplicate_email(form_data):
@@ -42,7 +45,7 @@ def test_create_user_form_invalid_duplicate_email(form_data):
 
 @pytest.mark.django_db
 def test_create_user_form_invalid_duplicate_email(form_data):
-    # Tworzenie istniejącego użytkownika z tym samym emailem
+    # Tworzenie istniejącego użytkownika z ta sama nazwa
     CreateUserModel.objects.create_user(
         username=form_data['username'],
         email='user@gmail.com',
