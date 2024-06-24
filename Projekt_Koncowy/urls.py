@@ -21,7 +21,7 @@ import django.contrib.auth.views as auth_views
 
 from evently.views import create_event, UserCreateView, CreateCategoryView, list_events, subscribe_event, \
     search_event, edit_event, delete_event, detail_event, unsubscribe_event, Linkedlin_Roger, \
-    Linkedlin_Artema, user_profile, user_events, user_subscriptions, homepage
+    Linkedlin_Artema, user_profile, user_events, user_subscriptions, homepage, admin_status_view, update_event_status
 
 #hone_views
 
@@ -30,8 +30,9 @@ urlpatterns = [
     # admin
     path('admin/', admin.site.urls),
     path("create_category", CreateCategoryView.as_view(), name="create_category"), # uprawienia admina
+    path("akcept_status", admin_status_view, name="akcept_status"),
+    path('update_event_status/', update_event_status, name='update_event_status'),
     # główna strona
-    # path('home_li/', home_views, name='home_li'),
     path('homapage/', homepage, name='homepage'),
     # lista eventow
     path('list_events/', list_events, name='list_events'),

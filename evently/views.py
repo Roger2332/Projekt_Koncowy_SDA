@@ -1,20 +1,22 @@
 from datetime import datetime
 
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
+from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import CreateView
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 
 from .forms import CreateEventForm, CreateUserForm, CategoryForm, EventSearchForm
-from .models import Category, Event, CreateUserModel
+from .models import Category, Event, CreateUserModel, Status
 
 
 @login_required  # Dekorator Sprawdza czy uzytkownik jest zalogowany, jesli nie jest zostanie przekierowany na strone do logowania
 def create_event(request):
     if request.method == 'POST':
-        form = CreateEventForm(request.POST)  # Inicjalizacja formularza CreateEventForm z danymi przekazanymi z żądania POST
+        form = CreateEventForm(
+            request.POST)  # Inicjalizacja formularza CreateEventForm z danymi przekazanymi z żądania POST
         if form.is_valid():  # Sprawdzenie poprawności danych formularza
             event = form.save(commit=False)
             form.instance.author = request.user  # Przypisanie bieżącego użytkownika jako autora wydarzenia
@@ -45,15 +47,12 @@ class CreateCategoryView(PermissionRequiredMixin, CreateView):
 # Widok tworzacy liste eventów
 def list_events(request):
     form = EventSearchForm(request.GET)
-    events = Event.objects.all().filter(status=1).order_by('start_at')  # Sortowanie wydarzen po dacie oraz sprawdzanie czy status ma aktywny
+    events = Event.objects.all().filter(status=1).order_by(
+        'start_at')  # Sortowanie wydarzen po dacie oraz sprawdzanie czy status ma aktywny
     return render(request, 'event_list.html', {'events': events, 'form': form})
 
 
 # Widok strony głównej
-# def home_views(request):
-#     return render(request, 'home.html', {'home_views': home_views})
-
-# Widok str gł Artem
 def homepage(request):
     return render(request, 'homepage.html')
 
@@ -156,18 +155,26 @@ def edit_event(request, pk):
         # Tworzenie formularza z danymi POST i istniejącą wartosciami
         if request.method == 'POST':
             form = CreateEventForm(request.POST, instance=event)
-            if form.is_valid():  # Pobieranie danych z formularza po poprawnej walidacji
-                form.save()
+            if form.is_valid():
+                # Pobranie danych z formularza po poprawnej walidacji
+                event = form.save(commit=False)  # Zapisanie formularza, ale bez zapisywania w bazie danych
+
+                # Ustawienie statusu na "Inactive"
+                event.status = Status.objects.get(name='Inactive')
+
+                event.save()  # Zapisanie wydarzenia z ustawionym statusem
+
                 return redirect('detail_event', pk=event.id)  # Po edycji przekierowanie do szczegółów wydarzenia
 
-        # Tworzenie formularza z istniejącą instancją wydarzenia Umożliwia to wypełnienie formularza danymi istniejącego wydarzenia, aby użytkownik mógł je edytować
         else:
+            # Tworzenie formularza z istniejącą instancją wydarzenia
             form = CreateEventForm(instance=event)
+
         # Renderowanie formularza, zarówno w przypadku GET jak i błędów walidacji
         return render(request, 'form.html', {'form': form, 'event': event})
 
     return HttpResponse('Nie jesteś organizatorem',
-                        status=403)  # Zwrócenie odpowiedzi HTTP 403, jeśli użytkownik nie jest uprawniony do edycji wydarzenia
+                        status=403)  # Odpowiedź HTTP 403, jeśli użytkownik nie jest uprawniony do edycji wydarzenia
 
 
 # Widok usuwania wydarzenia
@@ -221,6 +228,46 @@ def user_subscriptions(request, pk):
     user = request.user
     subscribed_events = Event.objects.filter(participants=user)
     return render(request, 'user_subscriptions.html', {'subscribed_events': subscribed_events})
+
+
+def user_is_admin(user):
+    return user.is_authenticated and user.is_superuser
+
+
+# Dekorator csrf_exempt pozwala na wyłączenie wymogu przesyłania tokena CSRF dla tego widoku.
+@csrf_exempt
+@user_passes_test(user_is_admin)
+def update_event_status(request):
+    if request.method == 'POST':
+        event_id = request.POST.get('event_id')  # Pobierz ID wydarzenia z danych POST
+        new_status_name = request.POST.get('new_status')  # Pobierz nazwę nowego statusu z danych POST
+
+        try:
+            event = Event.objects.get(id=event_id)  # Spróbuj pobrać wydarzenie o danym ID
+            new_status = Status.objects.get(name=new_status_name)  # Spróbuj pobrać nowy status po nazwie
+
+            event.status = new_status  # Przypisz nowy status do wydarzenia
+            event.save()  # Zapisz zmiany w bazie danych
+
+            return JsonResponse({'success': True})  # Zwróć odpowiedź JSON o sukcesie
+
+        except Event.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'Event not found'})  # Obsłuż brak wydarzenia
+
+        except Status.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'Status not found'})  # Obsłuż brak statusu
+
+    return JsonResponse({'success': False, 'error': 'Invalid request'})  # Obsłuż nieprawidłowy typ żądania
+
+
+@user_passes_test(user_is_admin)
+def admin_status_view(request):
+    form = EventSearchForm(request.GET)  # Utwórz formularz do wyszukiwania wydarzeń na podstawie danych GET
+    events = Event.objects.filter(status__name='Inactive').order_by('modified')
+    # Pobierz wydarzenia o statusie "Inactive" i posortowane według daty modyfikacji
+
+    return render(request, 'event_status_admin_list.html', {'events': events, 'form': form})
+    # Zwróć renderowanie szablonu HTML 'event_status_admin_list.html' z przekazaniem wydarzeń i formularza do kontekstu
 
 
 def Linkedlin_Roger(request):
