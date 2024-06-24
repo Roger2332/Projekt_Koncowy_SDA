@@ -110,8 +110,7 @@ class EventSearchForm(forms.Form):
         # Dynamiczne ustawienie queryset dla pola place na podstawie unikalnych miejsc z obiektów Event
         self.fields['place'].queryset = Event.objects.values_list('place', flat=True).distinct()
 
-#new
-# Forma dla komentów
+# Forma dla komentarzy
 class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment

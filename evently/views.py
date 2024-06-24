@@ -187,7 +187,6 @@ def delete_event(request, pk):
             return redirect('list_events')  # Po usunieciu przekierowanie do szczegółów wydarzenia
         # Renderowanie formularza, zarówno w przypadku GET jak i błędów walidacji
         return render(request, 'delete_event.html', {'event': event})
-
     # Zwrócenie odpowiedzi HTTP 403, jeśli użytkownik nie jest uprawniony do edycji wydarzenia
     return HttpResponse('Nie jesteś organizatorem', status=403)
 
@@ -200,7 +199,6 @@ def detail_event(request, pk):
     # Sprawdzenie, czy użytkownik jest zarejestrowany na wydarzenie
     is_registered = event.participants.filter(id=request.user.id).exists()
 
-    #new
     if request.method == 'POST':
         if request.user.is_authenticated:
             form = CommentForm(request.POST)
@@ -218,12 +216,12 @@ def detail_event(request, pk):
     return render(request, 'detail_event.html', {
         # Przekazanie obiektu wydarzenia do szablonu
         'event': event,
-        'comments': comments, #new
+        'comments': comments,
         # Informacja czy zalogowany użytkownik jest organizatorem wydarzenia Boolen True lub False
         'is_organizer': is_organizer,
         # Informacja czy zalogowany użytkownik jest zarejestrowany na wydarzenie
         'is_registered': is_registered,
-        'form': form, #new
+        'form': form,
     })
 
 

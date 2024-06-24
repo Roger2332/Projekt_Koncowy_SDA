@@ -38,7 +38,7 @@
         <!-- Komentarze -->
         <div class="comments-section">
             <h2>Comments</h2>
-            <!-- Forma для добавления комментариев -->
+            <!-- Forma dla dodawania komentarzy -->
             {% if user.is_authenticated %}
                 <form method="post">
                     {% csrf_token %}
@@ -49,7 +49,7 @@
                 <p>You need to <a href="{% url 'login' %}">log in</a> to add a comment.</p>
             {% endif %}
 
-            <!-- Список комментариев -->
+            <!-- List event -->
             <div class="comments-list">
                 {% for comment in comments %}
                     <div class="comment">
