@@ -13,28 +13,18 @@
         <p><strong>Organizer:</strong> {{ event.author.username }}</p>
 
         {% if is_organizer %}
-
-            
-            
-{#            Testowew rowiazanie, nie dziala !!!!!!!!!!!!!!#}
-            {% if event.status == 'Active' %}
+            {% if event.status.name == 'Active' %}
                 <p style="color: green;"><strong>Status:</strong> {{ event.status }}</p>
-            {% elif event.status == 'Inactive' %}
+            {% elif event.status.name == 'Inactive' %}
                 <p style="color: yellow;"><strong>Status:</strong> {{ event.status }}</p>
-            {% elif event.status == 'Rejected' %}
+            {% else event.status.name == 'Rejected' %}
                 <p style="color: red;"><strong>Status:</strong> {{ event.status }}</p>
-            {% else %}
-                <p style="color: black;"><strong>Status:</strong> {{ event.status }}</p>
             {% endif %}
-            
-            
-            
-            
-            <form action="{% url 'event_edit' event.id %}" method="post" class="btn btn-secondary">
+            <form action="{% url 'event_edit' event.id %}" class="btn btn-secondary">
                 {% csrf_token %}
                 <button type="submit" class="btn btn-success">Edit Event</button>
             </form>
-            <form action="{% url 'delete_event' event.id %}" method="post" class="btn btn-secondary">
+            <form action="{% url 'delete_event' event.id %}" class="btn btn-secondary">
                 {% csrf_token %}
                 <button type="submit" class="btn btn-success">Delete Event</button>
             </form>
