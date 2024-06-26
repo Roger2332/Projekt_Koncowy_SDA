@@ -172,7 +172,8 @@ def test_logout_view(client, user):
 
     # Sprawdzenie, czy użytkownik został wylogowany
     response = client.get(reverse('user_profile'))
-    assert response.status_code == 200
+    assert response.status_code == 302
+
 
 
 @pytest.mark.django_db

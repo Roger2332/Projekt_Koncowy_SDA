@@ -34,7 +34,7 @@ def test_create_event_form_invalid_start_end_dates():
     }
     form = CreateEventForm(data=form_data)
     assert not form.is_valid()
-    assert 'Data zakończenia musi być późniejsza niż data rozpoczęcia' in form.errors['__all__']
+    assert 'The end date must be later than the start date' in form.errors['__all__']
 
 
 @pytest.mark.django_db
