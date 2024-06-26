@@ -28,3 +28,19 @@ h1, h2 {
 div {
     margin: 20px 0;
 }
+
+nav ul {
+    display: flex;
+    list-style-type: none;
+    padding: 0;
+}
+
+nav ul li {
+    margin-right: 15px;
+    display: flex;
+    align-items: center;
+}
+
+nav ul li img {
+    margin-right: 5px;
+}

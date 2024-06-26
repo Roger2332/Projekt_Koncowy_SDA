@@ -39,7 +39,7 @@ class CreateEventForm(forms.ModelForm):
     description = forms.CharField(widget=forms.Textarea, validators=[dec_valid])
     category = forms.ModelChoiceField(queryset=Category.objects.all(),  # do poprawy
                                       widget=forms.Select(attrs={'class': 'form-control'}),
-                                      empty_label="Wybierz kategorię"
+                                      empty_label="Select a category"
                                       )
 
     def clean(self):
@@ -53,7 +53,7 @@ class CreateEventForm(forms.ModelForm):
         # Walidacja dat: sprawdzenie, czy data end_at jest późniejsza niż start_at
         if start_at and end_at:
             if end_at <= start_at:
-                raise ValidationError('Data zakończenia musi być późniejsza niż data rozpoczęcia')
+                raise ValidationError('The end date must be later than the start date')
         return cleaned_data  # Zwrócenie zwalidowanych danych
 
     def __init__(self, *args, **kwargs):
@@ -82,26 +82,26 @@ class CategoryForm(forms.ModelForm):
 class EventSearchForm(forms.Form):
     # Lista wyborów dla pola search_type
     SEARCH_CHOICES = [
-        ('future', 'Przyszłe'),
-        ('past', 'Przeszłe'),
-        ('ongoing_future', 'Trwające i przyszłe'),
-        ('all', 'Wszystkie')
+        ('future', 'Future events'),
+        ('past', 'Past events'),
+        ('ongoing_future', 'Ongoing and future events'),
+        ('all', 'All events')
     ]
     # Pole do wyszukiwania po nazwie wydarzenia
-    query = forms.CharField(label='Nazwa wydarzenia', max_length=100, required=False)
+    query = forms.CharField(label='Event name', max_length=100, required=False)
     # Pole do wyboru typu wyszukiwania
-    search_type = forms.ChoiceField(label='Typ wyszukiwania', choices=SEARCH_CHOICES, required=False)
+    search_type = forms.ChoiceField(label='Search type', choices=SEARCH_CHOICES, required=False)
     # Pole do wyszukiwania po nazwie miejsca
-    place = forms.CharField(label='Nazwa miejsca', max_length=100, required=False)
+    place = forms.CharField(label='Place name', max_length=100, required=False)
     # Pole do wyboru kategorii z modelu Category
-    category = forms.ModelChoiceField(queryset=Category.objects.all(), label='Kategoria', required=False)
+    category = forms.ModelChoiceField(queryset=Category.objects.all(), label='Category', required=False)
     # Pole do wyboru organizatora z modelu CreateUserModel
-    organizer = forms.ModelChoiceField(queryset=CreateUserModel.objects.all(), label='Organizator', required=False)
+    organizer = forms.ModelChoiceField(queryset=CreateUserModel.objects.all(), label='Organizer', required=False)
     # Pole do wprowadzania daty rozpoczęcia
-    start_date = forms.DateField(label='Data rozpoczęcia', required=False,
+    start_date = forms.DateField(label='Start date', required=False,
                                  widget=forms.TextInput(attrs={'type': 'date'}))
     # Pole do wprowadzania daty zakończenia
-    end_date = forms.DateField(label='Data zakończenia', required=False,
+    end_date = forms.DateField(label='End date', required=False,
                                widget=forms.TextInput(attrs={'type': 'date'}))
 
     def __init__(self, *args, **kwargs):
@@ -115,6 +115,7 @@ class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
         fields = ['content']
+        # Co wpisuje w pusty formularz do wypełniania
         widgets = {
             'content': forms.Textarea(attrs={'rows': 3, 'placeholder': 'Add a comment...'})
         }
