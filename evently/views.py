@@ -221,6 +221,7 @@ def detail_event(request, pk):
 
 
 # Widok profilu Usera
+@login_required
 def user_profile(request):
     user = request.user
     return render(request, 'profile.html', {'user': user})

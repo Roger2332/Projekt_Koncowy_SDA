@@ -24,7 +24,7 @@
         </tr>
         <tr>
             <td colspan="6">
-                <form id="subscribeForm{{ event.id }}" action="{% url 'detail_event' event.id %}" method="post"
+                <form id="subscribeForm{{ event.id }}" action="{% url 'detail_event' event.id %}"
                       style="display: none;">
                     {% csrf_token %}
                 </form>
