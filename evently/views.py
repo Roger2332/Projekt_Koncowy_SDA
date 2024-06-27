@@ -48,7 +48,7 @@ class CreateCategoryView(PermissionRequiredMixin, CreateView):
 
 # Widok tworzacy liste eventów
 def list_events(request, form=None):
-    #new
+    # new
     if request.user.is_authenticated and request.user.is_superuser:
         events = Event.objects.all().order_by('start_at')
     else:
@@ -236,6 +236,7 @@ def user_events(request, pk):
     else:
         return redirect('/search/?query=&search_type=all&place=&category=&organizer=&start_date=&end_date=')
 
+
 # wykonaj zapytanie do bazy danych, aby uzyskać wszystkie obiekty Event, w których bieżący użytkownik znajduje się na liście uczestników.
 @login_required
 def user_subscriptions(request, pk):
@@ -293,12 +294,11 @@ def admin_status_view(request):
     return render(request, 'event_status_admin_list.html', {'events': events, 'form': form})
 
 
-
-def Linkedlin_Roger(request):
+def linkedlin_Roger(request):
     response = redirect('https://www.linkedin.com/in/rogerszwaja')
     return response
 
 
-def Linkedlin_Artema(request):
+def linkedlin_Artema(request):
     response = redirect('https://www.linkedin.com/in/artem-monkiewicz')
     return response

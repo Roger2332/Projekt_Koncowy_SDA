@@ -18,18 +18,14 @@ from django.contrib import admin
 from django.urls import path
 import django.contrib.auth.views as auth_views
 
-
 from evently.views import create_event, UserCreateView, CreateCategoryView, list_events, subscribe_event, \
-    search_event, edit_event, delete_event, detail_event, unsubscribe_event, Linkedlin_Roger, \
-    Linkedlin_Artema, user_profile, user_events, user_subscriptions, homepage, admin_status_view, update_event_status
-
-#hone_views
-
+    search_event, edit_event, delete_event, detail_event, unsubscribe_event, linkedlin_Roger, \
+    linkedlin_Artema, user_profile, user_events, user_subscriptions, homepage, admin_status_view, update_event_status
 
 urlpatterns = [
     # admin
     path('admin/', admin.site.urls),
-    path("create_category", CreateCategoryView.as_view(), name="create_category"), # uprawienia admina
+    path("create_category", CreateCategoryView.as_view(), name="create_category"),  # uprawienia admina
     path("accept_status", admin_status_view, name="accept_status"),
     path('update_event_status/', update_event_status, name='update_event_status'),
     # główna strona
@@ -52,15 +48,16 @@ urlpatterns = [
     # profile usera
     path('profile/', user_profile, name='user_profile'),
     path('user/events/<int:pk>/', user_events, name='user_events'),
-    path('profile/subscriptions/<pk>/', user_subscriptions, name='user_subscriptions'), # forma "twoje subskrypcje"
+    path('profile/subscriptions/<pk>/', user_subscriptions, name='user_subscriptions'),  # forma "twoje subskrypcje"
     # zarządzanie hasłem
     path('accounts/password_change/', auth_views.PasswordChangeView.as_view(), name='password_change'),
     path('accounts/password_change/done/', auth_views.PasswordChangeDoneView.as_view(), name='password_change_done'),
     path('accounts/password_reset/', auth_views.PasswordResetView.as_view(), name='password_reset'),
     path('accounts/password_reset/done/', auth_views.PasswordResetDoneView.as_view(), name='password_reset_done'),
-    path('accounts/reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
+    path('accounts/reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(),
+         name='password_reset_confirm'),
     path('accounts/reset/done/', auth_views.PasswordResetCompleteView.as_view(), name='password_reset_complete'),
     # autorzy Evently
-    path('Artem', Linkedlin_Artema, name="Artem"),
-    path('Roger', Linkedlin_Roger, name="Roger"),
+    path('Artem', linkedlin_Artema, name="Artem"),
+    path('Roger', linkedlin_Roger, name="Roger"),
 ]
