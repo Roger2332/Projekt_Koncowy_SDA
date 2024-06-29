@@ -21,6 +21,7 @@ def create_event(request):
             event = form.save(commit=False)
             form.instance.author = request.user  # Przypisanie bieżącego użytkownika jako autora wydarzenia
             form.save()  # Zapisanie formularza do bazy danych
+            form.save_m2m()
             return redirect('detail_event', pk=event.pk)  # Przekierowanie na stronę szczegółów utworzonego wydarzenia
     else:
         form = CreateEventForm()  # Utworzenie pustego formularza CreateEventForm w przypadku, gdy żądanie nie jest metodą POST
@@ -41,18 +42,19 @@ class CreateCategoryView(PermissionRequiredMixin, CreateView):
     template_name = 'form.html'
     model = Category
     form_class = CategoryForm
-    success_url = reverse_lazy('create_category'),
+    success_url = reverse_lazy('create_category')
     # Sprawdzanie czy uzytkownik jest superuser(Administratorem)
     permission_required = 'is_superuser'
 
 
 # Widok tworzacy liste eventów
 def list_events(request):
+
     form = EventSearchForm(request.GET)
     if request.user.is_authenticated and request.user.is_superuser:
-        events = Event.objects.all().order_by('start_at')
+        events = Event.objects.filter(status=2).order_by('start_at')
     else:
-        events = Event.objects.filter(status=1).order_by('start_at')
+         events = Event.objects.filter(status=2).order_by('start_at')
     return render(request, 'event_list.html', {
         'events': events,
         'form': form,

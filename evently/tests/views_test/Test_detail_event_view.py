@@ -23,7 +23,7 @@ def sample_category():
 
 @pytest.fixture
 def event(users, sample_status, sample_category):
-    return Event.objects.create(
+    event = Event.objects.create(
         name='Wydarzenie 1',
         place='Miejsce A',
         start_at='2024-07-01',
@@ -31,8 +31,9 @@ def event(users, sample_status, sample_category):
         description='Opis wydarzenia',
         status=sample_status,
         author=users[0],
-        category=sample_category
     )
+    event.category.set([sample_category])  # Use .set() method for many-to-many field
+    return event
 
 @pytest.fixture
 def comment(users, event):
@@ -41,6 +42,7 @@ def comment(users, event):
         event=event,
         content='Test Comment'
     )
+
 
 @pytest.mark.django_db
 def test_detail_event_organizer(client, users, event):

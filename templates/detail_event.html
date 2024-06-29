@@ -4,8 +4,11 @@
     <div class="container mt-4">
         <h1>{{ event.name }}</h1>
         <p><strong>Place:</strong> {{ event.place }}</p>
-        <p><strong>Category:</strong> {{ event.category.name }}</p>
-
+        <p><strong>Category:</strong>
+            {% for category in event.category.all %}
+                {{ category.name }}{% if not forloop.last %}, {% endif %}
+            {% endfor %}
+        </p>
         <p><strong>Start date:</strong> {{ event.start_at }}</p>
         <p><strong>End date:</strong> {{ event.end_at }}</p>
 

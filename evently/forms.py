@@ -37,10 +37,7 @@ class CreateEventForm(forms.ModelForm):
     start_at = forms.DateField(widget=forms.SelectDateWidget, validators=[data_start_validator])
     end_at = forms.DateField(widget=forms.SelectDateWidget)
     description = forms.CharField(widget=forms.Textarea, validators=[dec_valid])
-    category = forms.ModelChoiceField(queryset=Category.objects.all(),
-                                      widget=forms.Select(attrs={'class': 'form-control'}),
-                                      empty_label="Select a category"
-                                      )
+    category = forms.ModelMultipleChoiceField(queryset=Category.objects.all(), widget=forms.CheckboxSelectMultiple)
 
     def clean(self):
         # Pobranie zwalidowanych danych z klasy nadrzędnej

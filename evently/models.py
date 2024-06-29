@@ -8,8 +8,6 @@ class CreateUserModel(AbstractUser):
     username = models.CharField(unique=True, max_length=50)
 
 
-
-
 class Category(models.Model):
     name = models.CharField(max_length=100)
     added = models.DateTimeField(auto_now_add=True)
@@ -17,6 +15,7 @@ class Category(models.Model):
 
     def __str__(self):
         return f'{self.name}'
+
 
 class Status(models.Model):
     STATUS_CHOICES = [
@@ -32,6 +31,7 @@ class Status(models.Model):
     def __str__(self):
         return f'{self.name}'
 
+
 class Event(models.Model):
     author = models.ForeignKey(CreateUserModel, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
@@ -40,13 +40,19 @@ class Event(models.Model):
     end_at = models.DateField()
     description = models.TextField()
     status = models.ForeignKey(Status, on_delete=models.CASCADE, default=1)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True, blank=True)
+    category = models.ManyToManyField(Category, related_name='events_category', blank=True)
     participants = models.ManyToManyField(CreateUserModel, related_name='events_participated', blank=True)
     added = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f'Event: {self.name}, start at: {self.start_at}, end at: {self.end_at}'
+
+    # dla panelu administratora(żeby poprawnie wyswietliwało się many-to-many)
+    def category_list(self):
+        return ", ".join([category.name for category in self.category.all()])
+
+    category_list.short_description = 'Category'
 
 
 class Comment(models.Model):
@@ -59,21 +65,3 @@ class Comment(models.Model):
 
     def __str__(self):
         return f'Author: {self.author}, Event: {self.event}'
-
-
-class Subscription(models.Model):
-    user = models.ForeignKey(CreateUserModel, on_delete=models.CASCADE)
-    event = models.ForeignKey(Event, on_delete=models.CASCADE)
-    added = models.DateTimeField(auto_now_add=True)
-    modified = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        return f'User: {self.user}, Event: {self.event}'
-
-
-class EventCategory(models.Model):
-    event = models.ForeignKey(Event, on_delete=models.CASCADE)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return f'Event: {self.event}, Category: {self.category}'
