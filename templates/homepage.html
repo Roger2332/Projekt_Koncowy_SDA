@@ -1,0 +1,30 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Homepage</title>
+    <link rel="stylesheet" href="{% static 'css/homepage_style.css' %}">
+</head>
+<body>
+<div class="center-content">
+    <div class="background-circle"></div> <!-- Tło -->
+    <div class="logo-container">
+        <a href="{% url 'list_events' %}" class="events-button">Events</a>
+        <a href="{% url 'list_events' %}">
+            <img src="{% static 'img/logo.png' %}" alt="Logo" class="center-logo animated-logo">
+        </a>
+        <a href="{% url 'login' %}" class="login-button">Log In</a>
+    </div>
+</div>
+<div class="authors">
+    <span>Created by:</span>
+    <a href="{% url 'Roger' %}" class="author-button">Roger Szwaja</a>
+    <a href="{% url 'Artem' %}" class="author-button">Artem Monkiewicz</a>
+</div>
+</body>
+</html>
+
+

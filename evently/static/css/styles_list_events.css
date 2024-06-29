@@ -1,0 +1,14 @@
+h2 {
+    text-align: center;
+    margin: 0;
+}
+
+h2 a {
+    display: inline-block;
+    text-align: center;
+    width: 100%;
+}
+
+td {
+    text-align: center;
+}
