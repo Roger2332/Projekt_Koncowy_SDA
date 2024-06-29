@@ -20,8 +20,9 @@
                 <p style="color: green;"><strong>Status:</strong> {{ event.status }}</p>
             {% elif event.status.name == 'Inactive' %}
                 <p style="color: yellow;"><strong>Status:</strong> {{ event.status }}</p>
-            {% elif event.status.name == 'Rejected' %}
-                <p style="color: red;"><strong>Status:</strong> {{ event.status }}</p>
+            {% elif event.status.name == 'v' %}
+                <p style="color: red;"><strong>Status:</strong> {{ event.status }} </p>
+                <p style="color: red">Correct your event to be accepted</p>
             {% endif %}
             <form action="{% url 'event_edit' event.id %}" class="btn btn-secondary">
                 {% csrf_token %}
