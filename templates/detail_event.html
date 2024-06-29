@@ -46,6 +46,7 @@
 
         <!-- Komentarze -->
         <div class="comments-section">
+
             <h2>Comments</h2>
             <!-- Forma dla dodawania komentarzy -->
             {% if user.is_authenticated %}
@@ -62,9 +63,13 @@
             <div class="comments-list">
                 {% for comment in comments %}
                     <div class="comment">
-                        <p><strong>{{ comment.author.username }}</strong></p>
-                        <p>{{ comment.content }}</p>
-                        <p><small>{{ comment.added }}</small></p>
+                        <table>
+                            <td>
+                                <p><strong>{{ comment.author.username }}</strong></p>
+                                <p>{{ comment.content }}</p>
+                                <p><small>{{ comment.added }}</small></p>
+                            </td>
+                        </table>
                     </div>
                 {% empty %}
                     <p>No comments yet. Be the first to comment!</p>

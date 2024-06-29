@@ -54,7 +54,7 @@ def list_events(request):
     if request.user.is_authenticated and request.user.is_superuser:
         events = Event.objects.filter(status=2).order_by('start_at')
     else:
-         events = Event.objects.filter(status=2).order_by('start_at')
+        events = Event.objects.filter(status=2).order_by('start_at')
     return render(request, 'event_list.html', {
         'events': events,
         'form': form,
@@ -157,6 +157,7 @@ def edit_event(request, pk):
                 event.status = Status.objects.get(name='Inactive')
                 # Zapisanie wydarzenia z ustawionym statusem
                 event.save()
+                form.save_m2m()
                 return redirect('detail_event', pk=event.id)  # Po edycji przekierowanie do szczegółów wydarzenia
         else:
             # Tworzenie formularza z istniejącą instancją wydarzenia
