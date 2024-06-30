@@ -34,7 +34,7 @@ class UserCreateView(CreateView):
     template_name = 'form.html'
     form_class = CreateUserForm
     # Przekierowanie po stworzeniu uzytkownika
-    success_url = reverse_lazy('list_events')
+    success_url = reverse_lazy('login')
 
 
 # Widok umozliwiajacy tworzenie Kategori
