@@ -27,5 +27,5 @@ def test_user_create_view(client, admin_user):  # Przyjmujemy admin_user, ale mo
 
     # Sprawdzenie, czy nastąpiło przekierowanie po dodaniu użytkownika
     assert response.status_code == 302  # Kod HTTP 302 oznacza przekierowanie
-    assert response.url == reverse('list_events')  # Oczekujemy przekierowania na listę wydarzeń
+    assert response.url == reverse('login')
 
