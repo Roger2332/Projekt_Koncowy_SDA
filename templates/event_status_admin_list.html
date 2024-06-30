@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+    <div class="container mt-4">
+        <h1 class="mb-4">List of events to accept</h1>
+
+        <link rel="stylesheet" type="text/css" href="{% static 'css/styles_list_events.css' %}">
+
+        <table role="grid">
+            <tbody>
+            {% for event in events %}
+                <tr>
+                    <td colspan="6">
+                        <h2>
+                            <a href="{% url 'detail_event' event.id %}" class="btn btn-secondary">
+                                {{ event.name }}
+                            </a>
+                        </h2>
+                    </td>
+                </tr>
+                <tr>
+                    <td><h6>Place:</h6> {{ event.place }}</td>
+                    <td><h6>Start date:</h6> {{ event.start_at }}</td>
+                    <td><h6>end date:</h6> {{ event.end_at }}</td>
+                    <td><h6>Organizer:</h6> {{ event.author.username }}</td>
+                </tr>
+                <tr>
+                    <td colspan="6">{{ event.description|truncatewords:50 }}</td>
+                </tr>
+                <tr>
+                    <td colspan="6">
+                        <button type="button" class="contrast accept-btn" style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer; font-size: 16px; border-radius: 5px;" data-event-id="{{ event.id }}">
+                            Accept
+                        </button>
+                        <button type="button" class="contrast reject-btn" style="background-color: red; color: white; border: none; padding: 10px 20px; cursor: pointer; font-size: 16px; border-radius: 5px;" data-event-id="{{ event.id }}">
+                            Dismiss event
+                        </button>
+                    </td>
+                </tr>
+                <tr style="height: 200px;"></tr> 
+            {% empty %}
+                <tr>
+                    <td colspan="6">No events to accept.</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{% static 'js/update_event_status.js' %}"></script>
+{% endblock %}

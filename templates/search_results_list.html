@@ -1,0 +1,45 @@
+{% load static %}
+
+<head>
+    <title>Event List</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styles_list_events.css' %}">
+</head>
+
+<table role="grid">
+    <tbody>
+    {% for event in events %}
+        <tr>
+            <td colspan="6">
+                <h2><a href="{% url 'detail_event' event.id %}" class="btn btn-secondary">{{ event.name }}</a></h2>
+            </td>
+        </tr>
+        <tr>
+            <td><h6>Place:</h6> {{ event.place }}</td>
+            <td><h6>Start at:</h6> {{ event.start_at }}</td>
+            <td><h6>End at:</h6> {{ event.end_at }}</td>
+            <td><h6>Organizer:</h6> {{ event.author.username }}</td>
+        </tr>
+        <tr>
+            <td colspan="6">{{ event.description|truncatewords:50 }}</td>
+        </tr>
+        <tr>
+            <td colspan="6">
+                <form id="subscribeForm{{ event.id }}" action="{% url 'detail_event' event.id %}"
+                      style="display: none;">
+                    {% csrf_token %}
+                </form>
+                <button type="button" class="contrast subscribe-btn" data-event-id="{{ event.id }}">View the
+                    event {{ event.name }}</button>
+            </td>
+        </tr>
+        <tr style="height: 200px;"></tr> <!-- Pierwszy duży odstęp -->
+
+    {% empty %}
+        <tr>
+            <td colspan="6">No results match your search criteria</td>
+            <!-- Brak wyników spełniających kryteria wyszukiwania -->
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+

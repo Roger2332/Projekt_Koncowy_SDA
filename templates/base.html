@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}My Django App{% endblock %}</title>
+    {% load static %}
+    <!-- Podłączenie stylów -->
+    <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@1.4.0/css/pico.min.css">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+<!-- Pasek nawigacyjny -->
+<nav class="container-fluid">
+    <a href="{% url 'list_events' %}" class="contrast">
+        <img src="{% static 'img/logo.png' %}" alt="Evently" style="max-width: 200px; height: auto;">
+    </a>
+    <ul>
+        {% if user.is_authenticated %}
+            <!-- Sprawdzanie uprawnień administratora lub superużytkownika -->
+            {% if user.is_staff or user.is_superuser %}
+                <a href="/admin" style="text-decoration: none;">
+                    <h2 style="display: inline; color: green; margin-left: 20px;">Admin's panel</h2>
+                </a>
+                <a href="/admin">
+                    <div style="display: inline-block; width: 90px; height: 90px; overflow: hidden; position: relative; margin-left: 10px;">
+                        <img src="{% static 'img/admin_photo.png' %}" alt="Admin panel" style="width: 90%; height: auto; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+                    </div>
+                </a>
+                <span style="margin-left: 485px; margin-right: 30px;">
+                    You are logged, <a href="{% url 'user_profile' %}" style="text-decoration: none; color: #00A3CC;">Admin's Profile</a>
+                </span>
+            {% else %}
+                <!-- Jeśli użytkownik nie jest administratorem -->
+                <span>You are logged, <a href="{% url 'user_profile' %}" style="text-decoration: none; color: #00A3CC;">{{ user.first_name }} {{ user.last_name }}</a></span>
+                <a href="{% url 'user_profile' %}">
+                    <div style="display: inline-block; width: 90px; height: 90px; background-color: white; border-radius: 50%; overflow: hidden; position: relative; margin-left: 10px;">
+                        <img src="{% static 'img/user_photo.png' %}" alt="User Profile" style="width: 90%; height: auto; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+                    </div>
+                </a>
+            {% endif %}
+            <!-- Przycisk wylogowania -->
+            <li>
+                <form method="post" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="contrast">Log out</button>
+                </form>
+            </li>
+        {% else %}
+            <!-- Link do strony logowania -->
+            <li><a href="{% url 'login' %}" class="contrast">Log in</a></li>
+        {% endif %}
+    </ul>
+</nav>
+
+<!-- Treść strony głównej -->
+<main class="container mt-4">
+    {% block content %}
+    {% endblock %}
+</main>
+
+<!-- Stopka -->
+<footer>
+</footer>
+
+</body>
+</html>
