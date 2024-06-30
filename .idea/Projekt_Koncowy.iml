@@ -18,6 +18,7 @@
       <sourceFolder url="file://$MODULE_DIR$/evently/tests/forms_test" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/evently/tests/url_test" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/evently/tests/views_test" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/evently/tests/models_test" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/.venv" />
       <excludeFolder url="file://$MODULE_DIR$/venv" />
     </content>
