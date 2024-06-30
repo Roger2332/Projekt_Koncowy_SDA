@@ -20,8 +20,9 @@
                 <p style="color: green;"><strong>Status:</strong> {{ event.status }}</p>
             {% elif event.status.name == 'Inactive' %}
                 <p style="color: yellow;"><strong>Status:</strong> {{ event.status }}</p>
-            {% elif event.status.name == 'Rejected' %}
-                <p style="color: red;"><strong>Status:</strong> {{ event.status }}</p>
+            {% elif event.status.name == 'v' %}
+                <p style="color: red;"><strong>Status:</strong> {{ event.status }} </p>
+                <p style="color: red">Correct your event to be accepted</p>
             {% endif %}
             <form action="{% url 'event_edit' event.id %}" class="btn btn-secondary">
                 {% csrf_token %}
@@ -46,6 +47,7 @@
 
         <!-- Komentarze -->
         <div class="comments-section">
+
             <h2>Comments</h2>
             <!-- Forma dla dodawania komentarzy -->
             {% if user.is_authenticated %}
@@ -62,9 +64,13 @@
             <div class="comments-list">
                 {% for comment in comments %}
                     <div class="comment">
-                        <p><strong>{{ comment.author.username }}</strong></p>
-                        <p>{{ comment.content }}</p>
-                        <p><small>{{ comment.added }}</small></p>
+                        <table>
+                            <td>
+                                <p><strong>{{ comment.author.username }}</strong></p>
+                                <p>{{ comment.content }}</p>
+                                <p><small>{{ comment.added }}</small></p>
+                            </td>
+                        </table>
                     </div>
                 {% empty %}
                     <p>No comments yet. Be the first to comment!</p>

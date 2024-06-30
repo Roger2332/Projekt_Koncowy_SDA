@@ -156,8 +156,7 @@ def edit_event(request, pk):
                 # Ustawienie statusu na "Inactive"
                 event.status = Status.objects.get(name='Inactive')
                 # Zapisanie wydarzenia z ustawionym statusem
-                event.save()  # Zapisanie formularza do bazy danych
-                form.save_m2m()
+                event.save()
                 return redirect('detail_event', pk=event.id)  # Po edycji przekierowanie do szczegółów wydarzenia
         else:
             # Tworzenie formularza z istniejącą instancją wydarzenia
