@@ -29,7 +29,7 @@ urlpatterns = [
     path("accept_status", admin_status_view, name="accept_status"),
     path('update_event_status/', update_event_status, name='update_event_status'),
     # główna strona
-    path('homepage/', homepage, name='homepage'),
+    path('', homepage, name='homepage'),
     # lista eventow
     path('list_events/', list_events, name='list_events'),
     # wyszukiwarka
