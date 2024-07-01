@@ -271,12 +271,12 @@ def test_password_change_url(client, user):
     assert response.status_code == 200
 
 
-
 @pytest.mark.django_db
 def test_password_change_done_url_no_user(client):
     response = client.get(reverse('password_change_done'))
     assert response.status_code == 302
     assert 'accounts/login' in response.url
+
 
 @pytest.mark.django_db
 def test_password_change_done_url_by_user(client):
@@ -285,7 +285,6 @@ def test_password_change_done_url_by_user(client):
     response = client.get(reverse('password_change_done'))
     assert response.status_code == 302
     assert 'accounts/login' in response.url
-
 
 
 @pytest.mark.django_db
@@ -304,7 +303,6 @@ def test_password_reset_done_url(client):
 def test_password_reset_confirm_url(client):
     response = client.get(reverse('password_reset_confirm', args=['uidb64', 'token']))
     assert response.status_code == 200
-
 
 
 @pytest.mark.django_db

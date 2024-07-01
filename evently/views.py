@@ -49,17 +49,17 @@ class CreateCategoryView(PermissionRequiredMixin, CreateView):
 
 # Widok tworzacy liste eventów
 def list_events(request):
-
     form = EventSearchForm(request.GET)
     if request.user.is_authenticated and request.user.is_superuser:
         events = Event.objects.filter(status=2).order_by('start_at')
     else:
-         events = Event.objects.filter(status=2).order_by('start_at')
+        events = Event.objects.filter(status=2).order_by('start_at')
     return render(request, 'event_list.html', {
         'events': events,
         'form': form,
         'is_admin': request.user.is_authenticated and request.user.is_superuser
     })
+
 
 # Widok strony głównej
 def homepage(request):

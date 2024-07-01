@@ -12,6 +12,7 @@ def test_create_category():
     assert category.added <= timezone.now()
     assert category.modified <= timezone.now()
 
+
 @pytest.mark.django_db
 def test_modify_category():
     category = Category.objects.create(name="Test Category")
@@ -24,7 +25,7 @@ def test_modify_category():
     category.refresh_from_db()
     assert category.name == "Updated Category"
     assert category.added == original_added
-    assert category.modified >= original_modified
+    assert category.modified > original_modified
 
 
 @pytest.mark.django_db

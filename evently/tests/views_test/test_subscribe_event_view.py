@@ -3,9 +3,11 @@ from django.urls import reverse
 import pytest
 from evently.models import CreateUserModel, Status, Event
 
+
 @pytest.fixture
 def client():
     return Client()
+
 
 @pytest.fixture
 def user():
@@ -21,7 +23,7 @@ def sample_statuses():
 
 @pytest.fixture
 def event(user, sample_statuses):
-    return  Event.objects.create(
+    return Event.objects.create(
         name='Wydarzenie 1',
         place='Miejsce A',
         start_at='2024-07-01',
@@ -56,9 +58,8 @@ def test_subscribe_event_view_with_authenticated_user_x2(client, user, event):
     assert 'Jesteś już zarejestrowany na to wydarzenie.' in response2.content.decode('utf-8')
 
 
-
 @pytest.mark.django_db
-def test_subscribe_event_view_with_no_authenticated_user(client,  event):
+def test_subscribe_event_view_with_no_authenticated_user(client, event):
     url = reverse('subscribe_event', kwargs={'event_id': event.id})
     response = client.get(url)
 

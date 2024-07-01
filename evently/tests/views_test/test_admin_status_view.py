@@ -5,23 +5,28 @@ from evently.models import Event, CreateUserModel, Status
 from evently.forms import EventSearchForm
 from evently.views import admin_status_view
 
+
 @pytest.fixture
 def client():
     return Client()
+
 
 @pytest.fixture
 def admin():
     return CreateUserModel.objects.create_superuser(username='admin', email='admin@gmai.com', password='admin12345')
 
+
 @pytest.fixture
 def user():
     return CreateUserModel.objects.create_user(username='testuser', email='user1@gmail.com', password='12345')
+
 
 @pytest.fixture
 def sample_status():
     status1 = Status.objects.create(name='Active')
     status2 = Status.objects.create(name='Inactive')
     return [status1, status2]
+
 
 @pytest.mark.django_db
 def test_admin_status_view_access(client, admin, sample_status):

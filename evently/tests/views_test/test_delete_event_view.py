@@ -4,7 +4,6 @@ from django.test import Client
 from evently.models import Event, Status, CreateUserModel
 
 
-
 @pytest.fixture
 def client():
     return Client()
@@ -20,17 +19,15 @@ def author():
     return CreateUserModel.objects.create_user(username='author', email='author@example.com', password='12345')
 
 
-
 @pytest.fixture
 def sample_status():
     status1 = Status.objects.create(name='Active')
     return status1
 
 
-
 @pytest.fixture
 def event(author, sample_status):
-    return  Event.objects.create(
+    return Event.objects.create(
         name='Wydarzenie 1',
         place='Miejsce A',
         start_at='2024-07-01',
@@ -62,7 +59,6 @@ def test_edit_event_logged_in_not_author(client, user, event):
 
     # Sprawdzamy, czy status odpowiedzi HTTP jest równy 403 (brak uprawnień)
     assert response.status_code == 403
-
 
 
 @pytest.mark.django_db
