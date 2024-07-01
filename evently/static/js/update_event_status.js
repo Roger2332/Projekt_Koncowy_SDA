@@ -1,10 +1,10 @@
-$(document).ready(function() {
-    $('.accept-btn').click(function() {
+$(document).ready(function () {
+    $('.accept-btn').click(function () {
         var eventId = $(this).data('event-id');
         updateEventStatus(eventId, 'Active');
     });
 
-    $('.reject-btn').click(function() {
+    $('.reject-btn').click(function () {
         var eventId = $(this).data('event-id');
         updateEventStatus(eventId, 'Rejected');
     });
@@ -18,7 +18,7 @@ $(document).ready(function() {
                 'new_status': newStatus,
                 'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
             },
-            success: function(response) {
+            success: function (response) {
                 if (response.success) {
                     alert('Status wydarzenia został zaktualizowany');
                     location.reload();

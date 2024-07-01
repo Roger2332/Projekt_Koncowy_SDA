@@ -5,7 +5,6 @@ from django.utils import timezone
 from datetime import timedelta
 
 
-
 @pytest.mark.django_db
 def test_create_event_form_valid_data():
     category = Category.objects.create(name='Test Category')

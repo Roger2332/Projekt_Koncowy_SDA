@@ -3,9 +3,11 @@ from django.urls import reverse
 import pytest
 from evently.models import CreateUserModel, Status, Event
 
+
 @pytest.fixture
 def client():
     return Client()
+
 
 @pytest.fixture
 def user():
@@ -21,7 +23,7 @@ def sample_statuses():
 
 @pytest.fixture
 def event(user, sample_statuses):
-    return  Event.objects.create(
+    return Event.objects.create(
         name='Wydarzenie 1',
         place='Miejsce A',
         start_at='2024-07-01',
@@ -44,6 +46,7 @@ def test_unsubscribe_event_not_registered(client, user, event):
     # Sprawdzamy, czy odpowiedź zawiera oczekiwany komunikat
     assert response.status_code == 400
     assert 'Nie jesteś zarejestrowany na to wydarzenie.' in response.content.decode('utf-8')
+
 
 @pytest.mark.django_db
 def test_unsubscribe_event_registered(client, user, event):

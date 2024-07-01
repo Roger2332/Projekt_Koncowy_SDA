@@ -2,6 +2,7 @@ import pytest
 from evently.models import CreateUserModel
 from django.db import IntegrityError
 
+
 @pytest.mark.django_db
 def test_create_user():
     user = CreateUserModel.objects.create(
@@ -17,6 +18,7 @@ def test_create_user():
     assert user.last_name == 'Hyszko'
     assert user.username == 'user'
     assert user.is_superuser is False
+
 
 @pytest.mark.django_db
 def test_create_user_is_superuser():
@@ -43,7 +45,7 @@ def test_create_user_duble_email():
         first_name='Piotr',
         last_name='Hyszko',
         username='user',
-        is_superuser= False
+        is_superuser=False
     )
     assert user1 is not None
 
@@ -56,7 +58,7 @@ def test_create_user_duble_email():
             first_name='Eryk',
             last_name='Smilek',
             username='user124',
-            is_superuser= False
+            is_superuser=False
         )
 
 

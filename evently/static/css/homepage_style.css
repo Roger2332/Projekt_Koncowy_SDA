@@ -27,10 +27,10 @@ body {
 
 .background-circle {
     position: absolute;
-    top: 30%;  /* Przesunięcie górne */
+    top: 30%; /* Przesunięcie górne */
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 300px;  /* szerokość */
+    width: 300px; /* szerokość */
     height: 300px; /* wysokość */
     background-color: rgba(255, 255, 255, 0.7); /* tło */
     border-radius: 50%; /* zaokręglenie */
@@ -70,7 +70,8 @@ body {
     z-index: 1;
     opacity: 0; /* stan początkowy niewidoczny */
 }
-.login-button{
+
+.login-button {
     margin-left: 80px; /* odstęp między Log In a logo */
     animation: fadeInButton 10s ease-in-out forwards;
 }

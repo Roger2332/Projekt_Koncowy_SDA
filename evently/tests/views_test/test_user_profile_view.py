@@ -8,9 +8,11 @@ from evently.models import CreateUserModel
 def client():
     return Client()
 
+
 @pytest.fixture
 def user():
     return CreateUserModel.objects.create_user(username='testuser', email='user1@gmail.com', password='12345')
+
 
 # Czy user może wejść na swój profile, a sprawdzanie poprawnoąci HTML
 @pytest.mark.django_db
@@ -18,8 +20,9 @@ def test_user_open_profile_page_positive(user, client):
     client.force_login(user)
     url = reverse("user_profile")
     response = client.get(url)
-    assert response.status_code == 200 # Czy otwiera się prawidłowo
-    assert 'profile.html' in [template.name for template in response.templates] # Sprawdzenie poprawności szablonu HTML
+    assert response.status_code == 200  # Czy otwiera się prawidłowo
+    assert 'profile.html' in [template.name for template in response.templates]  # Sprawdzenie poprawności szablonu HTML
+
 
 # Czy niezalogowany użytkownik może wejść na profile, czy jest dalej przekierowany na stronę logowania
 def test_unauthenticated_user_open_profile(client):

@@ -30,15 +30,19 @@
                 </tr>
                 <tr>
                     <td colspan="6">
-                        <button type="button" class="contrast accept-btn" style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer; font-size: 16px; border-radius: 5px;" data-event-id="{{ event.id }}">
+                        <button type="button" class="contrast accept-btn"
+                                style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer; font-size: 16px; border-radius: 5px;"
+                                data-event-id="{{ event.id }}">
                             Accept
                         </button>
-                        <button type="button" class="contrast reject-btn" style="background-color: red; color: white; border: none; padding: 10px 20px; cursor: pointer; font-size: 16px; border-radius: 5px;" data-event-id="{{ event.id }}">
+                        <button type="button" class="contrast reject-btn"
+                                style="background-color: red; color: white; border: none; padding: 10px 20px; cursor: pointer; font-size: 16px; border-radius: 5px;"
+                                data-event-id="{{ event.id }}">
                             Dismiss event
                         </button>
                     </td>
                 </tr>
-                <tr style="height: 200px;"></tr> 
+                <tr style="height: 200px;"></tr>
             {% empty %}
                 <tr>
                     <td colspan="6">No events to accept.</td>
