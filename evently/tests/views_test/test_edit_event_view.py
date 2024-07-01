@@ -21,17 +21,15 @@ def author():
     return CreateUserModel.objects.create_user(username='author', email='author@example.com', password='12345')
 
 
-
 @pytest.fixture
 def sample_status():
     status1 = Status.objects.create(name='Active')
     return status1
 
 
-
 @pytest.fixture
 def event(author, sample_status):
-    return  Event.objects.create(
+    return Event.objects.create(
         name='Wydarzenie 1',
         place='Miejsce A',
         start_at='2024-07-01',
@@ -62,10 +60,8 @@ def test_edit_event_logged_in_author(client, user, author, event):
     }
     response_post = client.post(reverse('event_edit', kwargs={'pk': event.pk}), data)
 
-
     # Sprawdzamy, czy po edycji użytkownik zostaje przekierowany na stronę szczegółów wydarzenia
     assert response_post.status_code == 200
-
 
 
 @pytest.mark.django_db
@@ -78,7 +74,6 @@ def test_edit_event_logged_in_not_author(client, user, event):
 
     # Sprawdzamy, czy status odpowiedzi HTTP jest równy 403 (brak uprawnień)
     assert response.status_code == 403
-
 
 
 @pytest.mark.django_db

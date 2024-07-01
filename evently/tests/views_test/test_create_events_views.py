@@ -14,16 +14,17 @@ def user():
     users = CreateUserModel.objects.create_user(username='testuser', email='user1@gmail.com', password='12345')
     return users
 
+
 @pytest.fixture
 def sample_statuses():
     status1 = Status.objects.create(name='Active')
     return status1
 
+
 @pytest.fixture
 def sample_category():
     category = Category.objects.create(name='Sport')
     return category
-
 
 
 @pytest.mark.django_db
@@ -53,11 +54,8 @@ def test_create_event_entry_by_logged_in_user(client, user):
     assert response.status_code == 200
 
 
-
 @pytest.mark.django_db
 def test_create_event_entry_by_an_unlogged_user(client):
     response = client.get(reverse('create_event'))
     assert response.status_code == 302
     assert 'accounts/login' in response.url
-
-

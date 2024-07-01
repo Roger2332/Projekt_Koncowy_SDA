@@ -132,6 +132,5 @@ AUTH_USER_MODEL = 'evently.CreateUserModel'  # Zmiana modelu defoltowego Uzytkow
 LOGIN_REDIRECT_URL = 'list_events'  # Ustawienia pozwalajace na zalogowanie sie
 LOGOUT_REDIRECT_URL = 'login'  # Ustawienia pozwalajace na wylogowanie sie
 
-
 EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
 EMAIL_FILE_PATH = BASE_DIR / "sent_emails"
