@@ -1,28 +1,9 @@
-from datetime import datetime
-
 from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
 from django import forms
 
+from .validators import title_validator, data_start_validator, dec_valid
 from .models import Event, CreateUserModel, Category, Comment
-
-
-# Sprawdzanie czy tytul nie zawiera samych bialych znakow
-def title_validator(value):
-    if value == '' * len(value):
-        raise forms.ValidationError('The title cannot contain only trademarks')
-
-
-# Sprawdzanie czy data nie jest wpisana przeszla
-def data_start_validator(value):
-    if value < datetime.now().date():
-        raise forms.ValidationError('The date cannot be past')
-
-
-# Sprawdzanie czy tresc zawiera conajmniej 20 znakow
-def dec_valid(value):
-    if len(value) < 20:
-        raise forms.ValidationError('Description must contain at least 20 characters')
 
 
 # Formularz umozliwiajacy tworzenie eventu
@@ -51,10 +32,6 @@ class CreateEventForm(forms.ModelForm):
             if end_at <= start_at:
                 raise ValidationError('The end date must be later than the start date')
         return cleaned_data  # Zwrócenie zwalidowanych danych
-
-    def __init__(self, *args, **kwargs):
-        # Inicjalizacja formularza za pomocą danych przekazanych jako argumenty
-        super().__init__(*args, **kwargs)
 
 
 # Forma do tworzenia usera
@@ -99,12 +76,6 @@ class EventSearchForm(forms.Form):
     # Pole do wprowadzania daty zakończenia
     end_date = forms.DateField(label='End date', required=False,
                                widget=forms.TextInput(attrs={'type': 'date'}))
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-        # Dynamiczne ustawienie queryset dla pola place na podstawie unikalnych miejsc z obiektów Event
-        self.fields['place'].queryset = Event.objects.values_list('place', flat=True).distinct()
 
 
 # Forma dla komentarzy
