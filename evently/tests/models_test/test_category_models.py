@@ -1,6 +1,7 @@
 import time
 
 import pytest
+from django.core.exceptions import ValidationError
 from django.utils import timezone
 from evently.models import Category
 
@@ -32,3 +33,28 @@ def test_modify_category():
 def test_category_str():
     category = Category.objects.create(name="Test Category")
     assert str(category) == "Test Category"
+
+
+
+@pytest.mark.django_db
+def test_category_long():
+    #Wprowadzenie za dlugiej kategori
+    category = Category(name='L' *101)
+    try:
+        category.full_clean()
+    except ValidationError:
+        pass
+    else:
+        category.save()
+    assert not Category.objects.filter(name='L' * 101).exists()
+
+    #Wprowadzenie za poprawnej dlugosci kategori
+    category = Category(name='L' * 100)
+    try:
+        category.full_clean()
+    except ValidationError:
+        pass
+    else:
+        category.save()
+
+    assert Category.objects.filter(name='L' * 100).exists()
