@@ -15,7 +15,8 @@ class Category(models.Model):
     def __str__(self):
         return f'{self.name}'
 
-#!
+
+# !
 class Status(models.Model):
     STATUS_CHOICES = [
         ('Active', 'Active'),
@@ -27,15 +28,8 @@ class Status(models.Model):
     added = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.errors = None
-
     def __str__(self):
         return f'{self.name}'
-
-    def is_valid(self):
-        pass
 
 
 class Event(models.Model):
@@ -60,7 +54,8 @@ class Event(models.Model):
 
     category_list.short_description = 'Category'
 
-#!
+
+# !
 class Comment(models.Model):
     author = models.ForeignKey(CreateUserModel, on_delete=models.CASCADE)
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
