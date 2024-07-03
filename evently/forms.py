@@ -9,7 +9,7 @@ from .models import Event, CreateUserModel, Category, Comment
 # Formularz umozliwiajacy tworzenie eventu
 class CreateEventForm(forms.ModelForm):
     class Meta:
-        model = Event  # sciagniecie modelu eventu
+        model = Event
         fields = ['name', 'place', 'start_at', 'end_at', 'description', 'category']  # wyswietl tabele ktore sa w liscie
 
     name = forms.CharField(max_length=100, validators=[title_validator])
@@ -39,9 +39,6 @@ class CreateUserForm(UserCreationForm):
     class Meta:
         model = CreateUserModel
         fields = ['first_name', 'last_name', 'username', 'email', ]
-
-    def save(self, commit=True):
-        return super().save(commit)
 
 
 # Forma do tworzenia kategorii
@@ -83,7 +80,7 @@ class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
         fields = ['content']
-        # Co wpisuje w pusty formularz do wypełniania
+        # Pole do mozliwosci wpisania komentarza
         widgets = {
             'content': forms.Textarea(attrs={'rows': 3, 'placeholder': 'Add a comment...'})
         }
