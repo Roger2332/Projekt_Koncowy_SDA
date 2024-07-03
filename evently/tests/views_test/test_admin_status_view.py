@@ -1,6 +1,7 @@
 import pytest
 from django.urls import reverse
 from django.test import Client
+from django.utils import timezone
 from evently.models import Event, CreateUserModel, Status
 from evently.forms import EventSearchForm
 from evently.views import admin_status_view
@@ -37,8 +38,8 @@ def test_admin_status_view_access(client, admin, sample_status):
     event = Event.objects.create(
         name='Wydarzenie 1',
         place='Miejsce A',
-        start_at='2024-07-01',
-        end_at='2024-07-02',
+        start_at= timezone.now().date(),
+        end_at= timezone.now().date() + timezone.timedelta(days=1),
         description='Opis wydarzenia',
         status=sample_status[1],
         author=admin

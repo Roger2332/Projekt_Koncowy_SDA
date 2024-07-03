@@ -2,6 +2,7 @@ from django.test import Client
 from django.urls import reverse
 import pytest
 from evently.models import CreateUserModel, Status, Event
+from django.utils import timezone
 
 
 @pytest.fixture
@@ -26,8 +27,8 @@ def event(user, sample_statuses):
     return Event.objects.create(
         name='Wydarzenie 1',
         place='Miejsce A',
-        start_at='2024-07-01',
-        end_at='2024-07-02',
+        start_at=timezone.now().date(),
+        end_at=timezone.now().date() + timezone.timedelta(days=1),
         description='Opis wydarzenia',
         status=sample_statuses,
         author=user

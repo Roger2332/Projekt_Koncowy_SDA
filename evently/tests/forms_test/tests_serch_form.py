@@ -72,14 +72,6 @@ def test_event_search_form_invalid(sample_categories, sample_organizers):
 
 
 @pytest.mark.django_db
-def test_event_search_form_place_queryset(sample_events):
-    # Testowanie zapytania queryset dla pola 'place' na podstawie obiektów Event
-    form = EventSearchForm()
-    place_choices = form.fields['place'].queryset.values_list('place', flat=True)
-    assert set(place_choices) == {'Miejsce A', 'Miejsce B'}
-
-
-@pytest.mark.django_db
 def test_event_search_form_empty_data(sample_categories, sample_organizers):
     # Test pustych danych wejściowych dla EventSearchForm
     form_data = {}

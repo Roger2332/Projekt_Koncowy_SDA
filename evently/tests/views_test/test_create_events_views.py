@@ -2,7 +2,7 @@ import pytest
 from django.urls import reverse
 from django.test import Client
 from evently.models import CreateUserModel, Event, Category, Status
-
+from django.utils import timezone
 
 @pytest.fixture
 def client():
@@ -35,8 +35,8 @@ def test_create_event_send_by_logged_in_user(client, user, sample_category, samp
     form_data = {
         'name': 'Nowe wydarzenie',
         'place': 'Miejsce A',
-        'start_at': '2024-07-01',
-        'end_at': '2024-07-02',
+        'start_at': timezone.now().date(),
+        'end_at': timezone.now().date() + timezone.timedelta(days=1),
         'description': 'Opis nowego wydarzenia',
         'category': sample_category.pk,  # Wybierz pierwszą kategorię
         'status': sample_statuses.id
