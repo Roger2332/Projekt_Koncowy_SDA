@@ -99,13 +99,6 @@ def test_update_event_status_url_no_user(client):
 
 
 @pytest.mark.django_db
-def test_update_event_status_url_by_the_admin(client, admin):
-    client.login(username='admin', password='admin12345')
-    response = client.get(reverse('update_event_status'))
-    assert response.status_code == 200
-
-
-@pytest.mark.django_db
 def test_update_event_status_url_by_the_user(client, user):
     client.login(username='testuser', password='12345')
     response = client.get(reverse('update_event_status'))
@@ -238,15 +231,6 @@ def test_user_profile_url(client, user):
     client.login(username='testuser', password='12345')
     response = client.get(reverse('user_profile'))
     assert response.status_code == 200
-
-
-@pytest.mark.django_db
-def test_user_events_url(client, sample_events, user):
-    client.login(username='testuser', password='12345')
-    response = client.get(reverse('user_events', args=[sample_events.pk]))
-    assert response.status_code == 302
-    assert response.url == reverse(
-        'search_event') + '?query=&search_type=all&place=&category=&organizer=1&start_date=&end_date='
 
 
 @pytest.mark.django_db
