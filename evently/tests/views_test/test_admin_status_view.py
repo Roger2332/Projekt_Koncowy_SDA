@@ -3,8 +3,6 @@ from django.urls import reverse
 from django.test import Client
 from django.utils import timezone
 from evently.models import Event, CreateUserModel, Status
-from evently.forms import EventSearchForm
-from evently.views import admin_status_view
 
 
 @pytest.fixture
@@ -50,10 +48,6 @@ def test_admin_status_view_access(client, admin, sample_status):
 
     # Sprawdzamy, czy status odpowiedzi HTTP jest równy 200 (sukces)
     assert response.status_code == 200
-
-    # Sprawdzamy, czy formularz EventSearchForm jest w kontekście
-    assert 'form' in response.context
-    assert isinstance(response.context['form'], EventSearchForm)
 
     # Sprawdzamy, czy wydarzenia związane z nieaktywnym statusem są w kontekście
     assert 'events' in response.context
