@@ -10,13 +10,11 @@
 </head>
 <body>
 <div class="center-content">
-    <div class="background-circle"></div> <!-- Tło -->
+    <div class="background-circle"></div> {# Tło loga #}
     <div class="logo-container">
-        <a href="{% url 'list_events' %}" class="events-button">Events</a>
-        <a href="{% url 'list_events' %}">
-            <img src="{% static 'img/logo.png' %}" alt="Logo" class="center-logo animated-logo">
-        </a>
-        <a href="{% url 'login' %}" class="login-button">Log In</a>
+        <a href="{% url 'list_events' %}" class="events-button">Events</a>  {# przycisk Events #}
+        <a href="{% url 'list_events' %}"> <img src="{% static 'img/logo.png' %}" alt="Logo" class="center-logo animated-logo"> </a> {# Logo #}
+        <a href="{% url 'login' %}" class="login-button">Log In</a> {# przycisk Log In #}
     </div>
 </div>
 <div class="authors">
