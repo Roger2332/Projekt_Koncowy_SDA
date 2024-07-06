@@ -43,7 +43,7 @@ admin.site.register(Comment, CommentAdmin)
 admin.site.register(Status, StatusAdmin)
 admin.site.register(CreateUserModel, CreateUserModelAdmin)
 
-# Персонализация панели администратора
+# Personalizacja panelu administracyjnego
 admin.site.site_header = 'Аadministrative panel'
 admin.site.site_title = 'Administration'
 admin.site.index_title = 'Welcome to the admin area'

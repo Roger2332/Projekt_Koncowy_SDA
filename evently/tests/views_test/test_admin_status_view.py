@@ -27,12 +27,10 @@ def sample_status():
     return [status1, status2]
 
 
+# Dostęp administratora do widoku statusu
 @pytest.mark.django_db
 def test_admin_status_view_access(client, admin, sample_status):
-    # Logujemy się jako administrator
     client.force_login(admin)
-
-    # Przygotowanie danych testowych
     event = Event.objects.create(
         name='Wydarzenie 1',
         place='Miejsce A',
@@ -42,38 +40,28 @@ def test_admin_status_view_access(client, admin, sample_status):
         status=sample_status[1],
         author=admin
     )
-
     # Wywołujemy widok admin_status_view
     response = client.get(reverse('accept_status'))
-
-    # Sprawdzamy, czy status odpowiedzi HTTP jest równy 200 (sukces)
     assert response.status_code == 200
-
     # Sprawdzamy, czy wydarzenia związane z nieaktywnym statusem są w kontekście
     assert 'events' in response.context
     events = response.context['events']
     assert events.exists()  # Sprawdzamy, czy istnieją jakieś wydarzenia
-
     # Sprawdzamy, czy wydarzenia są posortowane według daty modyfikacji
     last_modified_event = events.last()
     assert last_modified_event.modified is not None
-
     # Sprawdzamy, czy utworzone wydarzenie jest w kontekście
     assert event in events
 
 
+# Brak dostępu użytkownika do widoku statusu
 @pytest.mark.django_db
 def test_admin_status_view_no_access(client, user):
     client.force_login(user)
-
     # Wywołujemy widok admin_status_view
     response = client.get(reverse('accept_status'))
-
-    # Sprawdzamy, czy status odpowiedzi HTTP jest równy 302 (przekierowanie)
     assert response.status_code == 302
-
     # Sprawdzamy, czy użytkownik został przekierowany na stronę logowania
     assert response.url.startswith('/accounts/login/')
-
     # Sprawdzamy, czy response.context nie jest ustawiony (None), ponieważ nie otrzymujemy kontekstu przy przekierowaniu
     assert response.context is None

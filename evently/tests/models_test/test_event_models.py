@@ -6,6 +6,7 @@ from django.core.exceptions import ValidationError
 from evently.models import Event, Category, CreateUserModel, Status
 
 
+# Tworzenie pozytywnego modelu wydarzenia i sprawdzanie poprawności danych
 @pytest.mark.django_db
 def test_pozitive_event_model():
     category = Category.objects.create(name='Event Category')
@@ -13,7 +14,6 @@ def test_pozitive_event_model():
     user = CreateUserModel.objects.create(username='Event User', email='user@email.com')
     user2 = CreateUserModel.objects.create(username='Event User2', email='user2@email.com')
     event = Event.objects.create(
-
         name="Event Name",
         place="Event Location",
         start_at=date(2024, 6, 30),
@@ -24,7 +24,6 @@ def test_pozitive_event_model():
     )
     event.category.add(category)
     event.participants.add(user2)
-
     assert event.name == "Event Name"
     assert event.place == "Event Location"
     assert event.start_at == date(2024, 6, 30)
@@ -36,6 +35,7 @@ def test_pozitive_event_model():
     assert event.participants.count() == 1
 
 
+# Tworzenie negatywnego modelu wydarzenia i sprawdzanie, czy dane nie są zgodne
 @pytest.mark.django_db
 def test_negative_event_model():
     category = Category.objects.create(name='Event Category')
@@ -53,10 +53,8 @@ def test_negative_event_model():
         status=status,
         author=user,
     )
-
     event.category.add(category)
     event.participants.add(user2)
-
     assert not event.name == "Event faile"
     assert not event.place == "Event faile"
     assert not event.start_at == date(2342, 6, 30)
@@ -67,6 +65,7 @@ def test_negative_event_model():
     assert not event.participants.count() == 4783124
 
 
+# Edytowanie modelu wydarzenia i sprawdzanie zmian
 @pytest.mark.django_db
 def test_edit_event_model():
     category = Category.objects.create(name='Event Category')
@@ -74,7 +73,6 @@ def test_edit_event_model():
     user = CreateUserModel.objects.create(username='Event User', email='user@email.com')
     user2 = CreateUserModel.objects.create(username='Event User2', email='user2@email.com')
     event = Event.objects.create(
-
         name="Event Name",
         place="Event Location",
         start_at=date(2024, 6, 30),
@@ -85,7 +83,6 @@ def test_edit_event_model():
     )
     event.category.add(category)
     event.participants.add(user2)
-
     original_added = event.added
     original_modified = event.modified
     time.sleep(1)
@@ -96,6 +93,7 @@ def test_edit_event_model():
     assert event.modified > original_modified
 
 
+# Testowanie ograniczeń długości nazwy i miejsca wydarzenia
 @pytest.mark.django_db
 def test_long_name_and_place_event():
     # Test wprowadzenia za dlugiej nazwy wydarzenia
@@ -119,10 +117,8 @@ def test_long_name_and_place_event():
     else:
         event.save()
     assert not Event.objects.filter(name=long_name).exists()
-
     # Test wprowadzenia za dlugiej nazwy miejsca
     event = Event(
-
         name="Test event",
         place=long_name,
         start_at=date(2024, 6, 30),
@@ -138,7 +134,6 @@ def test_long_name_and_place_event():
     else:
         event.save()
     assert not Event.objects.filter(place=long_name).exists()
-
     # Test wprowadzenia za Poprawnej nazwy i miejsca
     event = Event(
 

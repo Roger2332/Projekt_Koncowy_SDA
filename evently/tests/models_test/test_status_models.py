@@ -7,6 +7,7 @@ from django.utils import timezone
 from evently.models import Status
 
 
+# Tworzenie domyślnych statusów i sprawdzanie ich poprawności
 @pytest.mark.django_db
 def test_default_status_positive():
     status1 = Status.objects.create(name='Active')
@@ -19,6 +20,7 @@ def test_default_status_positive():
     assert status1.modified <= timezone.now()
 
 
+# Testowanie ograniczenia długości nazwy statusu oraz walidacji nazwy zgodnie z wyborem
 @pytest.mark.django_db
 def test_long_status():
     # próba robienia złej nazwy o dlugosci 51
@@ -30,19 +32,15 @@ def test_long_status():
     else:
         status1.save()
     assert not Status.objects.filter(name="B" * 51).exists()
-
     # próba robienia innej nazwy niz w choice
     try:
         status2 = Status(name='Test')
         status2.full_clean()
     except ValidationError:
         pass
-
     else:
         status2.save()
-
     assert not Status.objects.filter(name='Test').exists()
-
     # próba robienia Dobrej nazwy
     try:
         status2 = Status(name='Active')
@@ -51,6 +49,5 @@ def test_long_status():
         pass
     else:
         status2.save()
-
     assert Status.objects.filter(name='Active').exists()
 

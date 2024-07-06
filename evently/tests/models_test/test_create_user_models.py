@@ -3,6 +3,7 @@ from evently.models import CreateUserModel
 from django.db import IntegrityError
 
 
+# Tworzenie użytkownika i sprawdzanie jego danych
 @pytest.mark.django_db
 def test_create_user():
     user = CreateUserModel.objects.create(
@@ -20,6 +21,7 @@ def test_create_user():
     assert user.is_superuser is False
 
 
+# Tworzenie superuser i sprawdzanie jego uprawnień
 @pytest.mark.django_db
 def test_create_user_is_superuser():
     user2 = CreateUserModel.objects.create_superuser(
@@ -37,6 +39,7 @@ def test_create_user_is_superuser():
     assert user2.is_superuser is True
 
 
+# Tworzenie użytkownika z zduplikowanym adresem e-mail, oczekiwanie na IntegrityError
 @pytest.mark.django_db
 def test_create_user_duble_email():
     user1 = CreateUserModel.objects.create(
@@ -48,7 +51,6 @@ def test_create_user_duble_email():
         is_superuser=False
     )
     assert user1 is not None
-
     # raises służy do sprawdzenia, czy określony kod w bloku with powoduje podniesienie określonego wyjątku, w tym przypadku IntegrityError.
     with pytest.raises(IntegrityError):
         # IntegrityError blad ktory django podnosi przy porownywaniu duplikowanych nazw
@@ -62,6 +64,7 @@ def test_create_user_duble_email():
         )
 
 
+# Tworzenie użytkownika z zduplikowaną nazwą użytkownika, oczekiwanie na IntegrityError
 @pytest.mark.django_db
 def test_create_user_duble_username():
     user1 = CreateUserModel.objects.create(
@@ -73,8 +76,7 @@ def test_create_user_duble_username():
         is_superuser=False
     )
     assert user1 is not None
-
-    # raises służy do sprawdzenia, czy określony kod w bloku with powoduje podniesienie określonego wyjątku, w tym przypadku IntegrityError.
+    # raises służy do sprawdzenia, czy określony kod w bloku with powoduje podniesienie określonego wyjątku, w tym przypadku IntegrityError
     with pytest.raises(IntegrityError):
         # IntegrityError blad ktory django podnosi przy porownywaniu duplikowanych nazw
         user2 = CreateUserModel.objects.create(

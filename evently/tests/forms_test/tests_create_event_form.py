@@ -4,7 +4,7 @@ from evently.models import Category
 from django.utils import timezone
 from datetime import timedelta
 
-
+# Poprawność danych
 @pytest.mark.django_db
 def test_create_event_form_valid_data():
     category = Category.objects.create(name='Test Category')
@@ -20,6 +20,7 @@ def test_create_event_form_valid_data():
     assert form.is_valid()
 
 
+# Forma validacji po podaniu błędnych danych
 @pytest.mark.django_db
 def test_create_event_form_invalid_start_end_dates():
     category = Category.objects.create(name='Test Category')
@@ -36,6 +37,8 @@ def test_create_event_form_invalid_start_end_dates():
     assert 'The end date must be later than the start date' in form.errors['__all__']
 
 
+# Formularz tworzenia wydarzenia bez podania nazwy.
+@pytest.mark.django_db
 @pytest.mark.django_db
 def test_create_event_form_missing_name():
     category = Category.objects.create(name='Test Category')
@@ -51,6 +54,7 @@ def test_create_event_form_missing_name():
     assert 'name' in form.errors
 
 
+# Formularz tworzenia wydarzenia z nieprawidłową kategorią
 @pytest.mark.django_db
 def test_create_event_form_invalid_category():
     form_data = {
@@ -65,7 +69,7 @@ def test_create_event_form_invalid_category():
     assert not form.is_valid()
     assert 'category' in form.errors
 
-
+# Formularz tworzenia wydarzenia z krótkim opisem
 @pytest.mark.django_db
 def test_create_event_form_description_too_short():
     category = Category.objects.create(name='Test Category')
@@ -82,8 +86,9 @@ def test_create_event_form_description_too_short():
     assert 'description' in form.errors
 
 
+# Formularz tworzenia wydarzenia z nazwą, która jest zbyt krótka.
 @pytest.mark.django_db
-def test_create_event_form_description_too_short():
+def test_create_event_form_name_too_short():
     category = Category.objects.create(name='Test Category')
     form_data = {
         'name': '         ',
@@ -98,6 +103,7 @@ def test_create_event_form_description_too_short():
     assert 'name' in form.errors
 
 
+# Formularz tworzenia wydarzenia z nieprawidłową datą rozpoczęcia.
 @pytest.mark.django_db
 def test_create_event_form_valid_data():
     category = Category.objects.create(name='Test Category')

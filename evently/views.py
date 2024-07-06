@@ -96,7 +96,6 @@ def detail_event(request, pk):
     is_organizer = request.user == event.author
     # Sprawdzenie, czy użytkownik jest zarejestrowany na wydarzenie
     is_registered = event.participants.filter(id=request.user.id).exists()
-
     if request.method == 'POST':
         if request.user.is_authenticated:
             form = CommentForm(request.POST)
@@ -112,7 +111,6 @@ def detail_event(request, pk):
             return redirect('login')
     else:
         form = CommentForm()
-
     return render(request, 'detail_event.html', {
         # Przekazanie obiektu wydarzenia do szablonu
         'event': event,

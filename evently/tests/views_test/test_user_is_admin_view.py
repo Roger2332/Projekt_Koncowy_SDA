@@ -8,13 +8,11 @@ def client():
     return Client()
 
 
-# -Użytkownik zwykły
 @pytest.fixture
 def user():
     return CreateUserModel.objects.create_user(username='testuser', email='user1@gmail.com', password='12345')
 
 
-# -Użytkownik z statusem superuser
 @pytest.fixture
 def admin():
     return CreateUserModel.objects.create_superuser(username='admin', email='admin@gmai.com', password='admin12345')
@@ -36,12 +34,13 @@ def test_user_is_admin_negative(client, user):
     assert not user.is_superuser
 
 
-# Sprawdza, czy role są ustawione poprawnie podczas tworzenia użytkownika i administratora, niezależnie od tego, czy są oni zalogowani, czy nie.
+# Admin (superuser) ma ustawioną flagę is_superuser, niezależnie od stanu zalogowania
 @pytest.mark.django_db
 def test_admin_is_not_logged_in(client, admin):
     assert admin.is_superuser
 
 
+# Zwykły użytkownik nie ma ustawionej flagi is_superuser, niezależnie od stanu zalogowania
 @pytest.mark.django_db
 def test_user_is_not_logged_in(client, user):
     assert not user.is_superuser
