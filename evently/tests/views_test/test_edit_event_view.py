@@ -2,7 +2,6 @@ import pytest
 from django.urls import reverse
 from django.test import Client
 from evently.models import Event, Status, CreateUserModel
-from evently.forms import CreateEventForm
 from django.utils import timezone
 
 
