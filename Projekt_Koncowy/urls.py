@@ -19,8 +19,8 @@ from django.urls import path
 import django.contrib.auth.views as auth_views
 
 from evently.views import create_event, UserCreateView, CreateCategoryView, list_events, subscribe_event, \
-    search_event, edit_event, delete_event, detail_event, unsubscribe_event, linkedlin_Roger, \
-    linkedlin_Artema, user_profile, user_events, user_subscriptions, homepage, admin_status_view, update_event_status
+    search_event, edit_event, delete_event, full_event_description, unsubscribe_event, linkedlin_Roger, \
+    linkedlin_Artema, user_profile, user_subscriptions, homepage, admin_status_view, update_event_status
 
 urlpatterns = [
     # admin
@@ -38,7 +38,7 @@ urlpatterns = [
     path('create_event/', create_event, name='create_event'),
     path('update_event/<int:pk>/', edit_event, name='event_edit'),
     path('delete_event/<int:pk>/', delete_event, name='delete_event'),
-    path('detail_event/<int:pk>/', detail_event, name='detail_event'),
+    path('full_event_description/<int:pk>/', full_event_description, name='full_event_description'),
     path('subscribe_event/<int:event_id>/', subscribe_event, name='subscribe_event'),
     path('event/<int:pk>/unregister/', unsubscribe_event, name='unsubscribe_event'),
     # user
@@ -47,7 +47,6 @@ urlpatterns = [
     path('accounts/logout/', auth_views.LogoutView.as_view(), name='logout'),
     # profile usera
     path('profile/', user_profile, name='user_profile'),
-    path('user/events/<int:pk>/', user_events, name='user_events'),
     path('profile/subscriptions/<pk>/', user_subscriptions, name='user_subscriptions'),  # forma "twoje subskrypcje"
     # zarządzanie hasłem
     path('accounts/password_change/', auth_views.PasswordChangeView.as_view(), name='password_change'),

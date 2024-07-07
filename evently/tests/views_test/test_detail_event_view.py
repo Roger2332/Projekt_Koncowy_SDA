@@ -53,9 +53,9 @@ def comment(users, event):
 
 # Szczegóły wydarzenia - organizator
 @pytest.mark.django_db
-def test_detail_event_organizer(client, users, event):
+def test_full_event_description_organizer(client, users, event):
     client.login(username='testuser1', password='12345')
-    response = client.get(reverse('detail_event', args=[event.pk]))
+    response = client.get(reverse('full_event_description', args=[event.pk]))
     assert response.status_code == 200
     assert 'is_organizer' in response.context
     assert response.context['is_organizer'] == True
@@ -63,10 +63,10 @@ def test_detail_event_organizer(client, users, event):
 
 # Szczegóły wydarzenia - uczestnik
 @pytest.mark.django_db
-def test_detail_event_participant(client, users, event):
+def test_full_event_description_participant(client, users, event):
     client.login(username='testuser2', password='12345')
     event.participants.add(users[1])
-    response = client.get(reverse('detail_event', args=[event.pk]))
+    response = client.get(reverse('full_event_description', args=[event.pk]))
     assert response.status_code == 200
     assert 'is_registered' in response.context
     assert response.context['is_registered'] == True
@@ -74,9 +74,9 @@ def test_detail_event_participant(client, users, event):
 
 # Szczegóły wydarzenia - osoba nieuczestnicząca
 @pytest.mark.django_db
-def test_detail_event_non_participant(client, users, event):
+def test_full_event_description_non_participant(client, users, event):
     client.login(username='testuser2', password='12345')
-    response = client.get(reverse('detail_event', args=[event.pk]))
+    response = client.get(reverse('full_event_description', args=[event.pk]))
     assert response.status_code == 200
     assert 'is_registered' in response.context
     assert response.context['is_registered'] == False
@@ -84,8 +84,8 @@ def test_detail_event_non_participant(client, users, event):
 
 # zczegóły wydarzenia - niezalogowany użytkownik
 @pytest.mark.django_db
-def test_detail_event_unauthenticated(client, event):
-    response = client.get(reverse('detail_event', args=[event.pk]))
+def test_full_event_description_unauthenticated(client, event):
+    response = client.get(reverse('full_event_description', args=[event.pk]))
     assert response.status_code == 200
     assert 'is_organizer' in response.context
     assert response.context['is_organizer'] == False
@@ -99,8 +99,8 @@ def test_post_valid_comment(client, users, event):
     data = {
         'content': 'New Comment'
     }
-    response = client.post(reverse('detail_event', args=[event.pk]), data)
-    assert response.status_code == 302
+    response = client.post(reverse('full_event_description', args=[event.pk]), data)
+    assert response.status_code == 302  # Expecting a redirect after successful comment post
     assert Comment.objects.filter(event=event, content='New Comment').exists()
 
 
@@ -110,6 +110,6 @@ def test_post_comment_unauthenticated(client, event):
     data = {
         'content': 'New Comment'
     }
-    response = client.post(reverse('detail_event', args=[event.pk]), data)
+    response = client.post(reverse('full_event_description', args=[event.pk]), data)
     assert response.status_code == 302
     assert not Comment.objects.filter(event=event, content='New Comment').exists()
