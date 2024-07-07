@@ -15,12 +15,11 @@ def form_data():
     }
 
 
-# Tworzenie użytkownika za pomocą formularza CreateUserForm z poprawnymi danymi.
+# Tworzenie użytkownika za pomocą formularza CreateUserForm z poprawnymi danymi
 @pytest.mark.django_db
 def test_create_user_form_valid(form_data):
     form = CreateUserForm(data=form_data)
     assert form.is_valid()
-
     user = form.save()
     assert user.first_name == form_data['first_name']
     assert user.last_name == form_data['last_name']
@@ -50,9 +49,7 @@ def test_create_user_form_invalid_duplicate_username(form_data):
         email='user@gmail.com',
         password=form_data['password1']
     )
-
     form = CreateUserForm(data=form_data)
     assert not form.is_valid()
-
     assert 'username' in form.errors
     assert form.errors['username'] == ['User with this Username already exists.']

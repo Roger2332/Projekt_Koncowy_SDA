@@ -37,7 +37,7 @@ def test_create_event_form_invalid_start_end_dates():
     assert 'The end date must be later than the start date' in form.errors['__all__']
 
 
-# Formularz tworzenia wydarzenia bez podania nazwy.
+# Formularz tworzenia wydarzenia bez podania nazwy
 @pytest.mark.django_db
 @pytest.mark.django_db
 def test_create_event_form_missing_name():
@@ -86,7 +86,7 @@ def test_create_event_form_description_too_short():
     assert 'description' in form.errors
 
 
-# Formularz tworzenia wydarzenia z nazwą, która jest zbyt krótka.
+# Formularz tworzenia wydarzenia z nazwą, która jest zbyt krótka
 @pytest.mark.django_db
 def test_create_event_form_name_too_short():
     category = Category.objects.create(name='Test Category')
@@ -103,7 +103,7 @@ def test_create_event_form_name_too_short():
     assert 'name' in form.errors
 
 
-# Formularz tworzenia wydarzenia z nieprawidłową datą rozpoczęcia.
+# Formularz tworzenia wydarzenia z nieprawidłową datą rozpoczęcia
 @pytest.mark.django_db
 def test_create_event_form_valid_data():
     category = Category.objects.create(name='Test Category')

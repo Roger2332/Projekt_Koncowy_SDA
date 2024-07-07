@@ -160,7 +160,7 @@ def test_delete_event_authenticated_author(client, user, sample_events):
     assert response.status_code == 200  # Użytkownik jest autorem, więc otrzymujemy dostęp do formularza usuwania
     # Usunięcie wydarzenia
     response = client.post(reverse('delete_event', args=[sample_events.pk]))
-    assert response.status_code == 302  # Przekierowanie po usunięciu
+    assert response.status_code == 302
     assert 'list_events' in response.url
     assert not Event.objects.filter(pk=sample_events.pk).exists()  # Sprawdzenie, że wydarzenie zostało usunięte
 
