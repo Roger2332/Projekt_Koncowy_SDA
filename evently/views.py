@@ -89,7 +89,7 @@ def search_event(request):
 
 
 # Widok calego wydarzenia
-def detail_event(request, pk):
+def full_event_description(request, pk):
     event = get_object_or_404(Event, pk=pk)
     comments = Comment.objects.filter(event=event).order_by('added')
     # Sprawdzanie czy zalogowany uzytkownik to autor wydarzenia
@@ -106,14 +106,14 @@ def detail_event(request, pk):
                 comment.author = request.user
                 comment.event = event
                 comment.save()
-                return redirect('detail_event', pk=event.pk)
+                return redirect('full_event_description', pk=event.pk)
         # Jeżeli użytkownik nie zostanie uwierzytelniony,
         else:
             return redirect('login')
     else:
         form = CommentForm()
 
-    return render(request, 'detail_event.html', {
+    return render(request, 'full_event_description.html', {
         # Przekazanie obiektu wydarzenia do szablonu
         'event': event,
         'comments': comments,
@@ -135,7 +135,7 @@ def create_event(request):
             form.instance.author = request.user  # Przypisanie bieżącego użytkownika jako autora wydarzenia
             form.save()  # Zapisanie formularza do bazy danych
             form.save_m2m()
-            return redirect('detail_event', pk=event.pk)  # Przekierowanie na stronę szczegółów utworzonego wydarzenia
+            return redirect('full_event_description', pk=event.pk)  # Przekierowanie na stronę szczegółów utworzonego wydarzenia
     else:
         form = CreateEventForm()  # Utworzenie pustego formularza CreateEventForm w przypadku, gdy żądanie nie jest metodą POST
     return render(request, 'create_event.html', {
@@ -152,7 +152,7 @@ def subscribe_event(request, event_id):
     # Dodanie użytkownika do uczestników wydarzenia
     event.participants.add(request.user)
     # Przekierowanie do szczegółów wydarzenia po zapisaniu się
-    return redirect('detail_event', pk=event.id)
+    return redirect('full_event_description', pk=event.id)
 
 
 # Wyrejestrowanie sie do eventu
@@ -164,7 +164,7 @@ def unsubscribe_event(request, pk):
     # Usunięcie użytkownika z uczestników wydarzenia
     event.participants.remove(request.user)
     # Przekierowanie do szczegółów wydarzenia po rezygnacji
-    return redirect('detail_event', pk=event.id)
+    return redirect('full_event_description', pk=event.id)
 
 
 # Widok edycji
@@ -184,7 +184,7 @@ def edit_event(request, pk):
                 event.status = Status.objects.get(name='Inactive')
                 # Zapisanie wydarzenia z ustawionym statusem
                 event.save()
-                return redirect('detail_event', pk=event.id)  # Po edycji przekierowanie do szczegółów wydarzenia
+                return redirect('full_event_description', pk=event.id)  # Po edycji przekierowanie do szczegółów wydarzenia
         else:
             # Tworzenie formularza z istniejącą instancją wydarzenia
             form = CreateEventForm(instance=event)
@@ -218,10 +218,6 @@ def user_profile(request):
     return render(request, 'profile.html', {'user': user})
 
 
-# Widok wydażeń usera
-def user_events(request, pk):
-    user = get_object_or_404(CreateUserModel, pk=pk)
-    return Event.objects.filter(author=user)
 
 
 # wykonaj zapytanie do bazy danych, aby uzyskać wszystkie obiekty Event, w których bieżący użytkownik znajduje się na liście uczestników.

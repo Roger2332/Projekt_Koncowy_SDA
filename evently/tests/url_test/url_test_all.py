@@ -168,8 +168,8 @@ def test_delete_event_not_authenticated(client, sample_events):
 
 
 @pytest.mark.django_db
-def test_detail_event_url(client, sample_events):
-    response = client.get(reverse('detail_event', args=[sample_events.pk]))
+def test_full_event_description_url(client, sample_events):
+    response = client.get(reverse('full_event_description', args=[sample_events.pk]))
     assert response.status_code == 200
 
 
@@ -180,7 +180,7 @@ def test_subscribe_event_url_by_user(client, sample_events, user):
     csrf_token = login_response.cookies['csrftoken'].value
     response = client.post(reverse('subscribe_event', args=[sample_events.pk]), {'csrfmiddlewaretoken': csrf_token})
     assert response.status_code == 302
-    assert response.url == reverse('detail_event', args=[sample_events.pk])
+    assert response.url == reverse('full_event_description', args=[sample_events.pk])
 
 
 @pytest.mark.django_db
@@ -198,7 +198,7 @@ def test_unsubscribe_event_url(client, sample_events, user):
     response = client.post(reverse('subscribe_event', args=[sample_events.pk]), {'csrfmiddlewaretoken': csrf_token})
     assert response.status_code == 302
 
-    assert response.url == reverse('detail_event', args=[sample_events.pk])
+    assert response.url == reverse('full_event_description', args=[sample_events.pk])
 
 
 @pytest.mark.django_db

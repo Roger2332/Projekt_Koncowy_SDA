@@ -42,7 +42,7 @@ def test_subscribe_event_view_with_authenticated_user(client, user, event):
     response = client.get(url)
 
     assert response.status_code == 302
-    assert 'detail_event' in response.url
+    assert 'full_event_description' in response.url
 
     assert event.participants.filter(id=user.id).exists()
 

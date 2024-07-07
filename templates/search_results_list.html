@@ -10,7 +10,7 @@
     {% for event in events %}
         <tr>
             <td colspan="6">
-                <h2><a href="{% url 'detail_event' event.id %}" class="btn btn-secondary">{{ event.name }}</a></h2>
+                <h2><a href="{% url 'full_event_description' event.id %}" class="btn btn-secondary">{{ event.name }}</a></h2>
             </td>
         </tr>
         <tr>
@@ -24,7 +24,7 @@
         </tr>
         <tr>
             <td colspan="6">
-                <form id="subscribeForm{{ event.id }}" action="{% url 'detail_event' event.id %}"
+                <form id="subscribeForm{{ event.id }}" action="{% url 'full_event_description' event.id %}"
                       style="display: none;">
                     {% csrf_token %}
                 </form>
@@ -32,9 +32,9 @@
                     event {{ event.name }}</button>
             </td>
         </tr>
-        <tr style="height: 200px;"></tr> <!-- Pierwszy duży odstęp -->
+        <tr style="height: 200px;"></tr> <!--duży odstęp -->
 
-    {% empty %}
+    {% empty %} Pozwala obsluzyc przypadek gdy iterowana lista jest pusta
         <tr>
             <td colspan="6">No results match your search criteria</td>
             <!-- Brak wyników spełniających kryteria wyszukiwania -->
@@ -42,4 +42,5 @@
     {% endfor %}
     </tbody>
 </table>
+<script src="{% static 'js/subscribe.js' %}"></script>
 
