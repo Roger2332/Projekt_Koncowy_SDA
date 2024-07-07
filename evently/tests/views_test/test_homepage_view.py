@@ -7,11 +7,11 @@ from django.urls import reverse
 def client():
     return Client()
 
-
+# # Sprawdzenie poprawności szablonu HTML
 @pytest.mark.django_db
 def test_homepage_tenplate(client):
-    url = reverse('homepage')  # Uzyskanie adresu URL widoku strony głównej.
+    url = reverse('homepage')
     response = client.get(url)
-    assert response.status_code == 200  # Czy otwiera się prawidłowo
+    assert response.status_code == 200
     assert 'homepage.html' in [template.name for template in
-                               response.templates]  # Sprawdzenie poprawności szablonu HTML
+                               response.templates]

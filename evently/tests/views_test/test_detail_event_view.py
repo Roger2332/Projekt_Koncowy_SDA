@@ -4,6 +4,7 @@ from django.urls import reverse
 from evently.models import CreateUserModel, Status, Event, Category, Comment
 from django.utils import timezone
 
+
 @pytest.fixture
 def client():
     return Client()
@@ -50,6 +51,7 @@ def comment(users, event):
     )
 
 
+# Szczegóły wydarzenia - organizator
 @pytest.mark.django_db
 def test_full_event_description_organizer(client, users, event):
     client.login(username='testuser1', password='12345')
@@ -59,6 +61,7 @@ def test_full_event_description_organizer(client, users, event):
     assert response.context['is_organizer'] == True
 
 
+# Szczegóły wydarzenia - uczestnik
 @pytest.mark.django_db
 def test_full_event_description_participant(client, users, event):
     client.login(username='testuser2', password='12345')
@@ -69,6 +72,7 @@ def test_full_event_description_participant(client, users, event):
     assert response.context['is_registered'] == True
 
 
+# Szczegóły wydarzenia - osoba nieuczestnicząca
 @pytest.mark.django_db
 def test_full_event_description_non_participant(client, users, event):
     client.login(username='testuser2', password='12345')
@@ -78,6 +82,7 @@ def test_full_event_description_non_participant(client, users, event):
     assert response.context['is_registered'] == False
 
 
+# zczegóły wydarzenia - niezalogowany użytkownik
 @pytest.mark.django_db
 def test_full_event_description_unauthenticated(client, event):
     response = client.get(reverse('full_event_description', args=[event.pk]))
@@ -87,6 +92,7 @@ def test_full_event_description_unauthenticated(client, event):
     assert response.context['is_registered'] == False
 
 
+# Dodawanie poprawnego komentarza
 @pytest.mark.django_db
 def test_post_valid_comment(client, users, event):
     client.login(username='testuser1', password='12345')
@@ -98,6 +104,7 @@ def test_post_valid_comment(client, users, event):
     assert Comment.objects.filter(event=event, content='New Comment').exists()
 
 
+# Dodawanie komentarza przez niezalogowanego użytkownika
 @pytest.mark.django_db
 def test_post_comment_unauthenticated(client, event):
     data = {

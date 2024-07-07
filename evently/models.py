@@ -16,7 +16,6 @@ class Category(models.Model):
         return f'{self.name}'
 
 
-# !
 class Status(models.Model):
     STATUS_CHOICES = [
         ('Active', 'Active'),
@@ -44,18 +43,14 @@ class Event(models.Model):
     participants = models.ManyToManyField(CreateUserModel, related_name='events_participated', blank=True)
     added = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
-
     def __str__(self):
         return f'Event: {self.name}, start at: {self.start_at}, end at: {self.end_at}'
-
     # dla panelu administratora(żeby poprawnie wyswietliwało się many-to-many)
     def category_list(self):
         return "".join([category.name for category in self.category.all()])
-
     category_list.short_description = 'Category'
 
 
-# !
 class Comment(models.Model):
     author = models.ForeignKey(CreateUserModel, on_delete=models.CASCADE)
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
@@ -63,6 +58,5 @@ class Comment(models.Model):
     event_date = models.DateTimeField(auto_now_add=True)
     added = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
-
     def __str__(self):
         return f'Author: {self.author}, Event: {self.event}'

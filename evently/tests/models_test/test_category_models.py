@@ -6,6 +6,7 @@ from django.utils import timezone
 from evently.models import Category
 
 
+# Nowa kategoria i sprawdzanie jej poprawnośći
 @pytest.mark.django_db
 def test_create_category():
     category = Category.objects.create(name="Test Category")
@@ -14,6 +15,7 @@ def test_create_category():
     assert category.modified <= timezone.now()
 
 
+# Modyfikacja kategorii i sprawdzanie zmian
 @pytest.mark.django_db
 def test_modify_category():
     category = Category.objects.create(name="Test Category")
@@ -22,20 +24,20 @@ def test_modify_category():
     time.sleep(1)
     category.name = "Updated Category"
     category.save()
-
     category.refresh_from_db()
     assert category.name == "Updated Category"
     assert category.added == original_added
     assert category.modified > original_modified
 
 
+# Tekstowa reprezentacja kategorii
 @pytest.mark.django_db
 def test_category_str():
     category = Category.objects.create(name="Test Category")
     assert str(category) == "Test Category"
 
 
-
+# Ograniczenie długości nazwy kategorii
 @pytest.mark.django_db
 def test_category_long():
     #Wprowadzenie za dlugiej kategori
@@ -47,7 +49,6 @@ def test_category_long():
     else:
         category.save()
     assert not Category.objects.filter(name='L' * 101).exists()
-
     #Wprowadzenie za poprawnej dlugosci kategori
     category = Category(name='L' * 100)
     try:
@@ -56,5 +57,4 @@ def test_category_long():
         pass
     else:
         category.save()
-
     assert Category.objects.filter(name='L' * 100).exists()

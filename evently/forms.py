@@ -10,23 +10,19 @@ from .models import Event, CreateUserModel, Category, Comment
 class CreateEventForm(forms.ModelForm):
     class Meta:
         model = Event
-        fields = ['name', 'place', 'start_at', 'end_at', 'description', 'category']  # wyswietl tabele ktore sa w liscie
-
+        fields = ['name', 'place', 'start_at', 'end_at', 'description', 'category']
     name = forms.CharField(max_length=100, validators=[title_validator])
     place = forms.CharField(max_length=100, validators=[title_validator])
     start_at = forms.DateField(widget=forms.SelectDateWidget, validators=[data_start_validator])
     end_at = forms.DateField(widget=forms.SelectDateWidget)
     description = forms.CharField(widget=forms.Textarea, validators=[dec_valid])
     category = forms.ModelMultipleChoiceField(queryset=Category.objects.all(), widget=forms.CheckboxSelectMultiple)
-
     def clean(self):
         # Pobranie zwalidowanych danych z klasy nadrzędnej
         cleaned_data = super().clean()
-
         # Pobranie wartości pól start_at i end_at
         start_at = cleaned_data.get("start_at")
         end_at = cleaned_data.get("end_at")
-
         # Walidacja dat: sprawdzenie, czy data end_at jest późniejsza niż start_at
         if start_at and end_at:
             if end_at <= start_at:

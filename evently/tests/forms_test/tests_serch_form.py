@@ -2,25 +2,25 @@ import pytest
 from datetime import date
 from evently.forms import EventSearchForm
 from evently.models import Event, Category, CreateUserModel, Status
-from django.db import models
 
 
+# Tworzenie przykładowych obiektów Category do testów
 @pytest.fixture
 def sample_categories():
-    # Tworzenie przykładowych obiektów Category do testów
     category1 = Category.objects.create(name='Kategoria 1')
     category2 = Category.objects.create(name='Kategoria 2')
     return [category1, category2]
 
 
+# Tworzenie przykładowych obiektów CreateUserModel do testów
 @pytest.fixture
 def sample_organizers():
-    # Tworzenie przykładowych obiektów CreateUserModel do testów
     organizer1 = CreateUserModel.objects.create(username='organizer1', email='organizer1@example.com')
     organizer2 = CreateUserModel.objects.create(username='organizer2', email='organizer2@example.com')
     return [organizer1, organizer2]
 
 
+# Tworzenie statusó w BD
 @pytest.fixture
 def sample_statuses():
     status1 = Status.objects.create(name='Active')
@@ -28,9 +28,9 @@ def sample_statuses():
     return (status1, status2)
 
 
+# Tworzenie przykładowych obiektów Event do testów
 @pytest.fixture
 def sample_events(sample_organizers, sample_statuses):
-    # Tworzenie przykładowych obiektów Event do testów
     event1 = Event.objects.create(name='Wydarzenie 1', place='Miejsce A', start_at=date(2024, 7, 1),
                                   end_at=date(2024, 7, 2), author=sample_organizers[0], status_id=sample_statuses[0].id)
     event2 = Event.objects.create(name='Wydarzenie 2', place='Miejsce B', start_at=date(2024, 8, 1),
@@ -38,9 +38,9 @@ def sample_events(sample_organizers, sample_statuses):
     return [event1, event2]
 
 
+# Poprawność danych dla EventSearchForm
 @pytest.mark.django_db
 def test_event_search_form_valid(sample_categories, sample_organizers):
-    # Test poprawnych danych dla EventSearchForm
     form_data = {
         'query': 'Wydarzenie',
         'search_type': 'future',
@@ -54,9 +54,9 @@ def test_event_search_form_valid(sample_categories, sample_organizers):
     assert form.is_valid()
 
 
+# Test niepoprawnych danych dla EventSearchForm
 @pytest.mark.django_db
 def test_event_search_form_invalid(sample_categories, sample_organizers):
-    # Test niepoprawnych danych dla EventSearchForm
     form_data = {
         'query': 'Wydarzenie',
         'search_type': 'invalid_type',  # Niepoprawny wybór
@@ -71,17 +71,17 @@ def test_event_search_form_invalid(sample_categories, sample_organizers):
     assert 'search_type' in form.errors
 
 
+# Puste dane wejściowe dla EventSearchForm
 @pytest.mark.django_db
 def test_event_search_form_empty_data(sample_categories, sample_organizers):
-    # Test pustych danych wejściowych dla EventSearchForm
     form_data = {}
     form = EventSearchForm(data=form_data)
     assert form.is_valid()
 
 
+# Poprawność queryset dla pola organizer w EventSearchForm
 @pytest.mark.django_db
 def test_event_search_form_organizer_queryset(sample_organizers):
-    # Testowanie poprawności queryset dla pola organizer w EventSearchForm
     form = EventSearchForm()
     organizer_choices = form.fields['organizer'].queryset.values_list('id', flat=True)
     assert set(organizer_choices) == {sample_organizers[0].id, sample_organizers[1].id}

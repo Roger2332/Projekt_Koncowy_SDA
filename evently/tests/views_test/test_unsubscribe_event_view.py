@@ -35,41 +35,34 @@ def event(user, sample_statuses):
     )
 
 
+# Odsubskrypcja wydarzenia przez użytkownika, który nie jest zarejestrowany na wydarzenie
 @pytest.mark.django_db
 def test_unsubscribe_event_not_registered(client, user, event):
-    # Logujemy użytkownika
     client.force_login(user)
-
     # Wywołujemy widok unsubscribe_event dla użytkownika niezarejestrowanego na wydarzenie
     url = reverse('unsubscribe_event', kwargs={'pk': event.id})
     response = client.get(url)
-
     # Sprawdzamy, czy odpowiedź zawiera oczekiwany komunikat
     assert response.status_code == 400
     assert 'Nie jesteś zarejestrowany na to wydarzenie.' in response.content.decode('utf-8')
 
 
+# Odsubskrypcja wydarzenia przez użytkownika, który jest zarejestrowany na wydarzenie
 @pytest.mark.django_db
 def test_unsubscribe_event_registered(client, user, event):
-    # Logujemy użytkownika
     client.force_login(user)
-
     # Dodajemy użytkownika jako uczestnika wydarzenia
     event.participants.add(user)
-
-    # Wywołujemy widok unsubscribe_event dla użytkownika zarejestrowanego na wydarzenie
     url = reverse('unsubscribe_event', kwargs={'pk': event.id})
     response = client.get(url, follow=True)
-
     # Sprawdzamy, czy użytkownik został usunięty z listy uczestników wydarzenia
     assert not event.participants.filter(id=user.id).exists()
-
     assert response.status_code == 200
 
 
+# Próba odsubskrypcji wydarzenia przez niezalogowanego użytkownika
 @pytest.mark.django_db
 def test_unsubscribe_event_unauthenticated(client, event):
-    # Wywołujemy widok unsubscribe_event dla niezalogowanego użytkownika
     url = reverse('unsubscribe_event', kwargs={'pk': event.id})
     response = client.get(url)
     assert reverse('login')

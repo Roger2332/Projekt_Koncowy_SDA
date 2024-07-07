@@ -45,28 +45,22 @@ def events(users, sample_status):
     return [event1, event2]
 
 
+#  Sprawdza wyświetlanie subskrypcji użytkownika do wydarzeń po zalogowaniu
 @pytest.mark.django_db
 def test_user_subscriptions_view(client, users, events):
     user = users[0]
     event1, event2 = events
-
     # Dodanie użytkownika do uczestników wydarzeń
     event1.participants.add(user)
     event2.participants.add(user)
-
     # Logowanie użytkownika
     client.login(username='testuser1', password='12345')
-
     # Wywołanie widoku
     url = reverse('user_subscriptions', kwargs={'pk': user.pk})
     response = client.get(url)
-
-    # Sprawdzenie, czy odpowiedź ma status 200
     assert response.status_code == 200
-
     # Sprawdzenie, czy używany jest właściwy szablon
     assert 'user_subscriptions.html' in [t.name for t in response.templates]
-
     # Sprawdzenie, czy w kontekście znajdują się odpowiednie wydarzenia
     subscribed_events = response.context['subscribed_events']
     assert set(subscribed_events) == {event1, event2}

@@ -4,6 +4,7 @@ from django.test import Client
 from evently.models import CreateUserModel, Event, Category, Status
 from django.utils import timezone
 
+
 @pytest.fixture
 def client():
     return Client()
@@ -27,9 +28,9 @@ def sample_category():
     return category
 
 
+# Zalogowany użytkownik tworzy nowe wydarzenie poprzez formularz
 @pytest.mark.django_db
 def test_create_event_send_by_logged_in_user(client, user, sample_category, sample_statuses):
-    # Sprawdza, czy zalogowany użytkownik może utworzyć nowe wydarzenie poprzez formularz
     client.login(username='testuser', password='12345')
     initial_event_count = Event.objects.count()
     form_data = {
@@ -42,18 +43,19 @@ def test_create_event_send_by_logged_in_user(client, user, sample_category, samp
         'status': sample_statuses.id
     }
     response = client.post(reverse('create_event'), form_data)
-    assert response.status_code == 302  # Przekierowanie po zapisaniu formularza
+    assert response.status_code == 302
     assert Event.objects.count() == initial_event_count + 1  # Sprawdzenie, czy wydarzenie zostało dodane
 
 
+# Sprawdza, czy zalogowany użytkownik ma dostęp do widoku create_event
 @pytest.mark.django_db
 def test_create_event_entry_by_logged_in_user(client, user):
-    # Sprawdza, czy zalogowany użytkownik ma dostęp do widoku create_event
     client.login(username='testuser', password='12345')
     response = client.get(reverse('create_event'))
     assert response.status_code == 200
 
 
+# Dostęp do widoku tworzenia wydarzenia przez niezalogowanego użytkownika
 @pytest.mark.django_db
 def test_create_event_entry_by_an_unlogged_user(client):
     response = client.get(reverse('create_event'))
