@@ -1,4 +1,5 @@
-from datetime import datetime
+import datetime
+
 
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.mixins import PermissionRequiredMixin
@@ -6,9 +7,12 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
 from django.http import HttpResponse, JsonResponse
+from django.core.mail import EmailMessage
+from django.conf import settings
 
-from .forms import CreateEventForm, CreateUserForm, CategoryForm, EventSearchForm, CommentForm
+from .forms import CreateEventForm, CreateUserForm, CategoryForm, EventSearchForm, CommentForm, SendEmailForm
 from .models import Category, Event, CreateUserModel, Status, Comment
+
 
 
 # Widok umozliwiajacy tworzenie uzytkownikow
@@ -280,3 +284,63 @@ def admin_status_view(request):
     events = Event.objects.filter(status__name='Inactive').order_by('modified')
     # Zwróć renderowanie szablonu HTML 'event_status_admin_list.html' z przekazaniem wydarzeń i formularza do kontekstu
     return render(request, 'event_status_admin_list.html', {'events': events})
+
+
+def send_test_email(request):
+    if request.method == 'POST':
+        form = SendEmailForm(request.POST)
+        if form.is_valid():
+            temat = form.cleaned_data.get('subject', 'Brak tematu')
+            tresc_tekstowa = form.cleaned_data.get('message_text', 'Brak treści').replace('\n', '<br>')
+            send_to_all = form.cleaned_data.get('send_to_all', False)
+            if send_to_all:
+                # Wysyłanie do wszystkich użytkowników
+                recipients = CreateUserModel.objects.all()
+                for user in recipients:
+                    html_content = f"""
+                    <html>
+                        <body>
+                            <p>Witaj {user.username},</p>
+                            <p>{tresc_tekstowa}</p>
+                            <p>Pozdrawiamy,<br>Zespół Evently</p>
+                        </body>
+                    </html>
+                    """
+                    send_email(user.email, temat, html_content)
+                return HttpResponse('Email został pomyślnie wysłany do wszystkich użytkowników!')
+            else:
+                # Wysyłanie do wybranego użytkownika
+                to_email = form.cleaned_data.get('to_email')
+                user_name = CreateUserModel.objects.get(email=to_email).username
+                html_content = f"""
+                <html>
+                    <body>
+                        <p>Witaj {user_name},</p>
+                        <p>{tresc_tekstowa}</p>
+                        <p>Pozdrawiamy,<br>Twój Zespół</p>
+                    </body>
+                </html>
+                """
+                send_email(to_email, temat, html_content)
+                return HttpResponse('Email został pomyślnie wysłany!')
+        else:
+            return render(request, 'form.html', {'form': form})
+    else:
+        form = SendEmailForm()
+    return render(request, 'form.html', {'form': form})
+
+def send_email(to_email, subject, message_html):
+    try:
+        od_email = settings.EMAIL_HOST_USER
+        email = EmailMessage(
+            subject,
+            message_html,
+            od_email,
+            [to_email],
+        )
+        email.content_subtype = 'html'
+        email.send(fail_silently=False)
+    except Exception as e:
+        raise  # Rzuca wyjątek ponownie, aby wyświetlić go w odpowiedzi
+
+

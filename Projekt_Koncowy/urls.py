@@ -20,7 +20,7 @@ import django.contrib.auth.views as auth_views
 
 from evently.views import create_event, UserCreateView, CreateCategoryView, list_events, subscribe_event, \
     search_event, edit_event, delete_event, full_event_description, unsubscribe_event, linkedlin_Roger, \
-    linkedlin_Artema, user_profile, user_subscriptions, homepage, admin_status_view, update_event_status
+    linkedlin_Artema, user_profile, user_subscriptions, homepage, admin_status_view, update_event_status, send_test_email
 
 urlpatterns = [
     # admin
@@ -59,4 +59,5 @@ urlpatterns = [
     # autorzy Evently
     path('Artem', linkedlin_Artema, name="Artem"),
     path('Roger', linkedlin_Roger, name="Roger"),
+    path('send-email/', send_test_email, name='send_test_email'),
 ]

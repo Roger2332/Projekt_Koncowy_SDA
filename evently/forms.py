@@ -80,3 +80,16 @@ class CommentForm(forms.ModelForm):
         widgets = {
             'content': forms.Textarea(attrs={'rows': 3, 'placeholder': 'Add a comment...'})
         }
+
+
+class SendEmailForm(forms.Form):
+    subject = forms.CharField(label='Temat', max_length=100, required=False)
+    message_text = forms.CharField(widget=forms.Textarea)
+    to_email = forms.ChoiceField(label='Do kogo wysłać', choices=[], required=True)
+    send_to_all = forms.BooleanField(label='Wyślij do wszystkich użytkowników', required=False)
+
+
+    def __init__(self, *args, **kwargs):
+        super(SendEmailForm, self).__init__(*args, **kwargs)
+        self.fields['to_email'].choices = [(user.email, user.username) for user in CreateUserModel.objects.all()]
+
