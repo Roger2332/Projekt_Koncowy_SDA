@@ -1,13 +1,13 @@
 services:
   db:
-    image: mysql
+    image: postgres
     environment:
-      MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_DATABASE: evently1
-      MYSQL_USER: evently2
-      MYSQL_PASSWORD: evently123
+      POSTGRES_DB: evently
+      POSTGRES_USER: evently
+      POSTGRES_PASSWORD: evently123
+      POSTGRES_ROOT_PASSWORD: rootpassword
     ports:
-      - '3306:3306'
+      - '5432:5432'
   web:
     build:
       context: .
