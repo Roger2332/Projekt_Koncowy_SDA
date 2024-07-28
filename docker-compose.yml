@@ -1,24 +1,51 @@
+#services:
+#  db:
+#    image: postgres
+#    environment:
+#      POSTGRES_DB: evently
+#      POSTGRES_USER: evently
+#      POSTGRES_PASSWORD: evently123
+#      POSTGRES_ROOT_PASSWORD: rootpassword
+#    ports:
+#      - '5432:5432'
+#  web:
+#    build:
+#      context: .
+#    command: python manage.py runserver 0.0.0.0:8000
+#    volumes:
+#      - .:/code
+#    ports:
+#      - '8000:8000'
+#    depends_on:
+#      - db
+
+version: '3.8'
+
 services:
-  db:
-    image: postgres
+  postgres-db:
+    image: postgres:latest
+    container_name: postgres_Artem
     environment:
-      POSTGRES_DB: evently
-      POSTGRES_USER: evently
-      POSTGRES_PASSWORD: evently123
-      POSTGRES_ROOT_PASSWORD: rootpassword
+      POSTGRES_USER: artem123
+      POSTGRES_PASSWORD: artem123
+      POSTGRES_DB: artem123
     ports:
-      - '5432:5432'
+      - "5432:5432"
   web:
-    build:
-      context: .
+    build: .
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - .:/code
     ports:
-      - '8000:8000'
+      - "8000:8000"
+    environment:
+      - DB_NAME=artem123
+      - DB_USER=artem123
+      - DB_PASSWORD=artem123
+      - DB_HOST=postgres-db
+      - DB_PORT=5432
     depends_on:
-      - db
-
+      - postgres-db
 
 
 
