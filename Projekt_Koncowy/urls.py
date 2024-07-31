@@ -19,7 +19,7 @@ from django.urls import path
 import django.contrib.auth.views as auth_views
 
 from evently.views import create_event, UserCreateView, CreateCategoryView, list_events, subscribe_event, \
-    search_event, edit_event, delete_event, full_event_description, unsubscribe_event, linkedlin_Roger, \
+    search_event, edit_event, delete_event, full_event_description, unsubscribe_event,delete_comment,  linkedlin_Roger, \
     linkedlin_Artema, user_profile, user_subscriptions, homepage, admin_status_view, update_event_status, send_test_email
 
 urlpatterns = [
@@ -41,6 +41,7 @@ urlpatterns = [
     path('full_event_description/<int:pk>/', full_event_description, name='full_event_description'),
     path('subscribe_event/<int:event_id>/', subscribe_event, name='subscribe_event'),
     path('event/<int:pk>/unregister/', unsubscribe_event, name='unsubscribe_event'),
+    path('delete_comment/<int:pk>/', delete_comment, name='delete_comment'),
     # user
     path('createuser/', UserCreateView.as_view(), name='user'),
     path('accounts/login/', auth_views.LoginView.as_view(), name='login'),

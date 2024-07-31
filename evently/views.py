@@ -1,6 +1,7 @@
 from datetime import datetime
 
 
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.shortcuts import render, redirect, get_object_or_404
@@ -227,6 +228,17 @@ def user_subscriptions(request, pk):
     subscribed_events = Event.objects.filter(participants=user)
     return render(request, 'user_subscriptions.html', {'subscribed_events': subscribed_events})
 
+# Usuwanie komentarzy dal userów oraz adminów
+@login_required
+def delete_comment(request, pk):
+    comment = get_object_or_404(Comment, pk=pk)
+    if request.user == comment.author or request.user.is_superuser:
+        comment.delete()
+        messages.success(request, "Comment has been deleted successfully.")
+    else:
+        messages.error(request, "You do not have permission to delete this comment.")
+
+    return redirect('full_event_description', comment.event.id)
 
 def linkedlin_Roger(request):
     response = redirect('https://www.linkedin.com/in/rogerszwaja')
