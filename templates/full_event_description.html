@@ -64,13 +64,15 @@
             <div class="comments-list">
                 {% for comment in comments %}
                     <div class="comment">
-                        <table>
-                            <td>
-                                <p><strong>{{ comment.author.username }}</strong></p>
-                                <p>{{ comment.content }}</p>
-                                <p><small>{{ comment.added }}</small></p>
-                            </td>
-                        </table>
+                        <p><strong>{{ comment.author.username }}</strong></p>
+                        <p>{{ comment.content }}</p>
+                        <p><small>{{ comment.added }}</small></p>
+                        {% if comment.author == user or user.is_staff %}
+                            <form action="{% url 'delete_comment' comment.id %}" method="post" style="display:inline;">
+                                {% csrf_token %}
+                                <button type="submit" style="background-color: red; color: white; padding: 5px 10px; font-size: 12px; border: none; border-radius: 3px;">Delete</button>
+                            </form>
+                        {% endif %}
                     </div>
                 {% empty %}
                     <p>No comments yet. Be the first to comment!</p>
