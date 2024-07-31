@@ -47,7 +47,7 @@ class Event(models.Model):
         return f'Event: {self.name}, start at: {self.start_at}, end at: {self.end_at}'
     # dla panelu administratora(żeby poprawnie wyswietliwało się many-to-many)
     def category_list(self):
-        return "".join([category.name for category in self.category.all()])
+        return ", ".join([category.name for category in self.category.all()])
     category_list.short_description = 'Category'
 
 
