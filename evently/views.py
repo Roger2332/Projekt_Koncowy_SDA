@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime
 
 
 from django.contrib.auth.decorators import login_required, user_passes_test
@@ -220,8 +220,6 @@ def user_profile(request):
     return render(request, 'profile.html', {'user': user})
 
 
-
-
 # wykonaj zapytanie do bazy danych, aby uzyskać wszystkie obiekty Event, w których bieżący użytkownik znajduje się na liście uczestników.
 @login_required
 def user_subscriptions(request, pk):
@@ -293,8 +291,8 @@ def send_test_email(request):
             temat = form.cleaned_data.get('subject', 'Brak tematu')
             tresc_tekstowa = form.cleaned_data.get('message_text', 'Brak treści').replace('\n', '<br>')
             send_to_all = form.cleaned_data.get('send_to_all', False)
+            # Wysyłanie do wszystkich użytkowników
             if send_to_all:
-                # Wysyłanie do wszystkich użytkowników
                 recipients = CreateUserModel.objects.all()
                 for user in recipients:
                     html_content = f"""
